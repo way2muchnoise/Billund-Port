@@ -3,9 +3,11 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package dan200.billund.shared;
+package com.dan200.billund.shared;
 
+import com.dan200.billund.Billund;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class CreativeTabBillund extends CreativeTabs
@@ -20,7 +22,12 @@ public class CreativeTabBillund extends CreativeTabs
     {
         return ItemBrick.create( StudColour.Red, 2, 2, 1 ); 
     }
-    
+
+    @Override
+    public Item getTabIconItem() {
+        return Billund.ModItems.brick;
+    }
+
     @Override
     public String getTranslatedTabLabel()
     {

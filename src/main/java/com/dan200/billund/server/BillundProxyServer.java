@@ -3,11 +3,10 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package dan200.billund.server;
+package com.dan200.billund.server;
 
+import com.dan200.billund.shared.BillundProxyCommon;
 import net.minecraft.entity.player.EntityPlayer;
-
-import dan200.billund.shared.BillundProxyCommon;
 
 public class BillundProxyServer extends BillundProxyCommon
 {

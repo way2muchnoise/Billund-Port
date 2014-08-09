@@ -3,26 +3,26 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package dan200.billund.shared;
-import java.util.List;
+package com.dan200.billund.shared;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import com.dan200.billund.Billund;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraft.util.Icon;
-import net.minecraftforge.common.ForgeDirection;
-import com.dan200.billund.Billund;
+
+import java.util.List;
 
 public class ItemOrderForm extends Item
 {
-	private static Icon s_icon;
+	private static IIcon s_icon;
 	
-	public ItemOrderForm(int i)
+	public ItemOrderForm()
     {
-        super(i);
+        super();
         setMaxStackSize( 1 );
 		setHasSubtypes( true );
 		setUnlocalizedName( "billform" );
@@ -32,13 +32,13 @@ public class ItemOrderForm extends Item
 	public static ItemStack create( int colour, int width, int depth, int quantity )
 	{
 		int damage = ((width - 1) & 0x1) + (((depth - 1) & 0x7) << 1) + ((colour & 0xf) << 4);
-		return new ItemStack( Billund.Items.brick.itemID, quantity, damage );
+		return new ItemStack( Billund.ModItems.brick, quantity, damage );
 	}
 
-	@Override
-    public void getSubItems( int itemID, CreativeTabs tabs, List list )
+    @Override
+    public void getSubItems( Item item, CreativeTabs tabs, List list )
     {
-		list.add( new ItemStack( Billund.Items.orderForm.itemID, 1, 0 ) );
+		list.add( new ItemStack( Billund.ModItems.orderForm, 1, 0 ) );
     }
     
 	@Override
@@ -52,13 +52,13 @@ public class ItemOrderForm extends Item
 	}
 
 	@Override
-	public void registerIcons( IconRegister iconRegister )
+	public void registerIcons( IIconRegister iconRegister )
 	{
 		s_icon = iconRegister.registerIcon( "billund:orderform" );
 	}
 
     @Override
-    public Icon getIconFromDamage( int damage )
+    public IIcon getIconFromDamage( int damage )
     {
     	return s_icon;
     }

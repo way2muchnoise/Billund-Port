@@ -3,10 +3,14 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package dan200.billund.client;
+package com.dan200.billund.client;
 
-import java.util.EnumSet;
-
+import com.dan200.billund.Billund;
+import com.dan200.billund.shared.*;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.Mod;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -16,37 +20,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.Icon;
-
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
-
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.TextureFXManager;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.common.network.Player;
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
-
-import com.dan200.billund.Billund;
-import dan200.billund.shared.BillundProxyCommon;
-import dan200.billund.shared.BlockBillund;
-import dan200.billund.shared.TileEntityBillund;
-import dan200.billund.shared.Stud;
-import dan200.billund.shared.StudColour;
-import dan200.billund.shared.Brick;
-import dan200.billund.shared.ItemBrick;
-import dan200.billund.shared.EntityAirDrop;
 
 public class BillundProxyClient extends BillundProxyCommon
 {
@@ -62,7 +43,7 @@ public class BillundProxyClient extends BillundProxyCommon
 		super.load();
 				
 		// Setup renderers
-		Billund.Blocks.billund.blockRenderID = RenderingRegistry.getNextAvailableRenderId();
+		Billund.ModBlocks.billund.blockRenderID = RenderingRegistry.getNextAvailableRenderId();
 				
 		// Setup client forge handlers
 		registerForgeHandlers();
@@ -84,66 +65,27 @@ public class BillundProxyClient extends BillundProxyCommon
 	private void registerForgeHandlers()
 	{
 		ForgeHandlers handlers = new ForgeHandlers();
-		MinecraftForge.EVENT_BUS.register( handlers );
-		TickRegistry.registerTickHandler( handlers, Side.CLIENT );
+		MinecraftForge.EVENT_BUS.register(handlers);
 		
 		BillundBlockRenderingHandler billundHandler = new BillundBlockRenderingHandler();
-		RenderingRegistry.registerBlockHandler( billundHandler );
+		RenderingRegistry.registerBlockHandler(billundHandler);
 		
 		BrickRenderer brickHandler = new BrickRenderer();
-		MinecraftForgeClient.registerItemRenderer( Billund.Items.brick.itemID, brickHandler );
+		MinecraftForgeClient.registerItemRenderer(Billund.ModItems.brick, brickHandler);
 
-		RenderingRegistry.registerEntityRenderingHandler( EntityAirDrop.class, new RenderAirDrop() );
+		RenderingRegistry.registerEntityRenderingHandler(EntityAirDrop.class, new RenderAirDrop());
 	}
 				
-	public class ForgeHandlers implements ITickHandler
+	public class ForgeHandlers
 	{
 		public ForgeHandlers()
 		{
 		}
-
-		// ITickHandler implementation
-		
-		@Override
-		public void tickStart( EnumSet<TickType> type, Object... tickData )
-		{
-			// See what brick is in front of the player
-			float f = ((Float)tickData[0]).floatValue();
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			World world = Minecraft.getMinecraft().theWorld;
-			
-			Brick hoverBrick = null;
-			if( player != null && world != null )
-			{
-				BlockBillund.setHoverBrick( ItemBrick.getExistingBrick( world, player, f ) ); 
-			}
-			else
-			{
-				BlockBillund.setHoverBrick( null );
-			}
-		}
-	
-		@Override
-		public void tickEnd( EnumSet<TickType> type, Object... tickData )
-		{
-		}
-	
-		@Override
-		public EnumSet<TickType> ticks()
-		{
-			return EnumSet.of( TickType.RENDER );
-		}
-	
-		@Override
-		public String getLabel()
-		{
-			return "Billund";
-		}
 		
 		// Forge event responses 
 		
-		@ForgeSubscribe
-		public void onRenderWorldLast( RenderWorldLastEvent event )
+		@Mod.EventHandler
+		public void onRenderWorldLast(RenderWorldLastEvent event)
 		{
 			// Draw the preview brick
 			float f = event.partialTicks;
@@ -196,7 +138,7 @@ public class BillundProxyClient extends BillundProxyCommon
 		// ISimpleBlockRenderingHandler implementation
 
 		@Override
-		public boolean shouldRender3DInInventory()
+		public boolean shouldRender3DInInventory(int modelId)
 		{
 			return false;
 		}
@@ -204,7 +146,7 @@ public class BillundProxyClient extends BillundProxyCommon
 		@Override
 		public int getRenderId()
 		{
-			return Billund.Blocks.billund.blockRenderID;
+			return Billund.ModBlocks.billund.blockRenderID;
 		}
 		
 		@Override
@@ -212,7 +154,7 @@ public class BillundProxyClient extends BillundProxyCommon
 		{
 			if( modelID == getRenderId() )
 			{
-				TileEntity entity = world.getBlockTileEntity( i, j, k );
+				TileEntity entity = world.getTileEntity(i, j, k);
 				if( entity != null && entity instanceof TileEntityBillund )
 				{
 					TileEntityBillund billund = (TileEntityBillund)entity;
@@ -246,8 +188,8 @@ public class BillundProxyClient extends BillundProxyCommon
 			}
 			return false;
 		}
-		
-		@Override
+
+        @Override
 		public void renderInventoryBlock( Block block, int metadata, int modelID, RenderBlocks renderblocks )
 		{
 		}
@@ -392,7 +334,7 @@ public class BillundProxyClient extends BillundProxyCommon
 		int blockZ = (brick.ZOrigin - localZ) / TileEntityBillund.ROWS_PER_BLOCK;
 		
 		Tessellator tessellator = Tessellator.instance;
-		int brightness = Billund.Blocks.billund.getMixedBrightnessForBlock( world, blockX, blockY, blockZ );
+		int brightness = Billund.ModBlocks.billund.getMixedBrightnessForBlock( world, blockX, blockY, blockZ );
 		
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.getTextureManager().bindTexture( mc.getTextureManager().getResourceLocation( 0 ) ); // bind the terrain texture
@@ -406,7 +348,7 @@ public class BillundProxyClient extends BillundProxyCommon
 	private static void renderBrick( IBlockAccess world, int brightness, int colour, int sx, int sy, int sz, int width, int height, int depth )
 	{
 		// Draw the brick
-		Icon icon = BlockBillund.getIcon( colour );
+		IIcon icon = BlockBillund.getIcon( colour );
 		if( world != null )
 		{
 			Tessellator tessellator = Tessellator.instance;
@@ -425,11 +367,11 @@ public class BillundProxyClient extends BillundProxyCommon
 		float endY = startY + ((float)height / yBlockSize);
 		float endZ = startZ + ((float)depth / zBlockSize);
 		renderBox(
-			icon, brightness,
-			startX, startY, startZ,
-			endX, endY, endZ,
-			true
-		);
+                icon, brightness,
+                startX, startY, startZ,
+                endX, endY, endZ,
+                true
+        );
 
 		// Draw the studs
 		int sny = sy + height;
@@ -479,7 +421,7 @@ public class BillundProxyClient extends BillundProxyCommon
 		}
 	}				
 	
-	private static void renderBox( Icon icon, int brightness, float startX, float startY, float startZ, float endX, float endY, float endZ, boolean bottom )
+	private static void renderBox( IIcon icon, int brightness, float startX, float startY, float startZ, float endX, float endY, float endZ, boolean bottom )
 	{
 		// X faces
 		renderFaceXNeg( icon, startX, startY, startZ, endX, endY, endZ );
@@ -497,7 +439,7 @@ public class BillundProxyClient extends BillundProxyCommon
 		renderFaceZPos( icon, startX, startY, startZ, endX, endY, endZ );
 	}
 
-	private static void renderFaceXNeg( Icon icon, float startX, float startY, float startZ, float endX, float endY, float endZ )
+	private static void renderFaceXNeg( IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ )
 	{            
 		Tessellator tessellator = Tessellator.instance;
         tessellator.setColorOpaque_F( 0.6f, 0.6f, 0.6f );
@@ -507,7 +449,7 @@ public class BillundProxyClient extends BillundProxyCommon
 		tessellator.addVertexWithUV( startX, startY, endZ, icon.getMaxU(), icon.getMaxV() );
     }
     
-	private static void renderFaceXPos( Icon icon, float startX, float startY, float startZ, float endX, float endY, float endZ )
+	private static void renderFaceXPos( IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ )
 	{            
 		Tessellator tessellator = Tessellator.instance;
         tessellator.setColorOpaque_F( 0.6f, 0.6f, 0.6f );
@@ -517,7 +459,7 @@ public class BillundProxyClient extends BillundProxyCommon
         tessellator.addVertexWithUV( endX, endY, endZ, icon.getMinU(), icon.getMaxV() );
     }
     
-	private static void renderFaceYNeg( Icon icon, float startX, float startY, float startZ, float endX, float endY, float endZ )
+	private static void renderFaceYNeg( IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ )
 	{            
 		Tessellator tessellator = Tessellator.instance;
         tessellator.setColorOpaque_F( 0.5f, 0.5f, 0.5f );
@@ -527,7 +469,7 @@ public class BillundProxyClient extends BillundProxyCommon
 		tessellator.addVertexWithUV( endX, startY, endZ, icon.getMaxU(), icon.getMaxV() );
     }
 
-	private static void renderFaceYPos( Icon icon, float startX, float startY, float startZ, float endX, float endY, float endZ )
+	private static void renderFaceYPos( IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ )
 	{            
 		Tessellator tessellator = Tessellator.instance;
         tessellator.setColorOpaque_F( 1.0f, 1.0f, 1.0f );
@@ -537,7 +479,7 @@ public class BillundProxyClient extends BillundProxyCommon
         tessellator.addVertexWithUV( startX, endY, endZ, icon.getMinU(), icon.getMaxV() );
     }
 
-	private static void renderFaceZNeg( Icon icon, float startX, float startY, float startZ, float endX, float endY, float endZ )
+	private static void renderFaceZNeg( IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ )
 	{            
 		Tessellator tessellator = Tessellator.instance;
         tessellator.setColorOpaque_F( 0.8f, 0.8f, 0.8f );
@@ -547,7 +489,7 @@ public class BillundProxyClient extends BillundProxyCommon
         tessellator.addVertexWithUV( startX, startY, startZ, icon.getMinU(), icon.getMaxV() );
     }
 
-	private static void renderFaceZPos( Icon icon, float startX, float startY, float startZ, float endX, float endY, float endZ )
+	private static void renderFaceZPos( IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ )
 	{            
 		Tessellator tessellator = Tessellator.instance;
         tessellator.setColorOpaque_F( 0.8f, 0.8f, 0.8f );

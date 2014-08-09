@@ -3,31 +3,31 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package dan200.billund.shared;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+package com.dan200.billund.shared;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+
+import java.util.List;
+import java.util.Random;
 
 public class BlockBillund extends BlockContainer
 {
 	public int blockRenderID;
-	private static Icon s_transparentIcon;
-	private static Icon[] s_icons;
+	private static IIcon s_transparentIcon;
+	private static IIcon[] s_icons;
 
 	private static Brick s_hoverBrick = null;
 	public static void setHoverBrick( Brick brick )
@@ -35,7 +35,7 @@ public class BlockBillund extends BlockContainer
 		s_hoverBrick = brick;
 	}	
 	
-    public static Icon getIcon( int studColour )
+    public static IIcon getIcon( int studColour )
     {
     	if( studColour >= 0 && studColour < StudColour.Count )
     	{
@@ -44,21 +44,16 @@ public class BlockBillund extends BlockContainer
 	    return s_transparentIcon;
     }
     
-    public BlockBillund(int i)
+    public BlockBillund()
     {
-        super( i, Material.wood );
+        super(Material.wood );
 		setHardness( 0.25f );
-		setUnlocalizedName( "billund" );
+		setBlockName("billund");
 
         // These get replaced on the client
 		blockRenderID = -1;
     }
-    
-    	
-    @Override
-    public void addCreativeItems( ArrayList list )
-    {
-    }
+
     
     @Override
     public int getRenderType()
@@ -77,15 +72,15 @@ public class BlockBillund extends BlockContainer
     {
         return false;
     }
-	
+
     @Override
-    public boolean canBeReplacedByLeaves(World world, int x, int y, int z)
+    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z)
     {
     	return false;
     }
-	
+
     @Override
-    public boolean isBlockSolidOnSide( World world, int i, int j, int k, ForgeDirection side )
+    public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side)
     {
 		return false;
 	}
@@ -96,12 +91,13 @@ public class BlockBillund extends BlockContainer
         return 0;
     }
 
-	@Override
-    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+
+    @Override
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z)
     {
     	if( !world.isRemote )
     	{
-			TileEntity tileEntity = world.getBlockTileEntity( x, y, z );
+			TileEntity tileEntity = world.getTileEntity(x, y, z);
 			if( tileEntity != null && tileEntity instanceof TileEntityBillund )
 			{
 				// Find a brick to destroy
@@ -138,18 +134,18 @@ public class BlockBillund extends BlockContainer
 	    }
 	    return false;
     }
-    
+
     @Override
-    public void onNeighborBlockChange( World world, int i, int j, int k, int l )
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
     {
-		TileEntity tileEntity = world.getBlockTileEntity( i, j, k );
+		TileEntity tileEntity = world.getTileEntity(x, y, z);
 		if( tileEntity != null && tileEntity instanceof TileEntityBillund )
 		{
 			TileEntityBillund billund = (TileEntityBillund)tileEntity;
 			billund.cullOrphans();
 			if( billund.isEmpty() )
 			{
-				world.setBlockToAir(i, j, k);
+				world.setBlockToAir(x, y, z);
 			}
 		}
     }
@@ -200,19 +196,19 @@ public class BlockBillund extends BlockContainer
 	@Override
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
     {
-        return AxisAlignedBB.getAABBPool().getAABB((double)par2 + this.minX, (double)par3 + this.minY, (double)par4 + this.minZ, (double)par2 + this.maxX, (double)par3 + this.maxY, (double)par4 + this.maxZ);
+        return AxisAlignedBB.getBoundingBox((double) par2 + this.minX, (double) par3 + this.minY, (double) par4 + this.minZ, (double) par2 + this.maxX, (double) par3 + this.maxY, (double) par4 + this.maxZ);
     }
 
 	@Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
     {
-        return AxisAlignedBB.getAABBPool().getAABB((double)par2 + this.minX, (double)par3 + this.minY, (double)par4 + this.minZ, (double)par2 + this.maxX, (double)par3 + this.maxY, (double)par4 + this.maxZ);
+        return AxisAlignedBB.getBoundingBox((double) par2 + this.minX, (double) par3 + this.minY, (double) par4 + this.minZ, (double) par2 + this.maxX, (double) par3 + this.maxY, (double) par4 + this.maxZ);
     }
     
 	@Override
     public void addCollisionBoxesToList( World world, int i, int j, int k, AxisAlignedBB bigBox, List list, Entity entity )
     {
-		TileEntity tileEntity = world.getBlockTileEntity( i, j, k );
+		TileEntity tileEntity = world.getTileEntity(i, j, k);
 		if( tileEntity != null && tileEntity instanceof TileEntityBillund )
 		{
 			double originX = (double)i;
@@ -242,12 +238,12 @@ public class BlockBillund extends BlockContainer
 							if( stud.XOrigin < minsx || stud.YOrigin < minsy || stud.ZOrigin < minsz )
 							{
 								// If the origin of this brick is in a different block, add our own aabbs for each stud
-								AxisAlignedBB littleBox = AxisAlignedBB.getAABBPool().getAABB(
-									startX, startY, startZ,
-									startX + stepX,
-									startY + stepY,
-									startZ + stepZ
-								);
+								AxisAlignedBB littleBox = AxisAlignedBB.getBoundingBox(
+                                        startX, startY, startZ,
+                                        startX + stepX,
+                                        startY + stepY,
+                                        startZ + stepZ
+                                );
 								if( littleBox.intersectsWith( bigBox ) )
 								{
 									list.add( littleBox );
@@ -261,12 +257,12 @@ public class BlockBillund extends BlockContainer
 								int sz = z + minsz;
 								if( sx == stud.XOrigin && sy == stud.YOrigin && sz == stud.ZOrigin )
 								{
-									AxisAlignedBB littleBox = AxisAlignedBB.getAABBPool().getAABB(
-										startX, startY, startZ,
-										startX + (double)stud.BrickWidth * stepX,
-										startY + (double)stud.BrickHeight * stepY,
-										startZ + (double)stud.BrickDepth * stepZ										
-									);
+									AxisAlignedBB littleBox = AxisAlignedBB.getBoundingBox(
+                                            startX, startY, startZ,
+                                            startX + (double) stud.BrickWidth * stepX,
+                                            startY + (double) stud.BrickHeight * stepY,
+                                            startZ + (double) stud.BrickDepth * stepZ
+                                    );
 									if( littleBox.intersectsWith( bigBox ) )
 									{
 										list.add( littleBox );
@@ -295,37 +291,9 @@ public class BlockBillund extends BlockContainer
     		return;
     	}
     }
-    
-	@Override
-    public Icon getBlockTexture( IBlockAccess world, int i, int j, int k, int side )
-    {
-    	if( s_hoverBrick != null )
-    	{
-	    	int sx = s_hoverBrick.XOrigin;
-	    	int sy = s_hoverBrick.YOrigin;
-	    	int sz = s_hoverBrick.ZOrigin;
-	    	{
-				int localX = (sx % TileEntityBillund.ROWS_PER_BLOCK + TileEntityBillund.ROWS_PER_BLOCK) % TileEntityBillund.ROWS_PER_BLOCK;
-				int localY = (sy % TileEntityBillund.LAYERS_PER_BLOCK + TileEntityBillund.LAYERS_PER_BLOCK) % TileEntityBillund.LAYERS_PER_BLOCK;
-				int localZ = (sz % TileEntityBillund.ROWS_PER_BLOCK + TileEntityBillund.ROWS_PER_BLOCK) % TileEntityBillund.ROWS_PER_BLOCK;
-				int blockX = (sx - localX) / TileEntityBillund.ROWS_PER_BLOCK;
-				int blockY = (sy - localY) / TileEntityBillund.LAYERS_PER_BLOCK;
-				int blockZ = (sz - localZ) / TileEntityBillund.ROWS_PER_BLOCK;
-				if( blockX == i && blockY == j && blockZ == k )
-				{
-					Stud stud = TileEntityBillund.getStud( world, s_hoverBrick.XOrigin, s_hoverBrick.YOrigin, s_hoverBrick.ZOrigin );
-					if( stud != null )
-					{
-						return getIcon( stud.Colour );
-					}
-				}
-			}
-    	}
-    	return s_transparentIcon;
-    }
 
 	@Override
-    public Icon getIcon( int side, int damage )
+    public IIcon getIcon( int side, int damage )
     {
     	return s_transparentIcon;
 	}
@@ -337,7 +305,7 @@ public class BlockBillund extends BlockContainer
     }
     
 	@Override
-	public TileEntity createNewTileEntity( World world )
+	public TileEntity createNewTileEntity(World world, int id)
 	{
 		return null;
 	}
@@ -348,10 +316,10 @@ public class BlockBillund extends BlockContainer
     	return new TileEntityBillund();
     }
 
-	@Override
-	public void registerIcons( IconRegister iconRegister )
+    @Override
+	public void registerBlockIcons( IIconRegister iconRegister )
 	{
-		s_icons = new Icon[ StudColour.Count ];
+		s_icons = new IIcon[ StudColour.Count ];
 		s_transparentIcon = iconRegister.registerIcon( "billund:transparent" );
 		s_icons[ StudColour.Red ] = iconRegister.registerIcon( "billund:red" );
 		s_icons[ StudColour.Green ] = iconRegister.registerIcon( "billund:green" );

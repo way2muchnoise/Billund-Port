@@ -3,12 +3,10 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package dan200.billund.shared;
+package com.dan200.billund.shared;
 
 public class BuildInfo
 {
-	// These fields are filled in automatically by recompile.sh
-	public static final String ModName = "MODNAME";
-	public static final String Version = "VERSION";
-	public static final int Revision = 42;	
+	public static final String ModName = "Billund";
+	public static final String Version = "1.7.2-0.1";
 }

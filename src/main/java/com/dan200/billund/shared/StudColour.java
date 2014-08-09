@@ -3,8 +3,7 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package dan200.billund.shared;
-import net.minecraft.util.Icon;
+package com.dan200.billund.shared;
 
 public class StudColour
 {

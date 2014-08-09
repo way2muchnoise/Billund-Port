@@ -3,30 +3,22 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
  
-package dan200.billund.shared;
+package com.dan200.billund.shared;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.ArrayList;
-import java.util.Iterator;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSand;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import dan200.billund.shared.BillundSet;
 
 public class EntityAirDrop extends Entity
 {
-    public int blockID;
+    public Block block;
     public int metadata;
     public int setType;
     public boolean deployed;
@@ -34,7 +26,7 @@ public class EntityAirDrop extends Entity
     public EntityAirDrop( World world )
     {
         super( world );
-        this.blockID = Block.chest.blockID;
+        this.block = Blocks.chest;
         this.metadata = 0;
     }
 
@@ -116,20 +108,20 @@ public class EntityAirDrop extends Entity
 				this.motionZ *= 0.7;
 				this.motionY *= -0.5;
 
-				if( this.worldObj.getBlockId( blockX, blockY, blockZ ) != Block.pistonMoving.blockID )
+				if( this.worldObj.getBlock( blockX, blockY, blockZ ) != Blocks.piston_extension )
 				{
 					this.setDead();
 					
 					// Set the block
-					this.worldObj.setBlock( blockX, blockY, blockZ, this.blockID, this.metadata, 3 );
+					this.worldObj.setBlock( blockX, blockY, blockZ, this.block, this.metadata, 3 );
 					
 					// Populate the block
-					TileEntity entity = this.worldObj.getBlockTileEntity( blockX, blockY, blockZ );
+					TileEntity entity = this.worldObj.getTileEntity( blockX, blockY, blockZ );
 					if( entity != null && entity instanceof IInventory )
 					{
 						IInventory inv = (IInventory)entity;
 						BillundSet.get( this.setType ).populateChest( inv );
-						inv.onInventoryChanged();
+						inv.markDirty();
 					}					
 				}
 			}
@@ -148,7 +140,7 @@ public class EntityAirDrop extends Entity
 	@Override
     protected void writeEntityToNBT( NBTTagCompound nbtTagCompound )
     {
-        nbtTagCompound.setInteger( "BlockID", this.blockID );
+        //nbtTagCompound.set( "BlockID", this.blockID );
         nbtTagCompound.setByte( "Data", (byte)this.metadata );
         nbtTagCompound.setInteger( "Set", this.setType );
         nbtTagCompound.setBoolean( "Deployed", this.deployed );
@@ -157,7 +149,7 @@ public class EntityAirDrop extends Entity
 	@Override
     protected void readEntityFromNBT( NBTTagCompound nbtTagCompound )
     {
-		this.blockID = nbtTagCompound.getInteger( "BlockID" );
+		//this.blockID = nbtTagCompound.getInteger( "BlockID" );
         this.metadata = nbtTagCompound.getByte( "Data" ) & 255;
         this.setType = nbtTagCompound.getInteger( "Set" );
         this.deployed = nbtTagCompound.getBoolean( "Deployed" );

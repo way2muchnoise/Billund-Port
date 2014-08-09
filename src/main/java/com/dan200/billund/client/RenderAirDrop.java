@@ -3,27 +3,22 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
  
-package dan200.billund.client;
+package com.dan200.billund.client;
 
+import com.dan200.billund.shared.EntityAirDrop;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import com.dan200.billund.shared.EntityAirDrop;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockAnvil;
-import net.minecraft.block.BlockDragonEgg;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererChestHelper;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.ChestItemRenderHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
-
-import dan200.billund.shared.EntityAirDrop;
 
 @SideOnly(Side.CLIENT)
 public class RenderAirDrop extends Render
@@ -40,9 +35,9 @@ public class RenderAirDrop extends Render
     private void doRenderFallingSand( EntityAirDrop entity, double x, double y, double z, float f, float f2 )
     {
         World world = entity.getWorld();
-        Block block = Block.blocksList[entity.blockID];
+        Block block = entity.block;
 
-        if( world.getBlockId( MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY), MathHelper.floor_double(entity.posZ)) != entity.blockID )
+        if( world.getBlock( MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY), MathHelper.floor_double(entity.posZ)) != entity.block )
         {
             GL11.glPushMatrix();
             GL11.glTranslatef( (float)x - 0.5f, (float)y - 0.5f, (float)z - 0.5f );
@@ -52,7 +47,7 @@ public class RenderAirDrop extends Render
 
             if( block != null )
             {
-				ChestItemRenderHelper.instance.renderChest( block, 0, 0.0f );
+				TileEntityRendererChestHelper.instance.renderChest( block, 0, 0.0f );
 				
 				if( !entity.deployed )
 				{

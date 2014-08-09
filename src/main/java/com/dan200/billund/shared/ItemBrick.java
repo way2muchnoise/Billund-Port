@@ -3,39 +3,42 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package dan200.billund.shared;
-import java.util.List;
+package com.dan200.billund.shared;
 
+import com.dan200.billund.Billund;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.util.Vec3;
 import net.minecraft.util.MathHelper;
-import net.minecraftforge.common.ForgeDirection;
-import com.dan200.billund.Billund;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+import java.util.List;
+
+import static net.minecraft.util.Vec3.createVectorHelper;
 
 public class ItemBrick extends Item
 {
-	public ItemBrick(int i)
+	public ItemBrick()
     {
-        super(i);
-        setMaxStackSize( 64 );
-		setHasSubtypes( true );
-		setUnlocalizedName( "billbrick" );
-		setCreativeTab( Billund.getCreativeTab() );
+        super();
+        this.setMaxStackSize(64);
+		this.setHasSubtypes(true);
+		this.setUnlocalizedName("billbrick");
+		this.setCreativeTab(Billund.getCreativeTab());
     }
 
 	public static ItemStack create( int colour, int width, int depth, int quantity )
 	{
 		int damage = ((width - 1) & 0x1) + (((depth - 1) & 0x7) << 1) + ((colour & 0xf) << 4);
-		return new ItemStack( Billund.Items.brick.itemID, quantity, damage );
+		return new ItemStack( Billund.ModItems.brick, quantity, damage );
 	}
 
-	@Override
-    public void getSubItems( int itemID, CreativeTabs tabs, List list )
+    @Override
+    public void getSubItems( Item item, CreativeTabs tabs, List list )
     {
     	for( int colour=0; colour<StudColour.Count; ++colour )
     	{
@@ -60,7 +63,7 @@ public class ItemBrick extends Item
         double x = player.prevPosX + (player.posX - player.prevPosX) * (double)f;
         double y = player.prevPosY + (player.posY - player.prevPosY) * (double)f + 1.62 - player.yOffset + yOffset2; // TODO: Improve
         double z = player.prevPosZ + (player.posZ - player.prevPosZ) * (double)f;
-        Vec3 position = world.getWorldVec3Pool().getVecFromPool( x, y, z );
+        Vec3 position = createVectorHelper( x, y, z );
         
         float f3 = MathHelper.cos( -yaw * 0.017453292F - (float)Math.PI );
         float f4 = MathHelper.sin( -yaw * 0.017453292F - (float)Math.PI );
@@ -74,7 +77,7 @@ public class ItemBrick extends Item
         {
             distance = (float)((EntityPlayerMP)player).theItemInWorldManager.getBlockReachDistance();
         }
-        Vec3 direction = world.getWorldVec3Pool().getVecFromPool( (double)f7, (double)f6, (double)f8 );        
+        Vec3 direction = createVectorHelper((double)f7, (double)f6, (double)f8 );
         
         // Do the raycast
         return TileEntityBillund.raycastStuds( world, position, direction, distance );

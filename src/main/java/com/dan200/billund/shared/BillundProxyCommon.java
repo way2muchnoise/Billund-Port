@@ -3,29 +3,21 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package dan200.billund.shared;
+package com.dan200.billund.shared;
 
-import java.util.Random;
-
+import com.dan200.billund.Billund;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.management.PlayerInstance;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
 
-import com.dan200.billund.Billund;
+import java.util.Random;
 
 public abstract class BillundProxyCommon implements IBillundProxy
 {
@@ -44,7 +36,7 @@ public abstract class BillundProxyCommon implements IBillundProxy
 	@Override		
 	public void load()
 	{
-		System.out.println( "Loading Billund v"+BuildInfo.Version+" (rev "+BuildInfo.Revision+")" );
+		System.out.println( "Loading Billund v"+BuildInfo.Version );
 		registerEntities();
 		registerTileEntities();
 		registerForgeHandlers();
@@ -60,26 +52,19 @@ public abstract class BillundProxyCommon implements IBillundProxy
 	{		
 		// Register our own creative tab
 		Billund.creativeTab = new CreativeTabBillund( CreativeTabs.getNextID(), "Billund" );
-		
-		// Billund block
-		Billund.Blocks.billund = new BlockBillund( Billund.billundBlockID );
-		GameRegistry.registerBlock( Billund.Blocks.billund, "Billund" );
-		LanguageRegistry.instance().addNameForObject( Billund.Blocks.billund, "en_US", "Billund" );
-		
-		// Brick item
-		Billund.Items.brick = new ItemBrick( Billund.brickItemID );
-		LanguageRegistry.instance().addNameForObject( Billund.Items.brick, "en_US", "Billund Brick" );
-		
-		// Order form item
-		Billund.Items.orderForm = new ItemOrderForm( Billund.orderFormItemID );
-		LanguageRegistry.instance().addNameForObject( Billund.Items.orderForm, "en_US", "Billund Order Form" );		
+
+        // Setup blocks
+        GameRegistry.registerBlock(Billund.ModBlocks.billund, "billund");
+
+        // Setup items
+        GameRegistry.registerItem(Billund.ModItems.brick, "brick");
+        GameRegistry.registerItem(Billund.ModItems.orderForm, "orderForm");
 	}
 	
 	private void registerEntities()
 	{
 		// airdrop entity
-		EntityRegistry.registerModEntity( EntityAirDrop.class, "AirDrop", 1, Billund.instance, 80, 3, true );
-		LanguageRegistry.instance().addStringLocalization( "entity.Billund_AirDrop.name", "Air Drop" );
+		EntityRegistry.registerModEntity( EntityAirDrop.class, "airDrop", 1, Billund.instance, 80, 3, true );
 	}
 		
 	private void registerTileEntities()
@@ -104,7 +89,7 @@ public abstract class BillundProxyCommon implements IBillundProxy
 
 		// Forge event responses 
 		
-		@ForgeSubscribe
+		@Mod.EventHandler
 		public void onEntityLivingDeath( LivingDeathEvent event )
 		{
 			if( event.entity.worldObj.isRemote )
@@ -118,7 +103,7 @@ public abstract class BillundProxyCommon implements IBillundProxy
 				if( (living.isChild() && r.nextInt(20) == 0) ||
 				    (!living.isChild() && r.nextInt(100) == 0) )
 				{
-					event.entity.entityDropItem( new ItemStack( Billund.Items.orderForm, 1 ), 0.0f );
+					event.entity.entityDropItem( new ItemStack( Billund.ModItems.orderForm, 1 ), 0.0f );
 				}
 			}
 		}

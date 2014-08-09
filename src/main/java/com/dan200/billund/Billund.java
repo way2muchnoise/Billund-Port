@@ -4,62 +4,41 @@
  */
  
 package com.dan200.billund;
-import java.util.Random;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Item;
-import net.minecraft.world.World;
-import net.minecraft.util.Icon;
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.Property;
+
+import com.dan200.billund.shared.*;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.Player;
-import dan200.billund.shared.BlockBillund;
-import dan200.billund.shared.BuildInfo;
-import dan200.billund.shared.IBillundProxy;
-import dan200.billund.shared.ItemBrick;
-import dan200.billund.shared.ItemOrderForm;
-import dan200.billund.shared.PacketHandler;
-import dan200.billund.shared.BillundPacket;
-import dan200.billund.shared.EntityAirDrop;
-import dan200.billund.shared.BillundSet;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
+
+import java.util.Random;
 
 ///////////////
 // UNIVERSAL //
 ///////////////
 
 @Mod( modid = "Billund", name = BuildInfo.ModName, version = BuildInfo.Version )
-@NetworkMod( channels = { "Billund" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class )
 public class Billund
 {
-	// Block IDs
-	public static int billundBlockID;
-	
-	// Item IDs
-	public static int brickItemID;
-	public static int orderFormItemID;
-	
-	// GUI IDs
-	// None
-	
 	// Configuration options
 	// None
 	
 	// Blocks and Items
-	public static class Blocks
+	public static class ModBlocks
 	{
-		public static BlockBillund billund;
+		public static BlockBillund billund = new BlockBillund();
 	}
 	
-	public static class Items
+	public static class ModItems
 	{
-		public static ItemBrick brick;
-		public static ItemOrderForm orderForm;
+		public static ItemBrick brick = new ItemBrick();
+		public static ItemOrderForm orderForm = new ItemOrderForm();
 	}
 	
 	// Other stuff	
@@ -74,7 +53,7 @@ public class Billund
 	@Mod.Instance( value = "Billund" )
 	public static Billund instance;
 	
-	@SidedProxy( clientSide = "dan200.billund.client.BillundProxyClient", serverSide = "dan200.billund.server.BillundProxyServer" )
+	@SidedProxy( clientSide = "com.dan200.billund.client.BillundProxyClient", serverSide = "com.dan200.billund.server.BillundProxyServer" )
 	public static IBillundProxy proxy;
 	
 	public Billund()
@@ -88,22 +67,8 @@ public class Billund
 		Configuration config = new Configuration( event.getSuggestedConfigurationFile() );
 		config.load();
 		
-		// Setup blocks
-		Property prop = config.getBlock("billundBlockID", 2642);
-		prop.comment = "The Block ID for Billund Blocks";
-		billundBlockID = prop.getInt();
-
-		// Setup items
-		prop = config.getItem("brickItemID", 6242);
-		prop.comment = "The Item ID for Billund Bricks";
-		brickItemID = prop.getInt();
-		
-		prop = config.getItem("orderFormItemID", 6242);
-		prop.comment = "The Item ID for Billund order forms";
-		orderFormItemID = prop.getInt();
-		
 		// Setup general
-		// None
+		PacketHandler.init();
 		
 		// Save config
 		config.save();
@@ -139,7 +104,7 @@ public class Billund
 		for( int i=0; i<player.inventory.getSizeInventory(); ++i )
 		{
 			ItemStack stack = player.inventory.getStackInSlot( i );
-			if( stack != null && stack.getItem() == Item.emerald )
+            if( stack != null && stack.getItem() == Items.emerald )
 			{
 				emeralds += stack.stackSize;
 				if( emeralds >= cost )
@@ -156,7 +121,7 @@ public class Billund
 			for( int i=0; i<player.inventory.getSizeInventory(); ++i )
 			{
 				ItemStack stack = player.inventory.getStackInSlot( i );
-				if( stack != null && stack.getItem() == Item.emerald )
+				if( stack != null && stack.getItem() == Items.emerald )
 				{
 					if( stack.stackSize <= emeralds )
 					{
@@ -174,30 +139,29 @@ public class Billund
 					}
 				}
 			}
-			player.inventory.onInventoryChanged();
+			player.inventory.markDirty();
 			return true;
 		}
 		return false;
 	}
 	
-	public static void handlePacket( BillundPacket packet, Player player )
+	public static void handlePacket( BillundPacket packet, EntityPlayer player )
 	{
 		switch( packet.packetType )
 		{
 			case BillundPacket.OrderSet:
 			{
-				EntityPlayer entity = (EntityPlayer)player;
-				World world = entity.worldObj;
+				World world = player.worldObj;
 				int set = packet.dataInt[0];
 				int cost = BillundSet.get( set ).getCost();
-				if( removeEmeralds( entity, cost ) )
+				if( removeEmeralds( player, cost ) )
 				{
 					Random r = new Random();
 					world.spawnEntityInWorld( new EntityAirDrop(
 						world,
-						Math.floor( entity.posX - 8 + r.nextInt(16) ) + 0.5f,
+						Math.floor( player.posX - 8 + r.nextInt(16) ) + 0.5f,
 						Math.min( world.getHeight(), 255 ) - r.nextInt(32) - 0.5f,
-						Math.floor( entity.posZ - 8 + r.nextInt(16) ) + 0.5f,
+						Math.floor( player.posZ - 8 + r.nextInt(16) ) + 0.5f,
 						set
 					) );
 				}

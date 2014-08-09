@@ -3,17 +3,21 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package dan200.billund.shared;
+package com.dan200.billund.shared;
+
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
+
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet250CustomPayload;
- 
-public class BillundPacket
+public class BillundPacket implements IMessage
 {
 	// Static Packet types
 	public static final byte OrderSet = 1;
@@ -29,8 +33,8 @@ public class BillundPacket
 		dataString = null;
 		dataInt = null;
 	}
-	
-	private void writeData( DataOutputStream data ) throws IOException 
+
+	private void writeData( DataOutputStream data ) throws IOException
 	{
 		data.writeByte(packetType);
 		if( dataString != null ) {
@@ -81,26 +85,6 @@ public class BillundPacket
 		}
 	}
 
-    /* This writes the P230's contents into the byte array of a real packet, on the given channel */
-	public Packet toPacket()
-    {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        DataOutputStream data = new DataOutputStream(bytes);
-        Packet250CustomPayload pkt = new Packet250CustomPayload();
-        try
-        {
-            writeData(data);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        pkt.channel = "Billund";
-        pkt.data    = bytes.toByteArray();
-        pkt.length  = pkt.data.length;
-        return pkt;
-    }
-
     /* This reads a byte array into a new P230 */
 	public static BillundPacket parse( byte[] bytes ) throws IOException
 	{
@@ -109,4 +93,31 @@ public class BillundPacket
 		pkt.readData( data );
 		return pkt;
 	}
+
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        try {
+            readData(new DataInputStream(new ByteBufInputStream(buf)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void toBytes(ByteBuf buf) {
+        try {
+            writeData(new DataOutputStream(new ByteBufOutputStream(buf)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static class Handler implements IMessageHandler<BillundPacket, IMessage> {
+
+        @Override
+        public IMessage onMessage(BillundPacket message, MessageContext ctx) {
+            System.out.println(String.format("Received %s from %s", message.dataString[0], ctx.getServerHandler().playerEntity.getDisplayName()));
+            return null;
+        }
+    }
 }

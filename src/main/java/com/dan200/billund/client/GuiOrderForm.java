@@ -3,18 +3,19 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package dan200.billund.client;
+package com.dan200.billund.client;
+
+import com.dan200.billund.shared.BillundPacket;
+import com.dan200.billund.shared.BillundSet;
+import com.dan200.billund.shared.PacketHandler;
+import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.network.PacketDispatcher;
-
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-
-import dan200.billund.shared.BillundPacket;
-import dan200.billund.shared.BillundSet;
+import net.minecraft.network.*;
 
 public class GuiOrderForm extends GuiScreen
 {
@@ -143,20 +144,20 @@ public class GuiOrderForm extends GuiScreen
         }
         
 		// Draw the text
-        fontRenderer.drawString( "Billund Order Form", startX + 8, startY + 10, 0x4c5156 );
+        fontRendererObj.drawString( "Billund Order Form", startX + 8, startY + 10, 0x4c5156 );
         
         String currency = getPlayerBalance() + " / " + getOrderCost();
         int currencyColour = canPlayerAffordOrder() ? 0x4c5156 : 0xae1e22;
-        fontRenderer.drawString( currency, startX + xSize - 25 - fontRenderer.getStringWidth( currency ), startY + 10, currencyColour );
+        fontRendererObj.drawString( currency, startX + xSize - 25 - fontRendererObj.getStringWidth( currency ), startY + 10, currencyColour );
         
         for( int i=0; i<NUM_SETS; ++i )
         {
-	        fontRenderer.drawString( getSetName(i), startX + 16, startY + 38 + i*23, 0x4c5156 );
+	        fontRendererObj.drawString( getSetName(i), startX + 16, startY + 38 + i*23, 0x4c5156 );
         }
         
         String order = m_ordered ? "Placed" : "Place Order";
         int colour = canPlayerOrder() ? 0x4c5156 : 0xb3a8a7;
-        fontRenderer.drawString( order, startX + 102 + (75 - fontRenderer.getStringWidth(order)) / 2, startY + 156, colour );
+        fontRendererObj.drawString( order, startX + 102 + (75 - fontRendererObj.getStringWidth(order)) / 2, startY + 156, colour );
                 
 		super.drawScreen( mouseX, mouseY, f );
 	}
@@ -196,7 +197,7 @@ public class GuiOrderForm extends GuiScreen
 					BillundPacket packet = new BillundPacket();
 					packet.packetType = BillundPacket.OrderSet;
 					packet.dataInt = new int[] { i };
-					PacketDispatcher.sendPacketToServer( packet.toPacket() );
+                    PacketHandler.INSTANCE.sendToServer(packet);
 				}
 			}
 			
@@ -211,7 +212,7 @@ public class GuiOrderForm extends GuiScreen
 		for( int i=0; i<m_player.inventory.getSizeInventory(); ++i )
 		{
 			ItemStack stack = m_player.inventory.getStackInSlot( i );
-			if( stack != null && stack.getItem() == Item.emerald )
+			if( stack != null && stack.getItem() == Items.emerald )
 			{
 				total += stack.stackSize;
 			}

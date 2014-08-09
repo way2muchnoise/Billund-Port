@@ -3,19 +3,19 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package dan200.billund.shared;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
-import net.minecraft.util.Vec3;
-import net.minecraft.block.Block;
-import net.minecraft.world.World;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.network.INetworkManager;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
+package com.dan200.billund.shared;
+
 import com.dan200.billund.Billund;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public class TileEntityBillund extends TileEntity
 {	
@@ -40,19 +40,18 @@ public class TileEntityBillund extends TileEntity
 		
 		if( blockY >= 0 )
 		{
-			int id = world.getBlockId( blockX, blockY, blockZ );
-			if( id == Billund.Blocks.billund.blockID )
+			Block block = world.getBlock( blockX, blockY, blockZ );
+			if( block == Billund.ModBlocks.billund )
 			{
-				TileEntity entity = world.getBlockTileEntity( blockX, blockY, blockZ );
+				TileEntity entity = world.getTileEntity( blockX, blockY, blockZ );
 				if( entity != null && entity instanceof TileEntityBillund )
 				{
 					TileEntityBillund billund = (TileEntityBillund)entity;
 					return billund.getStudLocal( localX, localY, localZ );
 				}
 			}
-			else if( id != 0 )
+			else if( block != Blocks.air )
 			{
-				Block block = Block.blocksList[ id ];
 				int colour = block.isOpaqueCube() ?	StudColour.Wall : StudColour.TranslucentWall;
 				return new Stud( colour, x, y, z, 1, 1, 1 );
 			}
@@ -71,17 +70,17 @@ public class TileEntityBillund extends TileEntity
 		
 		if( blockY >= 0 )
 		{
-			int id = world.getBlockId( blockX, blockY, blockZ );
-			if( id == Billund.Blocks.billund.blockID )
+			Block block = world.getBlock( blockX, blockY, blockZ );
+			if( block == Billund.ModBlocks.billund )
 			{
-				TileEntity entity = world.getBlockTileEntity( blockX, blockY, blockZ );
+				TileEntity entity = world.getTileEntity(blockX, blockY, blockZ);
 				if( entity != null && entity instanceof TileEntityBillund )
 				{
 					TileEntityBillund billund = (TileEntityBillund)entity;
 					return (billund.getStudLocal( localX, localY, localZ ) == null);
 				}
 			}
-			else if( id == 0 )
+			else if( block == Blocks.air )
 			{
 				return true;
 			}
@@ -100,11 +99,11 @@ public class TileEntityBillund extends TileEntity
 
 		if( blockY >= 0 )
 		{
-			int id = world.getBlockId( blockX, blockY, blockZ );
-			if( id == Billund.Blocks.billund.blockID )
+			Block block = world.getBlock(blockX, blockY, blockZ);
+			if( block == Billund.ModBlocks.billund )
 			{
 				// Add to existing billund block
-				TileEntity entity = world.getBlockTileEntity( blockX, blockY, blockZ );
+				TileEntity entity = world.getTileEntity(blockX, blockY, blockZ);
 				if( entity != null && entity instanceof TileEntityBillund )
 				{
 					TileEntityBillund billund = (TileEntityBillund)entity;
@@ -112,12 +111,12 @@ public class TileEntityBillund extends TileEntity
 				}
 				world.markBlockForUpdate( blockX, blockY, blockZ );
 			}
-			else if( id == 0 )
+			else if( block == Blocks.air )
 			{
 				// Add a new billund block
-				if( world.setBlock( blockX, blockY, blockZ, Billund.Blocks.billund.blockID, 0, 3) )
+				if( world.setBlock( blockX, blockY, blockZ, Billund.ModBlocks.billund, 0, 3) )
 				{
-					TileEntity entity = world.getBlockTileEntity( blockX, blockY, blockZ );
+					TileEntity entity = world.getTileEntity(blockX, blockY, blockZ);
 					if( entity != null && entity instanceof TileEntityBillund )
 					{
 						TileEntityBillund billund = (TileEntityBillund)entity;
@@ -420,17 +419,17 @@ public class TileEntityBillund extends TileEntity
     {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         this.writeToNBT( nbttagcompound );
-        return new Packet132TileEntityData( this.xCoord, this.yCoord, this.zCoord, 0, nbttagcompound );
+        return new S35PacketUpdateTileEntity( this.xCoord, this.yCoord, this.zCoord, 0, nbttagcompound );
     }
 
-	@Override
-    public void onDataPacket( INetworkManager net, Packet132TileEntityData packet )
+    @Override
+    public void onDataPacket( NetworkManager net, S35PacketUpdateTileEntity packet )
     {
-    	switch( packet.actionType )
+    	switch( packet.func_148853_f() )
     	{
     		case 0:
     		{
-    			this.readFromNBT( packet.data );
+    			this.readFromNBT( packet.func_148857_g() );
 				worldObj.markBlockForUpdate( xCoord, yCoord, zCoord );
     			break;
     		}
