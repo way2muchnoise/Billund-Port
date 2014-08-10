@@ -18,7 +18,7 @@ buildscript {
 apply plugin: 'forge'
 
 version = "1.7.10-0.1"
-group= "com.dan200.billund" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "com.noise.billund" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Billund"
 
 minecraft {
