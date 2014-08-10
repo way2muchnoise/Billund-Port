@@ -13,7 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -77,7 +76,7 @@ public class ItemBrick extends Item
         {
             distance = (float)((EntityPlayerMP)player).theItemInWorldManager.getBlockReachDistance();
         }
-        Vec3 direction = createVectorHelper((double)f7, (double)f6, (double)f8 );
+        Vec3 direction = createVectorHelper((double) f7, (double) f6, (double) f8);
         
         // Do the raycast
         return TileEntityBillund.raycastStuds( world, position, direction, distance );

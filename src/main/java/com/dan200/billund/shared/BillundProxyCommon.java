@@ -9,7 +9,6 @@ import com.dan200.billund.Billund;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,7 +50,7 @@ public abstract class BillundProxyCommon implements IBillundProxy
 	private void registerItems()
 	{		
 		// Register our own creative tab
-		Billund.creativeTab = new CreativeTabBillund( CreativeTabs.getNextID(), "Billund" );
+		Billund.creativeTab = new CreativeTabBillund("Billund" );
 
         // Setup blocks
         GameRegistry.registerBlock(Billund.ModBlocks.billund, "billund");

@@ -8,5 +8,5 @@ package com.dan200.billund.shared;
 public class BuildInfo
 {
 	public static final String ModName = "Billund";
-	public static final String Version = "1.7.2-0.1";
+	public static final String Version = "1.7.10-0.1";
 }

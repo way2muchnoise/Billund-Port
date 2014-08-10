@@ -8,14 +8,12 @@ package com.dan200.billund.client;
 import com.dan200.billund.shared.BillundPacket;
 import com.dan200.billund.shared.BillundSet;
 import com.dan200.billund.shared.PacketHandler;
-import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import net.minecraft.network.*;
 
 public class GuiOrderForm extends GuiScreen
 {

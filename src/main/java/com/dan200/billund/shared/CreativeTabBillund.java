@@ -12,9 +12,9 @@ import net.minecraft.item.ItemStack;
 
 public class CreativeTabBillund extends CreativeTabs
 {
-    public CreativeTabBillund( int p1, String p2 )
+    public CreativeTabBillund(String p2 )
     {
-        super( p1, p2 );
+        super( p2 );
     }
     
     @Override

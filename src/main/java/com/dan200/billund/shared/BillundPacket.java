@@ -5,6 +5,7 @@
 
 package com.dan200.billund.shared;
 
+import com.dan200.billund.Billund;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -12,7 +13,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 
-import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -85,15 +85,6 @@ public class BillundPacket implements IMessage
 		}
 	}
 
-    /* This reads a byte array into a new P230 */
-	public static BillundPacket parse( byte[] bytes ) throws IOException
-	{
-		DataInputStream data = new DataInputStream(new ByteArrayInputStream(bytes));
-		BillundPacket pkt = new BillundPacket();
-		pkt.readData( data );
-		return pkt;
-	}
-
     @Override
     public void fromBytes(ByteBuf buf) {
         try {
@@ -116,7 +107,8 @@ public class BillundPacket implements IMessage
 
         @Override
         public IMessage onMessage(BillundPacket message, MessageContext ctx) {
-            System.out.println(String.format("Received %s from %s", message.dataString[0], ctx.getServerHandler().playerEntity.getDisplayName()));
+            System.out.println(String.format("Received %s from %s", message.dataInt[0], ctx.getServerHandler().playerEntity.getDisplayName()));
+            Billund.handlePacket(message, ctx.getServerHandler().playerEntity);
             return null;
         }
     }
