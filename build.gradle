@@ -17,12 +17,12 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.7.10-0.1"
+version = "1.7.10-1.0"
 group= "com.noise.billund" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Billund"
 
 minecraft {
-    version = "1.7.10-10.13.0.1194"
+    version = "1.7.10-10.13.0.1200"
 }
 
 dependencies {
