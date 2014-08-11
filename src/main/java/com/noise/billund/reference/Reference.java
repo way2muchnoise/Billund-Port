@@ -9,7 +9,7 @@ public class Reference
 {
     public static final String MOD_ID = "Billund";
 	public static final String MOD_NAME = "Billund";
-	public static final String MOD_VERSION = "1.7.10-1.0";
+	public static final String MOD_VERSION = "1.7.10-1.2";
 
     public static final String CLIENT_PROXY_CLASS = "com.noise.billund.proxy.ClientProxy";
     public static final String SEVER_PROXY_CLASS = "com.noise.billund.proxy.ServerProxy";
