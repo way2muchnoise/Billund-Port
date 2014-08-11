@@ -5,7 +5,8 @@
 
 package com.noise.billund.network;
 
-import com.noise.billund.network.message.BillundMessage;
+import com.noise.billund.network.message.MessageBillund;
+import com.noise.billund.network.message.MessageTileEntityBillund;
 import com.noise.billund.reference.Reference;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -19,7 +20,8 @@ public class MessageHandler implements IMessageHandler
     public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_NAME.toLowerCase());
 
     public static void init() {
-        INSTANCE.registerMessage(BillundMessage.Handler.class, BillundMessage.class, 0, Side.SERVER);
+        INSTANCE.registerMessage(MessageBillund.Handler.class, MessageBillund.class, 0, Side.SERVER);
+        INSTANCE.registerMessage(MessageTileEntityBillund.Handler.class, MessageTileEntityBillund.class, 1, Side.CLIENT);
     }
 
     @Override

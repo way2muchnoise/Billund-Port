@@ -6,7 +6,7 @@
 package com.noise.billund.client.gui;
 
 import com.noise.billund.network.MessageHandler;
-import com.noise.billund.network.message.BillundMessage;
+import com.noise.billund.network.message.MessageBillund;
 import com.noise.billund.util.BillundSet;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -192,8 +192,8 @@ public class GuiOrderForm extends GuiScreen
 			{
 				if( m_orders[i] )
 				{
-					BillundMessage packet = new BillundMessage();
-					packet.packetType = BillundMessage.OrderSet;
+					MessageBillund packet = new MessageBillund();
+					packet.packetType = MessageBillund.OrderSet;
 					packet.dataInt = new int[] { i };
                     MessageHandler.INSTANCE.sendToServer(packet);
 				}

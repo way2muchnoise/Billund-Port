@@ -23,7 +23,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
-public class BillundMessage implements IMessage
+public class MessageBillund implements IMessage
 {
 	// Static Packet types
 	public static final byte OrderSet = 1;
@@ -33,7 +33,7 @@ public class BillundMessage implements IMessage
 	public String[] dataString;
 	public int[] dataInt;
 	
-	public BillundMessage()
+	public MessageBillund()
 	{
 		packetType = 0;
 		dataString = null;
@@ -109,15 +109,15 @@ public class BillundMessage implements IMessage
         }
     }
 
-    public static class Handler implements IMessageHandler<BillundMessage, IMessage> {
+    public static class Handler implements IMessageHandler<MessageBillund, IMessage> {
 
         @Override
-        public IMessage onMessage(BillundMessage message, MessageContext ctx) {
+        public IMessage onMessage(MessageBillund message, MessageContext ctx) {
             LogHelper.info(String.format("Received order for %s from %s", BillundSet.get(message.dataInt[0]).getDescription(), ctx.getServerHandler().playerEntity.getDisplayName()));
             EntityPlayer player  = ctx.getServerHandler().playerEntity;
             switch( message.packetType )
             {
-                case BillundMessage.OrderSet:
+                case MessageBillund.OrderSet:
                 {
                     World world = player.worldObj;
                     int set = message.dataInt[0];

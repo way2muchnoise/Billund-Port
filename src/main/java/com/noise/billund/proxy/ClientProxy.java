@@ -146,18 +146,18 @@ public class ClientProxy extends CommonProxy
 				if( entity != null && entity instanceof TileEntityBillund)
 				{
 					TileEntityBillund billund = (TileEntityBillund)entity;
-					for( int x=0; x<TileEntityBillund.STUDS_PER_ROW; ++x )
+					for( int x=0; x<Stud.STUDS_PER_ROW; ++x )
 					{
-						for( int y=0; y<TileEntityBillund.STUDS_PER_COLUMN; ++y )
+						for( int y=0; y<Stud.STUDS_PER_COLUMN; ++y )
 						{
-							for( int z=0; z<TileEntityBillund.STUDS_PER_ROW; ++z )
+							for( int z=0; z<Stud.STUDS_PER_ROW; ++z )
 							{
 								Stud stud = billund.getStudLocal( x, y, z );
 								if( stud != null )
 								{
-									int sx = i*TileEntityBillund.STUDS_PER_ROW + x;
-									int sy = j*TileEntityBillund.STUDS_PER_COLUMN + y;
-									int sz = k*TileEntityBillund.STUDS_PER_ROW + z;
+									int sx = i*Stud.STUDS_PER_ROW + x;
+									int sy = j*Stud.STUDS_PER_COLUMN + y;
+									int sz = k*Stud.STUDS_PER_ROW + z;
 									if( stud.XOrigin == sx && stud.YOrigin == sy && stud.ZOrigin == sz )
 									{
 										// Draw the brick			
@@ -282,15 +282,15 @@ public class ClientProxy extends CommonProxy
 
 		if( scale )
 		{
-			float scaleValue = ((float)TileEntityBillund.LAYERS_PER_BLOCK) / Math.max( 2.0f, (float)Math.max( width, depth ) - 0.5f );
+			float scaleValue = ((float)Stud.LAYERS_PER_BLOCK) / Math.max( 2.0f, (float)Math.max( width, depth ) - 0.5f );
 			GL11.glScalef( scaleValue, scaleValue, scaleValue );
 		}
 		if( center )
 		{
 			GL11.glTranslatef( 
-				-0.5f * ((float)width / (float)TileEntityBillund.ROWS_PER_BLOCK),
-				-0.5f * ((float)height / (float)TileEntityBillund.LAYERS_PER_BLOCK),
-				-0.5f * ((float)depth / (float)TileEntityBillund.ROWS_PER_BLOCK)
+				-0.5f * ((float)width / (float)Stud.ROWS_PER_BLOCK),
+				-0.5f * ((float)height / (float)Stud.LAYERS_PER_BLOCK),
+				-0.5f * ((float)depth / (float)Stud.ROWS_PER_BLOCK)
 			);		
 		}
 
@@ -314,12 +314,12 @@ public class ClientProxy extends CommonProxy
 	
 	public static void renderBrick( IBlockAccess world, Brick brick )
 	{
-		int localX = (brick.XOrigin % TileEntityBillund.ROWS_PER_BLOCK + TileEntityBillund.ROWS_PER_BLOCK) % TileEntityBillund.ROWS_PER_BLOCK;
-		int localY = (brick.YOrigin % TileEntityBillund.LAYERS_PER_BLOCK + TileEntityBillund.LAYERS_PER_BLOCK) % TileEntityBillund.LAYERS_PER_BLOCK;
-		int localZ = (brick.ZOrigin % TileEntityBillund.ROWS_PER_BLOCK + TileEntityBillund.ROWS_PER_BLOCK) % TileEntityBillund.ROWS_PER_BLOCK;
-		int blockX = (brick.XOrigin - localX) / TileEntityBillund.ROWS_PER_BLOCK;
-		int blockY = (brick.YOrigin - localY) / TileEntityBillund.LAYERS_PER_BLOCK;
-		int blockZ = (brick.ZOrigin - localZ) / TileEntityBillund.ROWS_PER_BLOCK;
+		int localX = (brick.XOrigin % Stud.ROWS_PER_BLOCK + Stud.ROWS_PER_BLOCK) % Stud.ROWS_PER_BLOCK;
+		int localY = (brick.YOrigin % Stud.LAYERS_PER_BLOCK + Stud.LAYERS_PER_BLOCK) % Stud.LAYERS_PER_BLOCK;
+		int localZ = (brick.ZOrigin % Stud.ROWS_PER_BLOCK + Stud.ROWS_PER_BLOCK) % Stud.ROWS_PER_BLOCK;
+		int blockX = (brick.XOrigin - localX) / Stud.ROWS_PER_BLOCK;
+		int blockY = (brick.YOrigin - localY) / Stud.LAYERS_PER_BLOCK;
+		int blockZ = (brick.ZOrigin - localZ) / Stud.ROWS_PER_BLOCK;
 		
 		Tessellator tessellator = Tessellator.instance;
 		int brightness = ModBlocks.billund.getMixedBrightnessForBlock( world, blockX, blockY, blockZ );
@@ -344,9 +344,9 @@ public class ClientProxy extends CommonProxy
 		}
 		
 		float pixel = 1.0f / 96.0f;
-		float xBlockSize = (float)TileEntityBillund.STUDS_PER_ROW;
-		float yBlockSize = (float)TileEntityBillund.STUDS_PER_COLUMN;
-		float zBlockSize = (float)TileEntityBillund.STUDS_PER_ROW;
+		float xBlockSize = (float)Stud.STUDS_PER_ROW;
+		float yBlockSize = (float)Stud.STUDS_PER_COLUMN;
+		float zBlockSize = (float)Stud.STUDS_PER_ROW;
 			
 		float startX = (float)sx / xBlockSize;
 		float startY = (float)sy / yBlockSize;
@@ -374,7 +374,7 @@ public class ClientProxy extends CommonProxy
 				boolean drawStud;
 				if( world != null )
 				{
-					Stud above = TileEntityBillund.getStud( world, snx, sny, snz );
+					Stud above = Stud.getStud( world, snx, sny, snz );
 					drawStud = (above == null) || (above.Colour == StudColour.TranslucentWall);
 				}
 				else

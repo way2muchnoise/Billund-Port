@@ -57,7 +57,7 @@ public class ItemBrick extends ItemBillund
 	    }
     }
     
-    public static TileEntityBillund.StudRaycastResult raycastFromPlayer( World world, EntityPlayer player, float f )
+    public static Stud.StudRaycastResult raycastFromPlayer( World world, EntityPlayer player, float f )
     {    	    	
     	// Calculate the raycast origin and direction
     	double yOffset2 = ( !world.isRemote && player.isSneaking() ) ? -0.08 : 0.0; // TODO: Improve
@@ -83,13 +83,13 @@ public class ItemBrick extends ItemBillund
         Vec3 direction = createVectorHelper((double) f7, (double) f6, (double) f8);
         
         // Do the raycast
-        return TileEntityBillund.raycastStuds( world, position, direction, distance );
+        return Stud.raycastStuds( world, position, direction, distance );
     }
     
     public static Brick getPotentialBrick( ItemStack stack, World world, EntityPlayer player, float f )
     {
         // Do the raycast
-    	TileEntityBillund.StudRaycastResult result = raycastFromPlayer( world, player, f );
+        Stud.StudRaycastResult result = raycastFromPlayer( world, player, f );
     	if( result != null )
     	{
     		// Calculate where to place the brick
@@ -127,7 +127,7 @@ public class ItemBrick extends ItemBillund
 						brick.XOrigin = placeX - x;
 						brick.YOrigin = placeY - y;
 						brick.ZOrigin = placeZ - z;
-						if( TileEntityBillund.canAddBrick( world, brick ) )
+						if( Stud.canAddBrick( world, brick ) )
 						{
 							return brick;
 						}
@@ -141,10 +141,10 @@ public class ItemBrick extends ItemBillund
     public static Brick getExistingBrick( World world, EntityPlayer player, float f )
     {
         // Do the raycast
-    	TileEntityBillund.StudRaycastResult result = raycastFromPlayer( world, player, f );
+        Stud.StudRaycastResult result = raycastFromPlayer( world, player, f );
 		if( result != null )
 		{
-			Stud stud = TileEntityBillund.getStud( world, result.hitX, result.hitY, result.hitZ );
+			Stud stud = Stud.getStud( world, result.hitX, result.hitY, result.hitZ );
 			if( stud != null && stud.Colour != StudColour.Wall)
 			{
 				return new Brick( stud.Colour, stud.XOrigin, stud.YOrigin, stud.ZOrigin, stud.BrickWidth, stud.BrickHeight, stud.BrickDepth );
@@ -184,7 +184,7 @@ public class ItemBrick extends ItemBillund
 			if( !world.isRemote )
 			{
 				// Place the brick
-				TileEntityBillund.addBrick( world, brick );
+                Stud.addBrick( world, brick );
 
 				if( !player.capabilities.isCreativeMode )
 				{
