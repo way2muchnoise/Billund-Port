@@ -87,7 +87,7 @@ public class MessageTileEntityBillund implements IMessage {
                 ((TileEntityBillund) tileEntity).setStuds(message.studs);
             }
             FMLClientHandler.instance().getClient().theWorld.markBlockForUpdate(message.x, message.y, message.z);
-            LogHelper.info(String.format("Received TE with lenght %s from", BillundSet.get(message.studs.length)));
+            LogHelper.debug(String.format("Brick at x:%s y:%s z:%s", message.x, message.y, message.z));
             return null;
         }
     }

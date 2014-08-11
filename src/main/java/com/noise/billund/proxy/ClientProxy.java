@@ -19,7 +19,9 @@ import com.noise.billund.util.StudColour;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -37,6 +39,8 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.opengl.GL11;
+
+import java.util.EnumSet;
 
 public class ClientProxy extends CommonProxy
 {
@@ -59,6 +63,7 @@ public class ClientProxy extends CommonProxy
     public void registerHandlers() {
         super.registerHandlers();
         MinecraftForge.EVENT_BUS.register(new ForgeHandlers());
+        FMLCommonHandler.instance().bus().register(new ForgeHandlers());
     }
 
     @Override
@@ -114,6 +119,25 @@ public class ClientProxy extends CommonProxy
 		}
 		
 		// Tick handler
+
+        @SubscribeEvent
+        public void onRenderTick(TickEvent.RenderTickEvent event )
+        {
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            World world = Minecraft.getMinecraft().theWorld;
+            // See what brick is in front of the player
+            float f = 1F; //TODO:((Float)tickData).getFloatValue(); was this dunno what it did yet :p
+
+            Brick hoverBrick = null;
+            if( player != null && world != null )
+            {
+                BlockBillund.setHoverBrick( ItemBrick.getExistingBrick( world, player, f ) );
+            }
+            else
+            {
+                BlockBillund.setHoverBrick( null );
+            }
+        }
     }		
 		
 	private static class BillundBlockRenderingHandler implements
