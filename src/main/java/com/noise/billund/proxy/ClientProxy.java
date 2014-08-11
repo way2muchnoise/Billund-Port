@@ -19,7 +19,7 @@ import com.noise.billund.util.StudColour;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -70,9 +70,9 @@ public class ClientProxy extends CommonProxy
 				
 	public class ForgeHandlers
 	{
-		// Forge event responses 
-		
-		@Mod.EventHandler
+		// Forge event responses
+
+		@SubscribeEvent
 		public void onRenderWorldLast(RenderWorldLastEvent event)
 		{
 			// Draw the preview brick

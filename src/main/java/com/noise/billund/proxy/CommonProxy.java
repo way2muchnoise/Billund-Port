@@ -10,7 +10,7 @@ import com.noise.billund.init.ModItems;
 import com.noise.billund.network.MessageHandler;
 import com.noise.billund.tileentity.TileEntityAirDrop;
 import com.noise.billund.tileentity.TileEntityBillund;
-import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.EntityLivingBase;
@@ -51,7 +51,7 @@ public abstract class CommonProxy implements IProxy
 
 		// Forge event responses 
 		
-		@Mod.EventHandler
+		@SubscribeEvent
 		public void onEntityLivingDeath( LivingDeathEvent event )
 		{
 			if( event.entity.worldObj.isRemote )
