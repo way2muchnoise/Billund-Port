@@ -1,7 +1,6 @@
 package com.noise.billund.network.message;
 
 import com.noise.billund.tileentity.TileEntityBillund;
-import com.noise.billund.util.BillundSet;
 import com.noise.billund.util.LogHelper;
 import com.noise.billund.util.Stud;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -32,7 +31,7 @@ public class MessageTileEntityBillund implements IMessage {
         this.x = buf.readInt();
         this.y = buf.readInt();
         this.z = buf.readInt();
-        if(buf.isReadable()) {
+        if (buf.isReadable()) {
             int j = buf.readInt();
             for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i) {
                 if (j == i) {
@@ -60,10 +59,9 @@ public class MessageTileEntityBillund implements IMessage {
         buf.writeInt(this.x);
         buf.writeInt(this.y);
         buf.writeInt(this.z);
-        for( int i=0; i<Stud.STUDS_PER_BLOCK; ++i )
-        {
+        for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i) {
             Stud stud = this.studs[i];
-            if( stud != null ) {
+            if (stud != null) {
                 buf.writeInt(i);
                 buf.writeInt(stud.Colour);
                 buf.writeInt(stud.XOrigin);
@@ -82,8 +80,7 @@ public class MessageTileEntityBillund implements IMessage {
         public IMessage onMessage(MessageTileEntityBillund message, MessageContext ctx) {
             TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y, message.z);
 
-            if (tileEntity instanceof TileEntityBillund)
-            {
+            if (tileEntity instanceof TileEntityBillund) {
                 ((TileEntityBillund) tileEntity).setStuds(message.studs);
             }
             FMLClientHandler.instance().getClient().theWorld.markBlockForUpdate(message.x, message.y, message.z);

@@ -7,16 +7,14 @@ package com.noise.billund.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-public class ServerProxy extends CommonProxy
-{
+public class ServerProxy extends CommonProxy {
 
-	// IProxy implementation
-	
-	@Override
-	public boolean isClient()
-	{
-		return false;
-	}
+    // IProxy implementation
+
+    @Override
+    public boolean isClient() {
+        return false;
+    }
 
     @Override
     public void initRenderingAndTextures() {
@@ -24,9 +22,8 @@ public class ServerProxy extends CommonProxy
     }
 
     @Override
-	public void openOrderFormGUI( EntityPlayer player )
-	{
-	}
+    public void openOrderFormGUI(EntityPlayer player) {
+    }
 
     @Override
     public void registerHandlers() {

@@ -5,24 +5,24 @@
 
 package com.noise.billund.util;
 
-public class Brick
-{	
-	public int Colour;
-	public int XOrigin;
-	public int YOrigin;
-	public int ZOrigin;
-	public int Width;
-	public int Height;
-	public int Depth;
-	
-	public Brick( int colour, int xOrigin, int yOrigin, int zOrigin, int width, int height, int depth )
-	{
-		Colour = colour;
-		XOrigin = xOrigin;
-		YOrigin = yOrigin;
-		ZOrigin = zOrigin;
-		Width = width;
-		Height = height;
-		Depth = depth;
-	}
+import com.noise.billund.reference.MCColour;
+
+public class Brick {
+    public MCColour Colour;
+    public int XOrigin;
+    public int YOrigin;
+    public int ZOrigin;
+    public int Width;
+    public int Height;
+    public int Depth;
+
+    public Brick(MCColour colour, int xOrigin, int yOrigin, int zOrigin, int width, int height, int depth) {
+        Colour = colour;
+        XOrigin = xOrigin;
+        YOrigin = yOrigin;
+        ZOrigin = zOrigin;
+        Width = width;
+        Height = height;
+        Depth = depth;
+    }
 }

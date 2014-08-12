@@ -7,12 +7,16 @@ package com.noise.billund.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-public interface IProxy
-{
+public interface IProxy {
     public abstract void registerTileEntities();
+
     public abstract void registerHandlers();
+
     public abstract void initRenderingAndTextures();
+
     public abstract void registerEntities();
-	public abstract void openOrderFormGUI( EntityPlayer player );
+
+    public abstract void openOrderFormGUI(EntityPlayer player);
+
     public abstract boolean isClient();
 }

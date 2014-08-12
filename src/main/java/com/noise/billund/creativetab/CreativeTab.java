@@ -6,17 +6,17 @@
 package com.noise.billund.creativetab;
 
 import com.noise.billund.item.ItemBrick;
+import com.noise.billund.reference.MCColour;
 import com.noise.billund.reference.Reference;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class CreativeTabBillund
-{
+public class CreativeTab {
     public static final CreativeTabs BILLUND_TAB = new CreativeTabs(Reference.MOD_ID.toLowerCase()) {
         @Override
         public ItemStack getIconItemStack() {
-            return ItemBrick.create(0, 2, 2, 1);
+            return ItemBrick.create(MCColour.RED, 2, 2, 1);
         }
 
         @Override

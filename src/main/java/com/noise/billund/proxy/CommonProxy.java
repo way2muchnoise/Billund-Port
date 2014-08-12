@@ -22,52 +22,44 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import java.util.Random;
 
-public abstract class CommonProxy implements IProxy
-{
-	// IProxy implementation
+public abstract class CommonProxy implements IProxy {
+    // IProxy implementation
 
-	public abstract void openOrderFormGUI( EntityPlayer player );
+    public abstract void openOrderFormGUI(EntityPlayer player);
 
-	public void registerEntities()
-	{
-		// airdrop entity
-		EntityRegistry.registerModEntity( TileEntityAirDrop.class, "airDrop", 1, Billund.instance, 80, 3, true );
-	}
+    public void registerEntities() {
+        // airdrop entity
+        EntityRegistry.registerModEntity(TileEntityAirDrop.class, "airDrop", 1, Billund.instance, 80, 3, true);
+    }
 
-	public void registerTileEntities()
-	{
-		// Tile Entities
-		GameRegistry.registerTileEntity( TileEntityBillund.class, "billund" );
-	}
+    public void registerTileEntities() {
+        // Tile Entities
+        GameRegistry.registerTileEntity(TileEntityBillund.class, "billund");
+    }
 
     public void registerHandlers() {
         MinecraftForge.EVENT_BUS.register(new ForgeHandlers());
         MessageHandler.init();
     }
 
-    public class ForgeHandlers
-	{
-		private Random r = new Random();
+    public class ForgeHandlers {
+        private Random r = new Random();
 
-		// Forge event responses 
-		
-		@SubscribeEvent
-		public void onEntityLivingDeath( LivingDeathEvent event )
-		{
-			if( event.entity.worldObj.isRemote )
-			{
-				return;
-			}
-			
-			if( event.entity instanceof EntityZombie )
-			{
-				EntityLivingBase living = (EntityLivingBase)event.entity;
-				if( (living.isChild() && r.nextInt(20) == 0) ||
-				    (!living.isChild() && r.nextInt(100) == 0))
-				{
-					event.entity.entityDropItem( new ItemStack( ModItems.orderForm, 1 ), 0.0f );
-				}
-			}
-		}
-	}
+        // Forge event responses
+
+        @SubscribeEvent
+        public void onEntityLivingDeath(LivingDeathEvent event) {
+            if (event.entity.worldObj.isRemote) {
+                return;
+            }
+
+            if (event.entity instanceof EntityZombie) {
+                EntityLivingBase living = (EntityLivingBase) event.entity;
+                if ((living.isChild() && r.nextInt(20) == 0) ||
+                        (!living.isChild() && r.nextInt(100) == 0)) {
+                    event.entity.entityDropItem(new ItemStack(ModItems.orderForm, 1), 0.0f);
+                }
+            }
+        }
+    }
 }
