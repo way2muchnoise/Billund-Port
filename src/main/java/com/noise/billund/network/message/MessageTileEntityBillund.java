@@ -1,5 +1,6 @@
 package com.noise.billund.network.message;
 
+import com.noise.billund.reference.Colour;
 import com.noise.billund.tileentity.TileEntityBillund;
 import com.noise.billund.util.LogHelper;
 import com.noise.billund.util.Stud;
@@ -36,7 +37,7 @@ public class MessageTileEntityBillund implements IMessage {
             for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i) {
                 if (j == i) {
                     Stud stud = new Stud();
-                    stud.Colour = buf.readInt();
+                    stud.Colour = Colour.getValue(buf.readInt());
                     stud.XOrigin = buf.readInt();
                     stud.YOrigin = buf.readInt();
                     stud.ZOrigin = buf.readInt();
@@ -63,7 +64,7 @@ public class MessageTileEntityBillund implements IMessage {
             Stud stud = this.studs[i];
             if (stud != null) {
                 buf.writeInt(i);
-                buf.writeInt(stud.Colour);
+                buf.writeInt(stud.Colour.number);
                 buf.writeInt(stud.XOrigin);
                 buf.writeInt(stud.YOrigin);
                 buf.writeInt(stud.ZOrigin);

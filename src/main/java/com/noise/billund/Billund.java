@@ -12,12 +12,13 @@ import com.noise.billund.init.Recipes;
 import com.noise.billund.proxy.IProxy;
 import com.noise.billund.reference.Reference;
 import com.noise.billund.util.LogHelper;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION)
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, guiFactory = Reference.GUI_FACTORY_CLASS)
 public class Billund {
     @Mod.Instance(value = Reference.MOD_ID)
     public static Billund instance;
@@ -27,9 +28,16 @@ public class Billund {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        //Initialize config
         ConfigHandler.init(event.getSuggestedConfigurationFile());
+        FMLCommonHandler.instance().bus().register(new ConfigHandler());
+
+        // Initialize mod items
         ModItems.init();
+
+        // Initialize mod blocks
         ModBlocks.init();
+
         LogHelper.info("preInit Complete!");
     }
 

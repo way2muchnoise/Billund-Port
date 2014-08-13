@@ -6,8 +6,7 @@
 package com.noise.billund.block;
 
 import com.noise.billund.item.ItemBrick;
-import com.noise.billund.reference.Colours;
-import com.noise.billund.reference.MCColour;
+import com.noise.billund.reference.Colour;
 import com.noise.billund.reference.Names;
 import com.noise.billund.reference.Textures;
 import com.noise.billund.tileentity.TileEntityBillund;
@@ -44,7 +43,7 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider 
     }
 
     public static IIcon getIcon(int studColour) {
-        if (studColour >= 0 && studColour < Colours.COUNT) {
+        if (studColour >= 0 && studColour < Colour.count()) {
             return s_icons[studColour];
         }
         return s_transparentIcon;
@@ -278,10 +277,12 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider 
 
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
-        s_icons = new IIcon[Colours.COUNT];
+        s_icons = new IIcon[Colour.count()];
         s_transparentIcon = iconRegister.registerIcon(Textures.RESOURCE_PREFIX + Textures.COLOURS_PREFIX + "transparent");
-        for (MCColour colour : MCColour.values()) {
-            s_icons[colour.number] = iconRegister.registerIcon(Textures.RESOURCE_PREFIX + Textures.COLOURS_PREFIX + colour.name);
+        for (Colour colour : Colour.values()) {
+            if (colour.number >= 0) {
+                s_icons[colour.number] = iconRegister.registerIcon(Textures.RESOURCE_PREFIX + Textures.COLOURS_PREFIX + colour.name);
+            }
         }
     }
 }

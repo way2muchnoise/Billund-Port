@@ -6,7 +6,7 @@
 package com.noise.billund.util;
 
 import com.noise.billund.item.ItemBrick;
-import com.noise.billund.reference.MCColour;
+import com.noise.billund.reference.Colour;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -56,49 +56,49 @@ public class BillundSet {
             case 0: {
                 // Starter set
                 // Basic pieces in 6 colours
-                addBasic(MCColour.RED);
-                addBasic(MCColour.GREEN);
+                addBasic(Colour.RED);
+                addBasic(Colour.GREEN);
                 add(null);
 
-                addBasic(MCColour.BLUE);
-                addBasic(MCColour.YELLOW);
+                addBasic(Colour.BLUE);
+                addBasic(Colour.YELLOW);
                 add(null);
 
-                addBasic(MCColour.WHITE);
-                addBasic(MCColour.BLACK);
+                addBasic(Colour.WHITE);
+                addBasic(Colour.BLACK);
                 add(null);
                 break;
             }
             case 1: {
                 // Colour Pack
                 // pieces in 3 colours
-                addAll(MCColour.RED);
-                addAll(MCColour.GREEN);
-                addAll(MCColour.BLUE);
+                addAll(Colour.RED);
+                addAll(Colour.GREEN);
+                addAll(Colour.BLUE);
                 break;
             }
             case 2: {
                 // Colour Pack
                 // pieces in 3 colours
-                addAll(MCColour.ORANGE);
-                addAll(MCColour.YELLOW);
-                addAll(MCColour.LIME);
+                addAll(Colour.ORANGE);
+                addAll(Colour.YELLOW);
+                addAll(Colour.LIME);
                 break;
             }
             case 3: {
                 // Colour Pack
                 // pieces in 3 colours
-                addAll(MCColour.PINK);
-                addAll(MCColour.PURPLE);
-                addAll(MCColour.WHITE);
+                addAll(Colour.PINK);
+                addAll(Colour.PURPLE);
+                addAll(Colour.WHITE);
                 break;
             }
             case 4: {
                 // Colour Pack
                 // pieces in 3 colours
-                addAll(MCColour.LIGHT_GREY);
-                addAll(MCColour.GREY);
-                addAll(MCColour.BLACK);
+                addAll(Colour.LIGHT_GREY);
+                addAll(Colour.GREY);
+                addAll(Colour.BLACK);
                 break;
             }
         }
@@ -111,14 +111,14 @@ public class BillundSet {
         }
     }
 
-    private void addBasic(MCColour colour) {
+    private void addBasic(Colour colour) {
         add(ItemBrick.create(colour, 1, 2, 24));
         add(ItemBrick.create(colour, 1, 4, 24));
         add(ItemBrick.create(colour, 2, 2, 24));
         add(ItemBrick.create(colour, 2, 4, 24));
     }
 
-    private void addAll(MCColour colour) {
+    private void addAll(Colour colour) {
         add(ItemBrick.create(colour, 1, 1, 24));
         add(ItemBrick.create(colour, 1, 2, 24));
         add(ItemBrick.create(colour, 1, 3, 24));

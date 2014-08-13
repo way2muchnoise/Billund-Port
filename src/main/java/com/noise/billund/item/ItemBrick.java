@@ -6,8 +6,7 @@
 package com.noise.billund.item;
 
 import com.noise.billund.init.ModItems;
-import com.noise.billund.reference.Colours;
-import com.noise.billund.reference.MCColour;
+import com.noise.billund.reference.Colour;
 import com.noise.billund.reference.Names;
 import com.noise.billund.util.Brick;
 import com.noise.billund.util.Stud;
@@ -32,14 +31,14 @@ public class ItemBrick extends ItemBillund {
         this.setUnlocalizedName(Names.Items.BRICK);
     }
 
-    public static ItemStack create(MCColour colour, int width, int depth, int quantity) {
+    public static ItemStack create(Colour colour, int width, int depth, int quantity) {
         int damage = ((width - 1) & 0x1) + (((depth - 1) & 0x7) << 1) + ((colour.number & 0xf) << 4);
         return new ItemStack(ModItems.brick, quantity, damage);
     }
 
     @Override
     public void getSubItems(Item item, CreativeTabs tabs, List list) {
-        for (MCColour colour : MCColour.values()) {
+        for (Colour colour : Colour.values()) {
             list.add(create(colour, 1, 1, 1));
             list.add(create(colour, 1, 2, 1));
             list.add(create(colour, 1, 3, 1));
@@ -140,8 +139,8 @@ public class ItemBrick extends ItemBillund {
         Stud.StudRaycastResult result = raycastFromPlayer(world, player, f);
         if (result != null) {
             Stud stud = Stud.getStud(world, result.hitX, result.hitY, result.hitZ);
-            if (stud != null && stud.Colour != Colours.WALL) {
-                return new Brick(MCColour.values()[stud.Colour], stud.XOrigin, stud.YOrigin, stud.ZOrigin, stud.BrickWidth, stud.BrickHeight, stud.BrickDepth);
+            if (stud != null && stud.Colour != Colour.WALL) {
+                return new Brick(stud.Colour, stud.XOrigin, stud.YOrigin, stud.ZOrigin, stud.BrickWidth, stud.BrickHeight, stud.BrickDepth);
             }
         }
         return null;
@@ -198,8 +197,8 @@ public class ItemBrick extends ItemBillund {
         return ((damage >> 1) & 0x7) + 1;
     }
 
-    public static MCColour getColour(ItemStack stack) {
+    public static Colour getColour(ItemStack stack) {
         int damage = stack.getItemDamage();
-        return MCColour.values()[((damage >> 4) & 0xf)];
+        return Colour.values()[((damage >> 4) & 0xf)];
     }
 }

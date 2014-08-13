@@ -7,6 +7,7 @@ package com.noise.billund.tileentity;
 
 import com.noise.billund.network.MessageHandler;
 import com.noise.billund.network.message.MessageTileEntityBillund;
+import com.noise.billund.reference.Colour;
 import com.noise.billund.util.Stud;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
@@ -86,7 +87,7 @@ public class TileEntityBillund extends TileEntity {
             Stud stud = m_studs[i];
             if (stud != null) {
                 NBTTagCompound studTag = new NBTTagCompound();
-                studTag.setInteger("c", stud.Colour);
+                studTag.setInteger("c", stud.Colour.number);
                 studTag.setInteger("x", stud.XOrigin);
                 studTag.setInteger("y", stud.YOrigin);
                 studTag.setInteger("z", stud.ZOrigin);
@@ -107,7 +108,7 @@ public class TileEntityBillund extends TileEntity {
             if (nbttagcompound.hasKey(key)) {
                 Stud stud = new Stud();
                 NBTTagCompound studTag = nbttagcompound.getCompoundTag(key);
-                stud.Colour = studTag.getInteger("c");
+                stud.Colour = Colour.getValue(studTag.getInteger("c"));
                 stud.XOrigin = studTag.getInteger("x");
                 stud.YOrigin = studTag.getInteger("y");
                 stud.ZOrigin = studTag.getInteger("z");

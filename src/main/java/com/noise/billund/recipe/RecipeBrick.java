@@ -1,11 +1,11 @@
 package com.noise.billund.recipe;
 
+import com.noise.billund.handler.ConfigHandler;
 import com.noise.billund.init.ModItems;
 import com.noise.billund.item.ItemBrick;
-import com.noise.billund.reference.MCColour;
+import com.noise.billund.reference.Colour;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
@@ -26,7 +26,7 @@ public class RecipeBrick implements IRecipe {
             }
         }
     }
-    return bricks == 1 && dye == 1;
+    return bricks == 1 && dye == 1 && ConfigHandler.redye;
 }
 
     @Override
@@ -47,7 +47,7 @@ public class RecipeBrick implements IRecipe {
         }
         if (dye) {
             return ItemBrick.create(
-                    MCColour.values()[ItemDye.field_150922_c[component.getItemDamage()]],
+                    Colour.getValue(component.getItemDamage()),
                     ItemBrick.getWidth(brick),
                     ItemBrick.getDepth(brick),
                     1

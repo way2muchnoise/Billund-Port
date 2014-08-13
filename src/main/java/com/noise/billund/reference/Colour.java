@@ -1,6 +1,6 @@
 package com.noise.billund.reference;
 
-public enum MCColour {
+public enum Colour {
     BLACK(0, "black"),
     RED(1, "red"),
     GREEN(2, "green"),
@@ -16,12 +16,30 @@ public enum MCColour {
     LIGHT_BLUE(12, "lightBlue"),
     MAGENTA(13, "magenta"),
     ORANGE(14, "orange"),
-    WHITE(15, "white");
+    WHITE(15, "white"),
+
+    TRANSLUCENT_WALL(-2, "translucentWall"),
+    WALL(-1, "wall");
+
 
     public final int number;
     public final String name;
-    MCColour(int number, String name) {
+    Colour(int number, String name) {
         this.number = number;
         this.name = name;
+    }
+
+    public static int count(){
+        return 16;
+    }
+
+    public static Colour getValue(int number) {
+        for (Colour p : values()) {
+            if (p.number == number) {
+                return p;
+            }
+        }
+        //should never happen
+        return null;
     }
 }

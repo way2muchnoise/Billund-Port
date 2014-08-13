@@ -11,7 +11,7 @@ import com.noise.billund.client.render.tileentity.TileEntityRendererAirDrop;
 import com.noise.billund.init.ModBlocks;
 import com.noise.billund.init.ModItems;
 import com.noise.billund.item.ItemBrick;
-import com.noise.billund.reference.Colours;
+import com.noise.billund.reference.Colour;
 import com.noise.billund.tileentity.TileEntityAirDrop;
 import com.noise.billund.tileentity.TileEntityBillund;
 import com.noise.billund.util.Brick;
@@ -160,7 +160,7 @@ public class ClientProxy extends CommonProxy {
                                         // Draw the brick
                                         int brightness = block.getMixedBrightnessForBlock(world, i, j, k);
                                         renderBrick(
-                                                world, brightness, stud.Colour,
+                                                world, brightness, stud.Colour.number,
                                                 sx, sy, sz, stud.BrickWidth, stud.BrickHeight, stud.BrickDepth
                                         );
                                     }
@@ -346,7 +346,7 @@ public class ClientProxy extends CommonProxy {
                 boolean drawStud;
                 if (world != null) {
                     Stud above = Stud.getStud(world, snx, sny, snz);
-                    drawStud = (above == null) || (above.Colour == Colours.TRANSLUCENT_WALL);
+                    drawStud = (above == null) || (above.Colour == Colour.TRANSLUCENT_WALL);
                 } else {
                     drawStud = true;
                 }

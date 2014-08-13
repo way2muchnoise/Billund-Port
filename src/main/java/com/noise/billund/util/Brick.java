@@ -5,10 +5,8 @@
 
 package com.noise.billund.util;
 
-import com.noise.billund.reference.MCColour;
-
 public class Brick {
-    public MCColour Colour;
+    public com.noise.billund.reference.Colour Colour;
     public int XOrigin;
     public int YOrigin;
     public int ZOrigin;
@@ -16,7 +14,7 @@ public class Brick {
     public int Height;
     public int Depth;
 
-    public Brick(MCColour colour, int xOrigin, int yOrigin, int zOrigin, int width, int height, int depth) {
+    public Brick(com.noise.billund.reference.Colour colour, int xOrigin, int yOrigin, int zOrigin, int width, int height, int depth) {
         Colour = colour;
         XOrigin = xOrigin;
         YOrigin = yOrigin;

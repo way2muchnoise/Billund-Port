@@ -5,15 +5,16 @@
 
 package com.noise.billund.tileentity;
 
+import com.noise.billund.handler.ConfigHandler;
 import com.noise.billund.util.BillundSet;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -75,9 +76,9 @@ public class TileEntityAirDrop extends Entity {
         }
 
         if (!this.deployed) {
-            this.motionY -= 0.003;
+            this.motionY -= 0.003 * ConfigHandler.speedMultiplier;
         } else {
-            this.motionY -= 0.02;
+            this.motionY -= 0.02 * ConfigHandler.speedMultiplier;
         }
 
         this.moveEntity(this.motionX, this.motionY, this.motionZ);
@@ -101,10 +102,15 @@ public class TileEntityAirDrop extends Entity {
                     // Set the block
                     this.worldObj.setBlock(blockX, blockY, blockZ, this.block, this.metadata, 3);
 
+                    //particles
+                    this.worldObj.playAuxSFX(2006, blockX, blockY - 1, blockZ, 10);
+
                     // Populate the block
                     TileEntity entity = this.worldObj.getTileEntity(blockX, blockY, blockZ);
-                    if (entity != null && entity instanceof IInventory) {
-                        IInventory inv = (IInventory) entity;
+                    if (entity != null && entity instanceof TileEntityChest) {
+                        TileEntityChest inv = (TileEntityChest) entity;
+                        //rename the chest to corresponding set
+                        inv.func_145976_a(BillundSet.get(this.setType).getDescription());
                         BillundSet.get(this.setType).populateChest(inv);
                         inv.markDirty();
                     }

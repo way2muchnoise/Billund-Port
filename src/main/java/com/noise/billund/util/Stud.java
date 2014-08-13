@@ -6,7 +6,7 @@
 package com.noise.billund.util;
 
 import com.noise.billund.init.ModBlocks;
-import com.noise.billund.reference.Colours;
+import com.noise.billund.reference.Colour;
 import com.noise.billund.tileentity.TileEntityBillund;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -16,7 +16,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class Stud {
-    public int Colour;
+    public Colour Colour;
     public int XOrigin;
     public int YOrigin;
     public int ZOrigin;
@@ -35,7 +35,7 @@ public class Stud {
     public Stud() {
     }
 
-    public Stud(int colour, int xOrigin, int yOrigin, int zOrigin, int width, int height, int depth) {
+    public Stud(Colour colour, int xOrigin, int yOrigin, int zOrigin, int width, int height, int depth) {
         Colour = colour;
         XOrigin = xOrigin;
         YOrigin = yOrigin;
@@ -46,7 +46,7 @@ public class Stud {
     }
 
     public Stud(Brick brick, int xLocal, int yLocal, int zLocal) {
-        this(brick.Colour.number, brick.XOrigin, brick.YOrigin, brick.ZOrigin, brick.Width, brick.Height, brick.Depth);
+        this(brick.Colour, brick.XOrigin, brick.YOrigin, brick.ZOrigin, brick.Width, brick.Height, brick.Depth);
     }
 
     public static Stud getStud(IBlockAccess world, int x, int y, int z) {
@@ -66,7 +66,7 @@ public class Stud {
                     return billund.getStudLocal(localX, localY, localZ);
                 }
             } else if (block != Blocks.air) {
-                int colour = block.isOpaqueCube() ? Colours.WALL : Colours.TRANSLUCENT_WALL;
+                Colour colour = block.isOpaqueCube() ? com.noise.billund.reference.Colour.TRANSLUCENT_WALL : com.noise.billund.reference.Colour.WALL;
                 return new Stud(colour, x, y, z, 1, 1, 1);
             }
         }
