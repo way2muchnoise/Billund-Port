@@ -17,7 +17,7 @@ public class MessageTileEntityBillund implements IMessage {
     public int x, y, z;
 
     public MessageTileEntityBillund() {
-        //this.studs = new Stud[Stud.STUDS_PER_BLOCK];
+        this.studs = new Stud[Stud.STUDS_PER_BLOCK];
     }
 
     public MessageTileEntityBillund(int x, int y, int z, Stud[] studs) {
