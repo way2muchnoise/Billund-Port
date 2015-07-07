@@ -5,42 +5,24 @@
 
 package billund.proxy;
 
-import billund.block.BlockBillund;
 import billund.client.gui.GuiOrderForm;
+import billund.client.render.BillundBlockRenderingHandler;
+import billund.client.render.BrickRenderer;
 import billund.client.render.tileentity.TileEntityRendererAirDrop;
+import billund.handler.ForgeEventHandler;
 import billund.init.ModBlocks;
 import billund.init.ModItems;
-import billund.item.ItemBrick;
-import billund.reference.Colour;
 import billund.tileentity.TileEntityAirDrop;
-import billund.tileentity.TileEntityBillund;
-import billund.util.Brick;
-import billund.util.Stud;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
-import org.lwjgl.opengl.GL11;
 
-public class ClientProxy extends CommonProxy {
+public class ClientProxy extends CommonProxy
+{
 
     @Override
     public boolean isClient()
@@ -48,7 +30,8 @@ public class ClientProxy extends CommonProxy {
         return true;
     }
 
-    public void initRenderingAndTextures() {
+    public void initRenderingAndTextures()
+    {
         ModBlocks.billund.blockRenderID = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new BillundBlockRenderingHandler());
         MinecraftForgeClient.registerItemRenderer(ModItems.brick, new BrickRenderer());
@@ -56,394 +39,17 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void registerHandlers() {
+    public void registerHandlers()
+    {
         super.registerHandlers();
-        MinecraftForge.EVENT_BUS.register(new ForgeHandlers());
-        FMLCommonHandler.instance().bus().register(new ForgeHandlers());
+        MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
+        FMLCommonHandler.instance().bus().register(new ForgeEventHandler());
     }
 
     @Override
-    public void openOrderFormGUI(EntityPlayer player) {
+    public void openOrderFormGUI(EntityPlayer player)
+    {
         GuiScreen gui = new GuiOrderForm(player);
         FMLClientHandler.instance().displayGuiScreen(player, gui);
-    }
-
-    public class ForgeHandlers {
-        // Forge event responses
-
-        @SubscribeEvent
-        public void onRenderWorldLast(RenderWorldLastEvent event) {
-            // Draw the preview brick
-            float f = event.partialTicks;
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-            World world = Minecraft.getMinecraft().theWorld;
-            if (player != null && world != null) {
-                ItemStack currentStack = player.inventory.getCurrentItem();
-                if (currentStack != null && currentStack.getItem() instanceof ItemBrick) {
-                    Brick brick = ItemBrick.getPotentialBrick(currentStack, player.worldObj, player, f);
-                    if (brick != null) {
-                        // Setup
-                        GL11.glPushMatrix();
-                        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ZERO);
-                        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-                        GL11.glDisable(GL11.GL_LIGHTING);
-
-                        translateToWorldCoords(Minecraft.getMinecraft().renderViewEntity, f);
-                        renderBrick(world, brick);
-
-                        // Teardown
-                        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                        GL11.glEnable(GL11.GL_LIGHTING);
-                        GL11.glPopMatrix();
-                    }
-                }
-            }
-        }
-
-        private void translateToWorldCoords(Entity entity, float frame) {
-            double interpPosX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * frame;
-            double interpPosY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * frame;
-            double interpPosZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * frame;
-            GL11.glTranslated(-interpPosX, -interpPosY, -interpPosZ);
-        }
-
-        // Tick handler
-
-        @SubscribeEvent
-        public void onRenderTick(TickEvent.RenderTickEvent event) {
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-            World world = Minecraft.getMinecraft().theWorld;
-            // See what brick is in front of the player
-            float f = 1F; //TODO:((Float)tickData).getFloatValue(); was this dunno what it did yet :p
-
-            Brick hoverBrick = null;
-            if (player != null && world != null) {
-                BlockBillund.setHoverBrick(ItemBrick.getExistingBrick(world, player, f));
-            } else {
-                BlockBillund.setHoverBrick(null);
-            }
-        }
-    }
-
-    private static class BillundBlockRenderingHandler implements
-            ISimpleBlockRenderingHandler {
-        public BillundBlockRenderingHandler() {
-        }
-
-        // ISimpleBlockRenderingHandler implementation
-
-        @Override
-        public boolean shouldRender3DInInventory(int modelId) {
-            return false;
-        }
-
-        @Override
-        public int getRenderId() {
-            return ModBlocks.billund.blockRenderID;
-        }
-
-        @Override
-        public boolean renderWorldBlock(IBlockAccess world, int i, int j, int k, Block block, int modelID, RenderBlocks renderblocks) {
-            if (modelID == getRenderId()) {
-                TileEntity entity = world.getTileEntity(i, j, k);
-                if (entity != null && entity instanceof TileEntityBillund) {
-                    TileEntityBillund billund = (TileEntityBillund) entity;
-                    for (int x = 0; x < Stud.STUDS_PER_ROW; ++x) {
-                        for (int y = 0; y < Stud.STUDS_PER_COLUMN; ++y) {
-                            for (int z = 0; z < Stud.STUDS_PER_ROW; ++z) {
-                                Stud stud = billund.getStudLocal(x, y, z);
-                                if (stud != null) {
-                                    int sx = i * Stud.STUDS_PER_ROW + x;
-                                    int sy = j * Stud.STUDS_PER_COLUMN + y;
-                                    int sz = k * Stud.STUDS_PER_ROW + z;
-                                    if (stud.XOrigin == sx && stud.YOrigin == sy && stud.ZOrigin == sz) {
-                                        // Draw the brick
-                                        int brightness = block.getMixedBrightnessForBlock(world, i, j, k);
-                                        renderBrick(
-                                                world, brightness, stud.Colour.number,
-                                                sx, sy, sz, stud.BrickWidth, stud.BrickHeight, stud.BrickDepth
-                                        );
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderblocks) {
-        }
-    }
-
-    public static class BrickRenderer implements
-            IItemRenderer {
-        public void BrickRenderer() {
-        }
-
-        // IItemRenderer implementation
-        @Override
-        public boolean handleRenderType(ItemStack item, IItemRenderer.ItemRenderType type) {
-            switch (type) {
-                case ENTITY:
-                case EQUIPPED:
-                case EQUIPPED_FIRST_PERSON:
-                case INVENTORY: {
-                    return true;
-                }
-                case FIRST_PERSON_MAP:
-                default: {
-                    return false;
-                }
-            }
-        }
-
-        @Override
-        public boolean shouldUseRenderHelper(IItemRenderer.ItemRenderType type, ItemStack item, IItemRenderer.ItemRendererHelper helper) {
-            switch (helper) {
-                case ENTITY_ROTATION:
-                case ENTITY_BOBBING:
-                case EQUIPPED_BLOCK:
-                case BLOCK_3D:
-                case INVENTORY_BLOCK: {
-                    return true;
-                }
-                default: {
-                    return false;
-                }
-            }
-        }
-
-        @Override
-        public void renderItem(ItemRenderType type, ItemStack item, Object[] data) {
-            int damage = item.getItemDamage();
-            switch (type) {
-                case ENTITY: {
-                    renderBrick(item, false, true);
-                    break;
-                }
-                case EQUIPPED: {
-                    GL11.glPushMatrix();
-                    GL11.glTranslatef(0.6f, 0.6f, 0.6f);
-                    renderBrick(item, false, true);
-                    GL11.glPopMatrix();
-                    break;
-                }
-                case INVENTORY: {
-                    GL11.glPushMatrix();
-                    GL11.glTranslatef(0.5f, 0.5f, 0.5f);
-                    renderBrick(item, true, true);
-                    GL11.glPopMatrix();
-                    break;
-                }
-                case EQUIPPED_FIRST_PERSON:
-                default: {
-                    break;
-                }
-            }
-        }
-    }
-
-    public static void renderBrick(ItemStack brick, boolean scale, boolean center) {
-        Tessellator tessellator = Tessellator.instance;
-        int brightness = 15;
-
-        int colour = ItemBrick.getColour(brick).number;
-        int width = ItemBrick.getWidth(brick);
-        int height = ItemBrick.getHeight(brick);
-        int depth = ItemBrick.getDepth(brick);
-
-        // Setup
-        GL11.glPushMatrix();
-
-        if (scale) {
-            float scaleValue = ((float) Stud.LAYERS_PER_BLOCK) / Math.max(2.0f, (float) Math.max(width, depth) - 0.5f);
-            GL11.glScalef(scaleValue, scaleValue, scaleValue);
-        }
-        if (center) {
-            GL11.glTranslatef(
-                    -0.5f * ((float) width / (float) Stud.ROWS_PER_BLOCK),
-                    -0.5f * ((float) height / (float) Stud.LAYERS_PER_BLOCK),
-                    -0.5f * ((float) depth / (float) Stud.ROWS_PER_BLOCK)
-            );
-        }
-
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-        Minecraft mc = Minecraft.getMinecraft();
-        mc.getTextureManager().bindTexture(mc.getTextureManager().getResourceLocation(0)); // bind the terrain texture
-
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(0.0f, -1.0f, 0.0f);
-        renderBrick(null, brightness, colour, 0, 0, 0, width, height, depth);
-        tessellator.draw();
-
-        // Teardown
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glPopMatrix();
-    }
-
-    public static void renderBrick(IBlockAccess world, Brick brick) {
-        int localX = (brick.XOrigin % Stud.ROWS_PER_BLOCK + Stud.ROWS_PER_BLOCK) % Stud.ROWS_PER_BLOCK;
-        int localY = (brick.YOrigin % Stud.LAYERS_PER_BLOCK + Stud.LAYERS_PER_BLOCK) % Stud.LAYERS_PER_BLOCK;
-        int localZ = (brick.ZOrigin % Stud.ROWS_PER_BLOCK + Stud.ROWS_PER_BLOCK) % Stud.ROWS_PER_BLOCK;
-        int blockX = (brick.XOrigin - localX) / Stud.ROWS_PER_BLOCK;
-        int blockY = (brick.YOrigin - localY) / Stud.LAYERS_PER_BLOCK;
-        int blockZ = (brick.ZOrigin - localZ) / Stud.ROWS_PER_BLOCK;
-
-        Tessellator tessellator = Tessellator.instance;
-        int brightness = ModBlocks.billund.getMixedBrightnessForBlock(world, blockX, blockY, blockZ);
-
-        Minecraft mc = Minecraft.getMinecraft();
-        mc.getTextureManager().bindTexture(mc.getTextureManager().getResourceLocation(0)); // bind the terrain texture
-
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(0.0f, -1.0f, 0.0f);
-        renderBrick(world, brightness, brick.Colour.number, brick.XOrigin, brick.YOrigin, brick.ZOrigin, brick.Width, brick.Height, brick.Depth);
-        tessellator.draw();
-    }
-
-    private static void renderBrick(IBlockAccess world, int brightness, int colour, int sx, int sy, int sz, int width, int height, int depth) {
-        // Draw the brick
-        IIcon icon = BlockBillund.getIcon(colour);
-        if (world != null) {
-            Tessellator tessellator = Tessellator.instance;
-            tessellator.setBrightness(brightness);
-        }
-
-        float pixel = 1.0f / 96.0f;
-        float xBlockSize = (float) Stud.STUDS_PER_ROW;
-        float yBlockSize = (float) Stud.STUDS_PER_COLUMN;
-        float zBlockSize = (float) Stud.STUDS_PER_ROW;
-
-        float startX = (float) sx / xBlockSize;
-        float startY = (float) sy / yBlockSize;
-        float startZ = (float) sz / zBlockSize;
-        float endX = startX + ((float) width / xBlockSize);
-        float endY = startY + ((float) height / yBlockSize);
-        float endZ = startZ + ((float) depth / zBlockSize);
-        renderBox(
-                icon, brightness,
-                startX, startY, startZ,
-                endX, endY, endZ,
-                true
-        );
-
-        // Draw the studs
-        int sny = sy + height;
-        startY = (float) sny / yBlockSize;
-        endY = startY + (0.1666f / yBlockSize);
-        for (int snx = sx; snx < sx + width; ++snx) {
-            startX = (float) snx / xBlockSize;
-            endX = startX + (1.0f / xBlockSize);
-            for (int snz = sz; snz < sz + depth; ++snz) {
-                boolean drawStud;
-                if (world != null) {
-                    Stud above = Stud.getStud(world, snx, sny, snz);
-                    drawStud = (above == null) || (above.Colour == Colour.TRANSLUCENT_WALL);
-                } else {
-                    drawStud = true;
-                }
-
-                if (drawStud) {
-                    startZ = (float) snz / zBlockSize;
-                    endZ = startZ + (1.0f / zBlockSize);
-                    renderBox(
-                            icon, brightness,
-                            startX + pixel * 2.0f, startY, startZ + pixel * 4.0f,
-                            startX + pixel * 4.0f, endY, endZ - pixel * 4.0f,
-                            false
-                    );
-                    renderBox(
-                            icon, brightness,
-                            startX + pixel * 4.0f, startY, startZ + pixel * 2.0f,
-                            endX - pixel * 4.0f, endY, endZ - pixel * 2.0f,
-                            false
-                    );
-                    renderBox(
-                            icon, brightness,
-                            endX - pixel * 4.0f, startY, startZ + pixel * 4.0f,
-                            endX - pixel * 2.0f, endY, endZ - pixel * 4.0f,
-                            false
-                    );
-                }
-            }
-        }
-    }
-
-    private static void renderBox(IIcon icon, int brightness, float startX, float startY, float startZ, float endX, float endY, float endZ, boolean bottom) {
-        // X faces
-        renderFaceXNeg(icon, startX, startY, startZ, endX, endY, endZ);
-        renderFaceXPos(icon, startX, startY, startZ, endX, endY, endZ);
-
-        // Y faces
-        if (bottom) {
-            renderFaceYNeg(icon, startX, startY, startZ, endX, endY, endZ);
-        }
-        renderFaceYPos(icon, startX, startY, startZ, endX, endY, endZ);
-
-        // Z faces
-        renderFaceZNeg(icon, startX, startY, startZ, endX, endY, endZ);
-        renderFaceZPos(icon, startX, startY, startZ, endX, endY, endZ);
-    }
-
-    private static void renderFaceXNeg(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ) {
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorOpaque_F(0.6f, 0.6f, 0.6f);
-        tessellator.addVertexWithUV(startX, endY, endZ, icon.getMinU(), icon.getMaxV());
-        tessellator.addVertexWithUV(startX, endY, startZ, icon.getMinU(), icon.getMinV());
-        tessellator.addVertexWithUV(startX, startY, startZ, icon.getMaxU(), icon.getMinV());
-        tessellator.addVertexWithUV(startX, startY, endZ, icon.getMaxU(), icon.getMaxV());
-    }
-
-    private static void renderFaceXPos(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ) {
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorOpaque_F(0.6f, 0.6f, 0.6f);
-        tessellator.addVertexWithUV(endX, startY, endZ, icon.getMaxU(), icon.getMaxV());
-        tessellator.addVertexWithUV(endX, startY, startZ, icon.getMaxU(), icon.getMinV());
-        tessellator.addVertexWithUV(endX, endY, startZ, icon.getMinU(), icon.getMinV());
-        tessellator.addVertexWithUV(endX, endY, endZ, icon.getMinU(), icon.getMaxV());
-    }
-
-    private static void renderFaceYNeg(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ) {
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorOpaque_F(0.5f, 0.5f, 0.5f);
-        tessellator.addVertexWithUV(startX, startY, endZ, icon.getMinU(), icon.getMaxV());
-        tessellator.addVertexWithUV(startX, startY, startZ, icon.getMinU(), icon.getMinV());
-        tessellator.addVertexWithUV(endX, startY, startZ, icon.getMaxU(), icon.getMinV());
-        tessellator.addVertexWithUV(endX, startY, endZ, icon.getMaxU(), icon.getMaxV());
-    }
-
-    private static void renderFaceYPos(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ) {
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorOpaque_F(1.0f, 1.0f, 1.0f);
-        tessellator.addVertexWithUV(endX, endY, endZ, icon.getMaxU(), icon.getMaxV());
-        tessellator.addVertexWithUV(endX, endY, startZ, icon.getMaxU(), icon.getMinV());
-        tessellator.addVertexWithUV(startX, endY, startZ, icon.getMinU(), icon.getMinV());
-        tessellator.addVertexWithUV(startX, endY, endZ, icon.getMinU(), icon.getMaxV());
-    }
-
-    private static void renderFaceZNeg(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ) {
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorOpaque_F(0.8f, 0.8f, 0.8f);
-        tessellator.addVertexWithUV(startX, endY, startZ, icon.getMaxU(), icon.getMaxV());
-        tessellator.addVertexWithUV(endX, endY, startZ, icon.getMaxU(), icon.getMinV());
-        tessellator.addVertexWithUV(endX, startY, startZ, icon.getMinU(), icon.getMinV());
-        tessellator.addVertexWithUV(startX, startY, startZ, icon.getMinU(), icon.getMaxV());
-    }
-
-    private static void renderFaceZPos(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ) {
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorOpaque_F(0.8f, 0.8f, 0.8f);
-        tessellator.addVertexWithUV(startX, startY, endZ, icon.getMinU(), icon.getMaxV());
-        tessellator.addVertexWithUV(endX, startY, endZ, icon.getMinU(), icon.getMinV());
-        tessellator.addVertexWithUV(endX, endY, endZ, icon.getMaxU(), icon.getMinV());
-        tessellator.addVertexWithUV(startX, endY, endZ, icon.getMaxU(), icon.getMaxV());
     }
 }
