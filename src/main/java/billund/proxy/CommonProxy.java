@@ -22,10 +22,23 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import java.util.Random;
 
-public abstract class CommonProxy implements IProxy {
+public  class CommonProxy {
     // IProxy implementation
 
-    public abstract void openOrderFormGUI(EntityPlayer player);
+    public void openOrderFormGUI(EntityPlayer player)
+    {
+        // NOOP
+    }
+
+    public void initRenderingAndTextures()
+    {
+        // NOOP
+    }
+
+    public boolean isClient()
+    {
+        return false;
+    }
 
     public void registerEntities() {
         // airdrop entity

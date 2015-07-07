@@ -9,7 +9,7 @@ import billund.handler.ConfigHandler;
 import billund.init.ModBlocks;
 import billund.init.ModItems;
 import billund.init.Recipes;
-import billund.proxy.IProxy;
+import billund.proxy.CommonProxy;
 import billund.reference.Reference;
 import billund.util.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -24,7 +24,7 @@ public class Billund {
     public static Billund instance;
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SEVER_PROXY_CLASS)
-    public static IProxy proxy;
+    public static CommonProxy proxy;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

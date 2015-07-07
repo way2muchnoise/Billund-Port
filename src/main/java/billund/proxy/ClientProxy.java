@@ -43,11 +43,11 @@ import org.lwjgl.opengl.GL11;
 public class ClientProxy extends CommonProxy {
 
     @Override
-    public boolean isClient() {
+    public boolean isClient()
+    {
         return true;
     }
 
-    @Override
     public void initRenderingAndTextures() {
         ModBlocks.billund.blockRenderID = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new BillundBlockRenderingHandler());
