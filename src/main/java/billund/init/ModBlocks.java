@@ -9,10 +9,11 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ModBlocks
 {
 
-    public static BlockBillund billund = new BlockBillund();
+    public static BlockBillund billund;
 
     public static void init()
     {
+        billund = new BlockBillund();
         GameRegistry.registerBlock(billund, Names.Blocks.BILLUND);
     }
 }

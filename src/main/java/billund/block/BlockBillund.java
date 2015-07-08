@@ -46,9 +46,7 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider
     public static IIcon getIcon(int studColour)
     {
         if (studColour >= 0 && studColour < Colour.count())
-        {
             return s_icons[studColour];
-        }
         return s_transparentIcon;
     }
 
@@ -118,10 +116,10 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider
                     // Spawn an item for the destroyed brick
                     if (!player.capabilities.isCreativeMode)
                     {
-                        float brickX = ((float) brick.XOrigin + (float) brick.Width * 0.5f) / (float) Stud.ROWS_PER_BLOCK;
-                        float brickY = ((float) brick.YOrigin + (float) brick.Height) / (float) Stud.LAYERS_PER_BLOCK;
-                        float brickZ = ((float) brick.ZOrigin + (float) brick.Depth * 0.5f) / (float) Stud.ROWS_PER_BLOCK;
-                        ItemStack stack = ItemBrick.create(brick.Colour, Math.min(brick.Width, brick.Depth), Math.max(brick.Width, brick.Depth), 1);
+                        float brickX = ((float) brick.xOrigin + (float) brick.width * 0.5f) / (float) Stud.ROWS_PER_BLOCK;
+                        float brickY = ((float) brick.yOrigin + (float) brick.height) / (float) Stud.LAYERS_PER_BLOCK;
+                        float brickZ = ((float) brick.zOrigin + (float) brick.depth * 0.5f) / (float) Stud.ROWS_PER_BLOCK;
+                        ItemStack stack = ItemBrick.create(brick.colour, Math.min(brick.width, brick.depth), Math.max(brick.width, brick.depth), 1);
                         EntityItem entityitem = new EntityItem(world, brickX, brickY + 0.05f, brickZ, stack);
                         entityitem.motionX = 0.0f;
                         entityitem.motionY = 0.0f;
@@ -150,10 +148,7 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider
         {
             TileEntityBillund billund = (TileEntityBillund) tileEntity;
             billund.cullOrphans();
-            if (billund.isEmpty())
-            {
-                world.setBlockToAir(x, y, z);
-            }
+            if (billund.isEmpty()) world.setBlockToAir(x, y, z);
         }
     }
 
@@ -163,9 +158,9 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider
         if (s_hoverBrick != null)
         {
             // See if the hovered brick is in the start bit
-            int sx = s_hoverBrick.XOrigin;
-            int sy = s_hoverBrick.YOrigin;
-            int sz = s_hoverBrick.ZOrigin;
+            int sx = s_hoverBrick.xOrigin;
+            int sy = s_hoverBrick.yOrigin;
+            int sz = s_hoverBrick.zOrigin;
             {
                 int localX = (sx % Stud.ROWS_PER_BLOCK + Stud.ROWS_PER_BLOCK) % Stud.ROWS_PER_BLOCK;
                 int localY = (sy % Stud.LAYERS_PER_BLOCK + Stud.LAYERS_PER_BLOCK) % Stud.LAYERS_PER_BLOCK;
@@ -187,9 +182,9 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider
                     float startZ = (float) (sz - (k * Stud.ROWS_PER_BLOCK)) * zScale;
                     this.setBlockBounds(
                             startX, startY, startZ,
-                            startX + (float) s_hoverBrick.Width * xScale,
-                            startY + (float) s_hoverBrick.Height * yScale,
-                            startZ + (float) s_hoverBrick.Depth * zScale
+                            startX + (float) s_hoverBrick.width * xScale,
+                            startY + (float) s_hoverBrick.height * yScale,
+                            startZ + (float) s_hoverBrick.depth * zScale
                     );
                     return;
                 }
@@ -252,9 +247,7 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider
                                         startZ + stepZ
                                 );
                                 if (littleBox.intersectsWith(bigBox))
-                                {
                                     list.add(littleBox);
-                                }
                             } else
                             {
                                 // Else, if this stud *is* the origin, add an aabb for the whole thing
@@ -270,9 +263,7 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider
                                             startZ + (double) stud.BrickDepth * stepZ
                                     );
                                     if (littleBox.intersectsWith(bigBox))
-                                    {
                                         list.add(littleBox);
-                                    }
                                 }
                             }
                         }
@@ -300,11 +291,7 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider
         s_icons = new IIcon[Colour.count()];
         s_transparentIcon = iconRegister.registerIcon(Textures.RESOURCE_PREFIX + Textures.COLOURS_PREFIX + "transparent");
         for (Colour colour : Colour.values())
-        {
             if (colour.number >= 0)
-            {
                 s_icons[colour.number] = iconRegister.registerIcon(Textures.RESOURCE_PREFIX + Textures.COLOURS_PREFIX + colour.name);
-            }
-        }
     }
 }

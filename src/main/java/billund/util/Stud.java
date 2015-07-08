@@ -50,7 +50,7 @@ public class Stud
 
     public Stud(Brick brick, int xLocal, int yLocal, int zLocal)
     {
-        this(brick.Colour, brick.XOrigin, brick.YOrigin, brick.ZOrigin, brick.Width, brick.Height, brick.Depth);
+        this(brick.colour, brick.xOrigin, brick.yOrigin, brick.zOrigin, brick.width, brick.height, brick.depth);
     }
 
     public static Stud getStud(IBlockAccess world, int x, int y, int z)
@@ -103,9 +103,7 @@ public class Stud
                     return (billund.getStudLocal(localX, localY, localZ) == null);
                 }
             } else if (block == Blocks.air)
-            {
                 return true;
-            }
         }
         return false;
     }
@@ -151,31 +149,23 @@ public class Stud
 
     public static boolean canAddBrick(World world, Brick brick)
     {
-        for (int x = brick.XOrigin; x < brick.XOrigin + brick.Width; ++x)
-        {
-            for (int y = brick.YOrigin; y < brick.YOrigin + brick.Height; ++y)
-            {
-                for (int z = brick.ZOrigin; z < brick.ZOrigin + brick.Depth; ++z)
-                {
+        for (int x = brick.xOrigin; x < brick.xOrigin + brick.width; ++x)
+            for (int y = brick.yOrigin; y < brick.yOrigin + brick.height; ++y)
+                for (int z = brick.zOrigin; z < brick.zOrigin + brick.depth; ++z)
                     if (!canSetStud(world, x, y, z))
-                    {
                         return false;
-                    }
-                }
-            }
-        }
         return true;
     }
 
     public static void addBrick(World world, Brick brick)
     {
-        for (int x = brick.XOrigin; x < brick.XOrigin + brick.Width; ++x)
+        for (int x = brick.xOrigin; x < brick.xOrigin + brick.width; ++x)
         {
-            for (int y = brick.YOrigin; y < brick.YOrigin + brick.Height; ++y)
+            for (int y = brick.yOrigin; y < brick.yOrigin + brick.height; ++y)
             {
-                for (int z = brick.ZOrigin; z < brick.ZOrigin + brick.Depth; ++z)
+                for (int z = brick.zOrigin; z < brick.zOrigin + brick.depth; ++z)
                 {
-                    Stud stud = new Stud(brick, x - brick.XOrigin, y - brick.YOrigin, z - brick.ZOrigin);
+                    Stud stud = new Stud(brick, x - brick.xOrigin, y - brick.yOrigin, z - brick.zOrigin);
                     setStud(world, x, y, z, stud);
                 }
             }
@@ -184,16 +174,10 @@ public class Stud
 
     public static void removeBrick(World world, Brick brick)
     {
-        for (int x = brick.XOrigin; x < brick.XOrigin + brick.Width; ++x)
-        {
-            for (int y = brick.YOrigin; y < brick.YOrigin + brick.Height; ++y)
-            {
-                for (int z = brick.ZOrigin; z < brick.ZOrigin + brick.Depth; ++z)
-                {
+        for (int x = brick.xOrigin; x < brick.xOrigin + brick.width; ++x)
+            for (int y = brick.yOrigin; y < brick.yOrigin + brick.height; ++y)
+                for (int z = brick.zOrigin; z < brick.zOrigin + brick.depth; ++z)
                     setStud(world, x, y, z, null);
-                }
-            }
-        }
     }
 
     public static class StudRaycastResult
@@ -274,17 +258,11 @@ public class Stud
             float distToEdgeY = 999.0f;
             float distToEdgeZ = 999.0f;
             if (stepX != 0)
-            {
                 distToEdgeX = (edgeX - x) / dx;
-            }
             if (stepY != 0)
-            {
                 distToEdgeY = (edgeY - y) / dy;
-            }
             if (stepZ != 0)
-            {
                 distToEdgeZ = (edgeZ - z) / dz;
-            }
             if (distToEdgeX <= distToEdgeY && distToEdgeX <= distToEdgeZ)
             {
                 if (distToEdgeX < distanceLeft)

@@ -6,6 +6,8 @@
 package billund.client.render.tileentity;
 
 import billund.client.render.models.ModelParachute;
+import billund.reference.Resources;
+import billund.tileentity.TileEntityAirDrop;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -22,7 +24,6 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class TileEntityRendererAirDrop extends Render
 {
-    private static final ResourceLocation chuteTexture = new ResourceLocation("billund", "textures/models/chute.png");
     private ModelParachute m_model;
 
     public TileEntityRendererAirDrop()
@@ -31,7 +32,7 @@ public class TileEntityRendererAirDrop extends Render
         m_model = new ModelParachute();
     }
 
-    private void doRenderFallingSand(billund.tileentity.TileEntityAirDrop entity, double x, double y, double z, float f, float f2)
+    private void doRenderFallingSand(TileEntityAirDrop entity, double x, double y, double z, float f, float f2)
     {
         World world = entity.getWorld();
         Block block = entity.block;
@@ -55,7 +56,7 @@ public class TileEntityRendererAirDrop extends Render
                     GL11.glScalef(1.2f, 1.2f, 1.2f);
 
                     Minecraft mc = Minecraft.getMinecraft();
-                    mc.getTextureManager().bindTexture(chuteTexture);
+                    mc.getTextureManager().bindTexture(Resources.Model.PARACHUTE);
                     m_model.render(0.0625f);
                 }
             }
@@ -73,6 +74,6 @@ public class TileEntityRendererAirDrop extends Render
 
     public void doRender(Entity entity, double x, double y, double z, float f, float f2)
     {
-        this.doRenderFallingSand((billund.tileentity.TileEntityAirDrop) entity, x, y, z, f, f2);
+        this.doRenderFallingSand((TileEntityAirDrop) entity, x, y, z, f, f2);
     }
 }

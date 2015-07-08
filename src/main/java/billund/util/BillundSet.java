@@ -17,20 +17,20 @@ public class BillundSet
         return new BillundSet(index);
     }
 
-    private static String[] s_setNames = new String[]{
-            "Starter Pack",
-            "Colour Pack A",
-            "Colour Pack B",
-            "Colour Pack C",
-            "Colour Pack D",
+    private static String[] s_setNames = new String[] {
+        "Starter Pack",
+        "Colour Pack A",
+        "Colour Pack B",
+        "Colour Pack C",
+        "Colour Pack D",
     };
 
-    private static int[] s_setCosts = new int[]{
-            7,
-            10,
-            10,
-            10,
-            10
+    private static int[] s_setCosts = new int[] {
+        7,
+        10,
+        10,
+        10,
+        10
     };
 
     private int m_index;
@@ -58,6 +58,7 @@ public class BillundSet
         s_addIndex = 0;
         s_addInventory = inv;
 
+        // TODO: Make this dynamic
         switch (m_index)
         {
             case 0:
@@ -120,9 +121,7 @@ public class BillundSet
     {
         int slot = s_addIndex++;
         if (slot < s_addInventory.getSizeInventory())
-        {
             s_addInventory.setInventorySlotContents(slot, stack);
-        }
     }
 
     private void addBasic(Colour colour)

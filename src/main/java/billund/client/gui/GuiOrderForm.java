@@ -7,18 +7,16 @@ package billund.client.gui;
 
 import billund.network.MessageHandler;
 import billund.network.message.MessageBillund;
+import billund.reference.Resources;
 import billund.util.BillundSet;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class GuiOrderForm extends GuiScreen
 {
-    private static final ResourceLocation background = new ResourceLocation("billund", "textures/gui/orderForm.png");
-
     private static final int xSize = 192;
     private static final int ySize = 185;
 
@@ -88,31 +86,14 @@ public class GuiOrderForm extends GuiScreen
                 int tickBoxIndex = (localY - 33) / 23;
                 int tickBoxLocalY = (localY - 33) % 23;
                 if (tickBoxIndex >= 0 && tickBoxIndex < NUM_SETS && tickBoxLocalY < 17)
-                {
                     if (!m_ordered)
-                    {
                         for (int i = 0; i < NUM_SETS; ++i)
-                        {
-                            if (i == tickBoxIndex)
-                            {
-                                m_orders[i] = !m_orders[i];
-                            } else
-                            {
-                                m_orders[i] = false;
-                            }
-                        }
-                    }
-                }
+                            m_orders[i] = i == tickBoxIndex && !m_orders[i];
             }
 
             // Test order button
             if (localX >= 102 && localX < 177 && localY >= 149 && localY < 170)
-            {
-                if (canPlayerOrder())
-                {
-                    order();
-                }
-            }
+                if (canPlayerOrder()) order();
         }
     }
 
@@ -124,7 +105,7 @@ public class GuiOrderForm extends GuiScreen
 
         // Draw the form
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(background);
+        this.mc.getTextureManager().bindTexture(Resources.GUI.ORDER_FORM);
 
         int startY = (height - ySize) / 2;
         int startX = (width - xSize) / 2;
@@ -133,12 +114,8 @@ public class GuiOrderForm extends GuiScreen
 
         // Draw the ticks
         for (int i = 0; i < NUM_SETS; ++i)
-        {
             if (m_orders[i])
-            {
                 drawTexturedModalRect(startX + 160, startY + 31 + i * 23, xSize, 0, 19, 19);
-            }
-        }
 
         // Draw the text
         fontRendererObj.drawString("Billund Order Form", startX + 8, startY + 10, 0x4c5156);
@@ -148,9 +125,7 @@ public class GuiOrderForm extends GuiScreen
         fontRendererObj.drawString(currency, startX + xSize - 25 - fontRendererObj.getStringWidth(currency), startY + 10, currencyColour);
 
         for (int i = 0; i < NUM_SETS; ++i)
-        {
             fontRendererObj.drawString(getSetName(i), startX + 16, startY + 38 + i * 23, 0x4c5156);
-        }
 
         String order = m_ordered ? "Placed" : "Place Order";
         int colour = canPlayerOrder() ? 0x4c5156 : 0xb3a8a7;
@@ -210,9 +185,7 @@ public class GuiOrderForm extends GuiScreen
         {
             ItemStack stack = m_player.inventory.getStackInSlot(i);
             if (stack != null && stack.getItem() == Items.emerald)
-            {
                 total += stack.stackSize;
-            }
         }
         return total;
     }
@@ -221,12 +194,8 @@ public class GuiOrderForm extends GuiScreen
     {
         int total = 0;
         for (int i = 0; i < NUM_SETS; ++i)
-        {
             if (m_orders[i])
-            {
                 total += getSetCost(i);
-            }
-        }
         return total;
     }
 

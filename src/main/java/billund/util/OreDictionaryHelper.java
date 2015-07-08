@@ -15,9 +15,8 @@ public class OreDictionaryHelper
     public static boolean compareOre(ItemStack stack, String oreName)
     {
         for (ItemStack ore : OreDictionary.getOres(oreName))
-        {
-            if (OreDictionary.itemMatches(ore, stack, false)) return true;
-        }
+            if (OreDictionary.itemMatches(ore, stack, false))
+                return true;
         return false;
     }
 
@@ -32,9 +31,7 @@ public class OreDictionaryHelper
         {
             String name = OreDictionary.getOreName(i);
             if (name.startsWith("dye") && name.length() > 3)
-            {
                 return name.substring(3);
-            }
         }
         return null;
     }

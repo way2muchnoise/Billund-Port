@@ -25,15 +25,11 @@ public class RecipeBrick implements IRecipe
             if (stack != null)
             {
                 if (stack.getItem() == ModItems.brick)
-                {
                     bricks++;
-                } else if (OreDictionaryHelper.compareOre(stack, "dye"))
-                {
+                else if (OreDictionaryHelper.compareOre(stack, "dye"))
                     dye++;
-                } else
-                {
+                else
                     other = true;
-                }
             }
         }
         return bricks == 1 && dye == 1 && !other && ConfigHandler.redye;
@@ -51,19 +47,15 @@ public class RecipeBrick implements IRecipe
             if (stack != null)
             {
                 if (stack.getItem() == ModItems.brick)
-                {
                     brick = stack.copy();
-                } else if (OreDictionaryHelper.compareOre(stack, "dye"))
-                {
+                else if (OreDictionaryHelper.compareOre(stack, "dye"))
                     component = stack.copy();
                     dye = true;
-                }
             }
         }
         if (dye)
         {
-            String name = null;
-
+            String name = null; // TODO: get some name here?
             return ItemBrick.create(
                     Colour.getNamed(name),
                     ItemBrick.getWidth(brick),

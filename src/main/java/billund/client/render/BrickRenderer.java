@@ -37,20 +37,15 @@ public class BrickRenderer implements IItemRenderer
             case EQUIPPED_BLOCK:
             case BLOCK_3D:
             case INVENTORY_BLOCK:
-            {
                 return true;
-            }
             default:
-            {
                 return false;
-            }
         }
     }
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object[] data)
     {
-        int damage = item.getItemDamage();
         switch (type)
         {
             case ENTITY:
@@ -76,9 +71,7 @@ public class BrickRenderer implements IItemRenderer
             }
             case EQUIPPED_FIRST_PERSON:
             default:
-            {
                 break;
-            }
         }
     }
 }

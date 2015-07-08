@@ -8,12 +8,14 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ModItems
 {
 
-    public static ItemBrick brick = new ItemBrick();
-    public static ItemOrderForm orderForm = new ItemOrderForm();
+    public static ItemBrick brick;
+    public static ItemOrderForm orderForm;
 
     public static void init()
     {
+        brick = new ItemBrick();
         GameRegistry.registerItem(brick, Names.Items.BRICK);
+        orderForm = new ItemOrderForm();
         GameRegistry.registerItem(orderForm, Names.Items.ORDER_FORM);
     }
 }

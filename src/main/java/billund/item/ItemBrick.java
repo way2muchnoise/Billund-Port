@@ -135,9 +135,9 @@ public class ItemBrick extends ItemBillund
                 {
                     for (int y = 0; y < height; ++y)
                     {
-                        brick.XOrigin = placeX - x;
-                        brick.YOrigin = placeY - y;
-                        brick.ZOrigin = placeZ - z;
+                        brick.xOrigin = placeX - x;
+                        brick.yOrigin = placeY - y;
+                        brick.zOrigin = placeZ - z;
                         if (Stud.canAddBrick(world, brick))
                         {
                             return brick;

@@ -79,18 +79,13 @@ public class TileEntityAirDrop extends Entity
                     MathHelper.floor_double(this.posZ)
             )) + 11.0f;
             if (this.posY <= deployHeight)
-            {
                 this.deployed = true;
-            }
         }
 
         if (!this.deployed)
-        {
             this.motionY -= 0.003 * ConfigHandler.speedMultiplier;
-        } else
-        {
+        else
             this.motionY -= 0.02 * ConfigHandler.speedMultiplier;
-        }
 
         this.moveEntity(this.motionX, this.motionY, this.motionZ);
         this.motionX *= 0.98;
@@ -131,9 +126,7 @@ public class TileEntityAirDrop extends Entity
                     }
                 }
             } else if (blockY < 0)
-            {
                 this.setDead();
-            }
         }
     }
 
@@ -145,7 +138,6 @@ public class TileEntityAirDrop extends Entity
     @Override
     protected void writeEntityToNBT(NBTTagCompound nbtTagCompound)
     {
-        //nbtTagCompound.set( "BlockID", this.blockID );
         nbtTagCompound.setByte("Data", (byte) this.metadata);
         nbtTagCompound.setInteger("Set", this.setType);
         nbtTagCompound.setBoolean("Deployed", this.deployed);
@@ -154,7 +146,6 @@ public class TileEntityAirDrop extends Entity
     @Override
     protected void readEntityFromNBT(NBTTagCompound nbtTagCompound)
     {
-        //this.blockID = nbtTagCompound.getInteger( "BlockID" );
         this.metadata = nbtTagCompound.getByte("Data") & 255;
         this.setType = nbtTagCompound.getInteger("Set");
         this.deployed = nbtTagCompound.getBoolean("Deployed");

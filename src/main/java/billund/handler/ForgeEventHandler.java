@@ -69,13 +69,9 @@ public class ForgeEventHandler
         // See what brick is in front of the player
         float f = 1F; //TODO:((Float)tickData).getFloatValue(); was this dunno what it did yet :p
 
-        Brick hoverBrick = null;
         if (player != null && world != null)
-        {
             BlockBillund.setHoverBrick(ItemBrick.getExistingBrick(world, player, f));
-        } else
-        {
+        else
             BlockBillund.setHoverBrick(null);
-        }
     }
 }

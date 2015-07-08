@@ -18,9 +18,7 @@ public class EmeraldHelper
             {
                 emeralds += stack.stackSize;
                 if (emeralds >= cost)
-                {
                     break;
-                }
             }
         }
 
@@ -43,9 +41,7 @@ public class EmeraldHelper
                         emeralds = 0;
                     }
                     if (emeralds == 0)
-                    {
                         break;
-                    }
                 }
             }
             player.inventory.markDirty();

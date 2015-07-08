@@ -62,12 +62,12 @@ public class BrickRenderHelper
 
     public static void renderBrick(IBlockAccess world, Brick brick)
     {
-        int localX = (brick.XOrigin % Stud.ROWS_PER_BLOCK + Stud.ROWS_PER_BLOCK) % Stud.ROWS_PER_BLOCK;
-        int localY = (brick.YOrigin % Stud.LAYERS_PER_BLOCK + Stud.LAYERS_PER_BLOCK) % Stud.LAYERS_PER_BLOCK;
-        int localZ = (brick.ZOrigin % Stud.ROWS_PER_BLOCK + Stud.ROWS_PER_BLOCK) % Stud.ROWS_PER_BLOCK;
-        int blockX = (brick.XOrigin - localX) / Stud.ROWS_PER_BLOCK;
-        int blockY = (brick.YOrigin - localY) / Stud.LAYERS_PER_BLOCK;
-        int blockZ = (brick.ZOrigin - localZ) / Stud.ROWS_PER_BLOCK;
+        int localX = (brick.xOrigin % Stud.ROWS_PER_BLOCK + Stud.ROWS_PER_BLOCK) % Stud.ROWS_PER_BLOCK;
+        int localY = (brick.yOrigin % Stud.LAYERS_PER_BLOCK + Stud.LAYERS_PER_BLOCK) % Stud.LAYERS_PER_BLOCK;
+        int localZ = (brick.zOrigin % Stud.ROWS_PER_BLOCK + Stud.ROWS_PER_BLOCK) % Stud.ROWS_PER_BLOCK;
+        int blockX = (brick.xOrigin - localX) / Stud.ROWS_PER_BLOCK;
+        int blockY = (brick.yOrigin - localY) / Stud.LAYERS_PER_BLOCK;
+        int blockZ = (brick.zOrigin - localZ) / Stud.ROWS_PER_BLOCK;
 
         Tessellator tessellator = Tessellator.instance;
         int brightness = ModBlocks.billund.getMixedBrightnessForBlock(world, blockX, blockY, blockZ);
@@ -77,7 +77,7 @@ public class BrickRenderHelper
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0f, -1.0f, 0.0f);
-        renderBrick(world, brightness, brick.Colour.number, brick.XOrigin, brick.YOrigin, brick.ZOrigin, brick.Width, brick.Height, brick.Depth);
+        renderBrick(world, brightness, brick.colour.number, brick.xOrigin, brick.yOrigin, brick.zOrigin, brick.width, brick.height, brick.depth);
         tessellator.draw();
     }
 

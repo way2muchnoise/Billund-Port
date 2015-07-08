@@ -30,34 +30,22 @@ public class TileEntityBillund extends TileEntity
 
     public Stud getStudLocal(int x, int y, int z)
     {
-        if (x >= 0 && x < Stud.STUDS_PER_ROW &&
-                y >= 0 && y < Stud.STUDS_PER_COLUMN &&
-                z >= 0 && z < Stud.STUDS_PER_ROW)
-        {
+        if (x >= 0 && x < Stud.STUDS_PER_ROW && y >= 0 && y < Stud.STUDS_PER_COLUMN && z >= 0 && z < Stud.STUDS_PER_ROW)
             return m_studs[x + (z * Stud.STUDS_PER_ROW) + (y * Stud.STUDS_PER_LAYER)];
-        }
         return null;
     }
 
     public void setStudLocal(int x, int y, int z, Stud stud)
     {
-        if (x >= 0 && x < Stud.STUDS_PER_ROW &&
-                y >= 0 && y < Stud.STUDS_PER_COLUMN &&
-                z >= 0 && z < Stud.STUDS_PER_ROW)
-        {
+        if (x >= 0 && x < Stud.STUDS_PER_ROW && y >= 0 && y < Stud.STUDS_PER_COLUMN && z >= 0 && z < Stud.STUDS_PER_ROW)
             m_studs[x + (z * Stud.STUDS_PER_ROW) + (y * Stud.STUDS_PER_LAYER)] = stud;
-        }
     }
 
     public boolean isEmpty()
     {
         for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i)
-        {
             if (m_studs[i] != null)
-            {
                 return false;
-            }
-        }
         return true;
     }
 
@@ -78,9 +66,7 @@ public class TileEntityBillund extends TileEntity
             }
         }
         if (changed)
-        {
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
     }
 
     @Override
@@ -140,9 +126,7 @@ public class TileEntityBillund extends TileEntity
                 stud.BrickDepth = studTag.getInteger("d");
                 m_studs[i] = stud;
             } else
-            {
                 m_studs[i] = null;
-            }
         }
     }
 }

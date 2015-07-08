@@ -68,19 +68,13 @@ public class CommonProxy
         @SubscribeEvent
         public void onEntityLivingDeath(LivingDeathEvent event)
         {
-            if (event.entity.worldObj.isRemote)
-            {
-                return;
-            }
+            if (event.entity.worldObj.isRemote) return;
 
             if (event.entity instanceof EntityZombie)
             {
                 EntityLivingBase living = (EntityLivingBase) event.entity;
-                if ((living.isChild() && r.nextInt(20) == 0) ||
-                        (!living.isChild() && r.nextInt(100) == 0))
-                {
+                if ((living.isChild() && r.nextInt(20) == 0) || (!living.isChild() && r.nextInt(100) == 0))
                     event.entity.entityDropItem(new ItemStack(ModItems.orderForm, 1), 0.0f);
-                }
             }
         }
     }
