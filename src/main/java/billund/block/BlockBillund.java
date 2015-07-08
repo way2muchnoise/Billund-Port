@@ -18,7 +18,6 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -284,31 +283,9 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider
     }
 
     @Override
-    public void onBlockAdded(World world, int i, int j, int k)
-    {
-        super.onBlockAdded(world, i, j, k);
-    }
-
-    @Override
-    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack itemstack)
-    {
-        super.onBlockPlacedBy(world, i, j, k, entityliving, itemstack);
-        if (world.isRemote)
-        {
-            return;
-        }
-    }
-
-    @Override
     public IIcon getIcon(int side, int damage)
     {
         return s_transparentIcon;
-    }
-
-    @Override
-    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int l, float m, float n, float o)
-    {
-        return false;
     }
 
     @Override

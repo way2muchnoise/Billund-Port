@@ -7,8 +7,8 @@ package billund.reference;
 
 public class Reference
 {
-    public static final String MOD_ID = "billund";
-    public static final String MOD_NAME = "Billund";
+    public static final String ID = "billund";
+    public static final String NAME = "Billund";
 
     // Main version information that will be displayed in mod listing and for other purposes.
     public static final String V_MAJOR = "@MAJOR@";

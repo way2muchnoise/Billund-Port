@@ -10,29 +10,37 @@ import billund.init.ModBlocks;
 import billund.init.ModItems;
 import billund.init.Recipes;
 import billund.proxy.CommonProxy;
+import billund.reference.MetaData;
 import billund.reference.Reference;
 import billund.util.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION_FULL, guiFactory = Reference.GUI_FACTORY_CLASS)
+@Mod(modid = Reference.ID, name = Reference.NAME, version = Reference.VERSION_FULL, guiFactory = Reference.GUI_FACTORY_CLASS)
 public class Billund
 {
-    @Mod.Instance(value = Reference.MOD_ID)
+    @Mod.Instance(Reference.ID)
     public static Billund instance;
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SEVER_PROXY_CLASS)
     public static CommonProxy proxy;
 
+    @Mod.Metadata(Reference.ID)
+    public static ModMetadata metadata;
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        //Initialize config
+        // Initialize config
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         FMLCommonHandler.instance().bus().register(new ConfigHandler());
+
+        // Init MetaData
+        metadata = MetaData.init(metadata);
 
         // Initialize mod items
         ModItems.init();
@@ -58,6 +66,7 @@ public class Billund
         // Register the Handlers
         proxy.registerHandlers();
 
+        // Register Recipes
         Recipes.init();
 
         LogHelper.info("init Complete!");

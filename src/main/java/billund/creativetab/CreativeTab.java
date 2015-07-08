@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 
 public class CreativeTab
 {
-    public static final CreativeTabs BILLUND_TAB = new CreativeTabs(Reference.MOD_ID.toLowerCase())
+    public static final CreativeTabs BILLUND_TAB = new CreativeTabs(Reference.ID.toLowerCase())
     {
         @Override
         public ItemStack getIconItemStack()

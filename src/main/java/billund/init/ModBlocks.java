@@ -5,7 +5,7 @@ import billund.reference.Names;
 import billund.reference.Reference;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@GameRegistry.ObjectHolder(Reference.MOD_ID)
+@GameRegistry.ObjectHolder(Reference.ID)
 public class ModBlocks
 {
 
