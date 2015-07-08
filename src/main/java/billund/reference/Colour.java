@@ -1,6 +1,7 @@
 package billund.reference;
 
-public enum Colour {
+public enum Colour
+{
     BLACK(0, "black"),
     RED(1, "red"),
     GREEN(2, "green"),
@@ -24,18 +25,24 @@ public enum Colour {
 
     public final int number;
     public final String name;
-    Colour(int number, String name) {
+
+    Colour(int number, String name)
+    {
         this.number = number;
         this.name = name;
     }
 
-    public static int count(){
+    public static int count()
+    {
         return 16;
     }
 
-    public static Colour getValue(int number) {
-        for (Colour p : values()) {
-            if (p.number == number) {
+    public static Colour getValue(int number)
+    {
+        for (Colour p : values())
+        {
+            if (p.number == number)
+            {
                 return p;
             }
         }
@@ -43,9 +50,12 @@ public enum Colour {
         return null;
     }
 
-    public static Colour getNamed(String name) {
-        for (Colour p : values()) {
-            if (p.name.toLowerCase().equals(name.toLowerCase())) {
+    public static Colour getNamed(String name)
+    {
+        for (Colour p : values())
+        {
+            if (p.name.toLowerCase().equals(name.toLowerCase()))
+            {
                 return p;
             }
         }

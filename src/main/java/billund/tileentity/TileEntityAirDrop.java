@@ -18,19 +18,22 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class TileEntityAirDrop extends Entity {
+public class TileEntityAirDrop extends Entity
+{
     public Block block;
     public int metadata;
     public int setType;
     public boolean deployed;
 
-    public TileEntityAirDrop(World world) {
+    public TileEntityAirDrop(World world)
+    {
         super(world);
         this.block = Blocks.chest;
         this.metadata = 0;
     }
 
-    public TileEntityAirDrop(World world, double x, double y, double z, int set) {
+    public TileEntityAirDrop(World world, double x, double y, double z, int set)
+    {
         this(world);
         this.preventEntitySpawning = true;
         this.setSize(0.98f, 0.98f);
@@ -46,38 +49,46 @@ public class TileEntityAirDrop extends Entity {
     }
 
     @Override
-    protected boolean canTriggerWalking() {
+    protected boolean canTriggerWalking()
+    {
         return false;
     }
 
     @Override
-    protected void entityInit() {
+    protected void entityInit()
+    {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean canBeCollidedWith()
+    {
         return !this.isDead;
     }
 
     @Override
-    public void onUpdate() {
+    public void onUpdate()
+    {
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
 
-        if (!this.deployed) {
+        if (!this.deployed)
+        {
             float deployHeight = (float) (this.worldObj.getTopSolidOrLiquidBlock(
                     MathHelper.floor_double(this.posX),
                     MathHelper.floor_double(this.posZ)
             )) + 11.0f;
-            if (this.posY <= deployHeight) {
+            if (this.posY <= deployHeight)
+            {
                 this.deployed = true;
             }
         }
 
-        if (!this.deployed) {
+        if (!this.deployed)
+        {
             this.motionY -= 0.003 * ConfigHandler.speedMultiplier;
-        } else {
+        } else
+        {
             this.motionY -= 0.02 * ConfigHandler.speedMultiplier;
         }
 
@@ -86,17 +97,20 @@ public class TileEntityAirDrop extends Entity {
         this.motionY *= 0.98;
         this.motionZ *= 0.98;
 
-        if (!this.worldObj.isRemote) {
+        if (!this.worldObj.isRemote)
+        {
             int blockX = MathHelper.floor_double(this.posX);
             int blockY = MathHelper.floor_double(this.posY);
             int blockZ = MathHelper.floor_double(this.posZ);
 
-            if (this.onGround) {
+            if (this.onGround)
+            {
                 this.motionX *= 0.7;
                 this.motionZ *= 0.7;
                 this.motionY *= -0.5;
 
-                if (this.worldObj.getBlock(blockX, blockY, blockZ) != Blocks.piston_extension) {
+                if (this.worldObj.getBlock(blockX, blockY, blockZ) != Blocks.piston_extension)
+                {
                     this.setDead();
 
                     // Set the block
@@ -107,7 +121,8 @@ public class TileEntityAirDrop extends Entity {
 
                     // Populate the block
                     TileEntity entity = this.worldObj.getTileEntity(blockX, blockY, blockZ);
-                    if (entity != null && entity instanceof TileEntityChest) {
+                    if (entity != null && entity instanceof TileEntityChest)
+                    {
                         TileEntityChest inv = (TileEntityChest) entity;
                         //rename the chest to corresponding set
                         inv.func_145976_a(BillundSet.get(this.setType).getDescription());
@@ -115,18 +130,21 @@ public class TileEntityAirDrop extends Entity {
                         inv.markDirty();
                     }
                 }
-            } else if (blockY < 0) {
+            } else if (blockY < 0)
+            {
                 this.setDead();
             }
         }
     }
 
     @Override
-    protected void fall(float par1) {
+    protected void fall(float par1)
+    {
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
+    protected void writeEntityToNBT(NBTTagCompound nbtTagCompound)
+    {
         //nbtTagCompound.set( "BlockID", this.blockID );
         nbtTagCompound.setByte("Data", (byte) this.metadata);
         nbtTagCompound.setInteger("Set", this.setType);
@@ -134,7 +152,8 @@ public class TileEntityAirDrop extends Entity {
     }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
+    protected void readEntityFromNBT(NBTTagCompound nbtTagCompound)
+    {
         //this.blockID = nbtTagCompound.getInteger( "BlockID" );
         this.metadata = nbtTagCompound.getByte("Data") & 255;
         this.setType = nbtTagCompound.getInteger("Set");
@@ -142,17 +161,20 @@ public class TileEntityAirDrop extends Entity {
     }
 
     @SideOnly(Side.CLIENT)
-    public float getShadowSize() {
+    public float getShadowSize()
+    {
         return 0.0f;
     }
 
     @SideOnly(Side.CLIENT)
-    public World getWorld() {
+    public World getWorld()
+    {
         return this.worldObj;
     }
 
     @SideOnly(Side.CLIENT)
-    public boolean canRenderOnFire() {
+    public boolean canRenderOnFire()
+    {
         return false;
     }
 }

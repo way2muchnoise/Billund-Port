@@ -15,7 +15,8 @@ import net.minecraft.client.model.ModelRenderer;
 //latest version of the Minecraft Coder Pack before attempting
 //to use this code.
 
-public class ModelParachute extends ModelBase {
+public class ModelParachute extends ModelBase
+{
     public ModelRenderer Parachute;
     public ModelRenderer LeftWing;
     public ModelRenderer RightWing;
@@ -24,19 +25,22 @@ public class ModelParachute extends ModelBase {
     public ModelRenderer wire3;
     public ModelRenderer wire4;
 
-    private static void setPosition(ModelRenderer m, float x, float y, float z) {
+    private static void setPosition(ModelRenderer m, float x, float y, float z)
+    {
         m.offsetX = x * 0.0625f;
         m.offsetY = y * 0.0625f;
         m.offsetZ = z * 0.0625f;
     }
 
-    private static void setRotation(ModelRenderer m, float x, float y, float z) {
+    private static void setRotation(ModelRenderer m, float x, float y, float z)
+    {
         m.rotateAngleX = x;
         m.rotateAngleY = y;
         m.rotateAngleZ = z;
     }
 
-    public ModelParachute() {
+    public ModelParachute()
+    {
         Parachute = new ModelRenderer(this, 0, 0);
         Parachute.addBox(-6.0F, -0.5F, -6.0F, 12, 1, 12, 0);
         setPosition(Parachute, 0.0F, -10.0F, -0.0f);
@@ -70,7 +74,8 @@ public class ModelParachute extends ModelBase {
 
     }
 
-    public void render(float f5) {
+    public void render(float f5)
+    {
         Parachute.render(f5);
         LeftWing.render(f5);
         RightWing.render(f5);
@@ -80,6 +85,7 @@ public class ModelParachute extends ModelBase {
         //wire4.render(f5);
     }
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
+    {
     }
 }

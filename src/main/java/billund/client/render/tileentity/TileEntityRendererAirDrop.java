@@ -20,30 +20,36 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public class TileEntityRendererAirDrop extends Render {
+public class TileEntityRendererAirDrop extends Render
+{
     private static final ResourceLocation chuteTexture = new ResourceLocation("billund", "textures/models/chute.png");
     private ModelParachute m_model;
 
-    public TileEntityRendererAirDrop() {
+    public TileEntityRendererAirDrop()
+    {
         this.shadowSize = 0.5f;
         m_model = new ModelParachute();
     }
 
-    private void doRenderFallingSand(billund.tileentity.TileEntityAirDrop entity, double x, double y, double z, float f, float f2) {
+    private void doRenderFallingSand(billund.tileentity.TileEntityAirDrop entity, double x, double y, double z, float f, float f2)
+    {
         World world = entity.getWorld();
         Block block = entity.block;
 
-        if (world.getBlock(MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY), MathHelper.floor_double(entity.posZ)) != entity.block) {
+        if (world.getBlock(MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY), MathHelper.floor_double(entity.posZ)) != entity.block)
+        {
             GL11.glPushMatrix();
             GL11.glTranslatef((float) x - 0.5f, (float) y - 0.5f, (float) z - 0.5f);
             this.bindEntityTexture(entity);
 
             GL11.glDisable(GL11.GL_LIGHTING);
 
-            if (block != null) {
+            if (block != null)
+            {
                 TileEntityRendererChestHelper.instance.renderChest(block, 0, 0.0f);
 
-                if (!entity.deployed) {
+                if (!entity.deployed)
+                {
                     GL11.glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
                     GL11.glTranslatef(-0.5f, -0.5f, 0.5f);
                     GL11.glScalef(1.2f, 1.2f, 1.2f);
@@ -60,11 +66,13 @@ public class TileEntityRendererAirDrop extends Render {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
+    protected ResourceLocation getEntityTexture(Entity entity)
+    {
         return TextureMap.locationBlocksTexture;
     }
 
-    public void doRender(Entity entity, double x, double y, double z, float f, float f2) {
+    public void doRender(Entity entity, double x, double y, double z, float f, float f2)
+    {
         this.doRenderFallingSand((billund.tileentity.TileEntityAirDrop) entity, x, y, z, f, f2);
     }
 }

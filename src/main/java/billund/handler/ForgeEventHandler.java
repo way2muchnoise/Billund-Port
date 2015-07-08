@@ -19,16 +19,20 @@ public class ForgeEventHandler
     // Forge event responses
 
     @SubscribeEvent
-    public void onRenderWorldLast(RenderWorldLastEvent event) {
+    public void onRenderWorldLast(RenderWorldLastEvent event)
+    {
         // Draw the preview brick
         float f = event.partialTicks;
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         World world = Minecraft.getMinecraft().theWorld;
-        if (player != null && world != null) {
+        if (player != null && world != null)
+        {
             ItemStack currentStack = player.inventory.getCurrentItem();
-            if (currentStack != null && currentStack.getItem() instanceof ItemBrick) {
+            if (currentStack != null && currentStack.getItem() instanceof ItemBrick)
+            {
                 Brick brick = ItemBrick.getPotentialBrick(currentStack, player.worldObj, player, f);
-                if (brick != null) {
+                if (brick != null)
+                {
                     // Setup
                     GL11.glPushMatrix();
                     GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ZERO);
@@ -47,7 +51,8 @@ public class ForgeEventHandler
         }
     }
 
-    private void translateToWorldCoords(Entity entity, float frame) {
+    private void translateToWorldCoords(Entity entity, float frame)
+    {
         double interpPosX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * frame;
         double interpPosY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * frame;
         double interpPosZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * frame;
@@ -57,16 +62,19 @@ public class ForgeEventHandler
     // Tick handler
 
     @SubscribeEvent
-    public void onRenderTick(TickEvent.RenderTickEvent event) {
+    public void onRenderTick(TickEvent.RenderTickEvent event)
+    {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         World world = Minecraft.getMinecraft().theWorld;
         // See what brick is in front of the player
         float f = 1F; //TODO:((Float)tickData).getFloatValue(); was this dunno what it did yet :p
 
         Brick hoverBrick = null;
-        if (player != null && world != null) {
+        if (player != null && world != null)
+        {
             BlockBillund.setHoverBrick(ItemBrick.getExistingBrick(world, player, f));
-        } else {
+        } else
+        {
             BlockBillund.setHoverBrick(null);
         }
     }

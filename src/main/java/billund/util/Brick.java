@@ -5,7 +5,8 @@
 
 package billund.util;
 
-public class Brick {
+public class Brick
+{
     public billund.reference.Colour Colour;
     public int XOrigin;
     public int YOrigin;
@@ -14,7 +15,8 @@ public class Brick {
     public int Height;
     public int Depth;
 
-    public Brick(billund.reference.Colour colour, int xOrigin, int yOrigin, int zOrigin, int width, int height, int depth) {
+    public Brick(billund.reference.Colour colour, int xOrigin, int yOrigin, int zOrigin, int width, int height, int depth)
+    {
         Colour = colour;
         XOrigin = xOrigin;
         YOrigin = yOrigin;

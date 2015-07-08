@@ -10,8 +10,10 @@ import billund.reference.Colour;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-public class BillundSet {
-    public static BillundSet get(int index) {
+public class BillundSet
+{
+    public static BillundSet get(int index)
+    {
         return new BillundSet(index);
     }
 
@@ -33,27 +35,33 @@ public class BillundSet {
 
     private int m_index;
 
-    public BillundSet(int index) {
+    public BillundSet(int index)
+    {
         m_index = index;
     }
 
-    public int getCost() {
+    public int getCost()
+    {
         return s_setCosts[m_index];
     }
 
-    public String getDescription() {
+    public String getDescription()
+    {
         return s_setNames[m_index];
     }
 
     private IInventory s_addInventory = null;
     private int s_addIndex = 0;
 
-    public void populateChest(IInventory inv) {
+    public void populateChest(IInventory inv)
+    {
         s_addIndex = 0;
         s_addInventory = inv;
 
-        switch (m_index) {
-            case 0: {
+        switch (m_index)
+        {
+            case 0:
+            {
                 // Starter set
                 // Basic pieces in 6 colours
                 addBasic(Colour.RED);
@@ -69,7 +77,8 @@ public class BillundSet {
                 add(null);
                 break;
             }
-            case 1: {
+            case 1:
+            {
                 // Colour Pack
                 // pieces in 3 colours
                 addAll(Colour.RED);
@@ -77,7 +86,8 @@ public class BillundSet {
                 addAll(Colour.BLUE);
                 break;
             }
-            case 2: {
+            case 2:
+            {
                 // Colour Pack
                 // pieces in 3 colours
                 addAll(Colour.ORANGE);
@@ -85,7 +95,8 @@ public class BillundSet {
                 addAll(Colour.LIME);
                 break;
             }
-            case 3: {
+            case 3:
+            {
                 // Colour Pack
                 // pieces in 3 colours
                 addAll(Colour.PINK);
@@ -93,7 +104,8 @@ public class BillundSet {
                 addAll(Colour.WHITE);
                 break;
             }
-            case 4: {
+            case 4:
+            {
                 // Colour Pack
                 // pieces in 3 colours
                 addAll(Colour.LIGHT_GREY);
@@ -104,21 +116,25 @@ public class BillundSet {
         }
     }
 
-    private void add(ItemStack stack) {
+    private void add(ItemStack stack)
+    {
         int slot = s_addIndex++;
-        if (slot < s_addInventory.getSizeInventory()) {
+        if (slot < s_addInventory.getSizeInventory())
+        {
             s_addInventory.setInventorySlotContents(slot, stack);
         }
     }
 
-    private void addBasic(Colour colour) {
+    private void addBasic(Colour colour)
+    {
         add(ItemBrick.create(colour, 1, 2, 24));
         add(ItemBrick.create(colour, 1, 4, 24));
         add(ItemBrick.create(colour, 2, 2, 24));
         add(ItemBrick.create(colour, 2, 4, 24));
     }
 
-    private void addAll(Colour colour) {
+    private void addAll(Colour colour)
+    {
         add(ItemBrick.create(colour, 1, 1, 24));
         add(ItemBrick.create(colour, 1, 2, 24));
         add(ItemBrick.create(colour, 1, 3, 24));

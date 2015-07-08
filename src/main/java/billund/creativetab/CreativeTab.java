@@ -12,15 +12,19 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class CreativeTab {
-    public static final CreativeTabs BILLUND_TAB = new CreativeTabs(Reference.MOD_ID.toLowerCase()) {
+public class CreativeTab
+{
+    public static final CreativeTabs BILLUND_TAB = new CreativeTabs(Reference.MOD_ID.toLowerCase())
+    {
         @Override
-        public ItemStack getIconItemStack() {
+        public ItemStack getIconItemStack()
+        {
             return ItemBrick.create(Colour.RED, 2, 2, 1);
         }
 
         @Override
-        public Item getTabIconItem() {
+        public Item getTabIconItem()
+        {
             return null;
         }
     };

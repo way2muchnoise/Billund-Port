@@ -5,7 +5,8 @@
 
 package billund.reference;
 
-public class Reference {
+public class Reference
+{
     public static final String MOD_ID = "billund";
     public static final String MOD_NAME = "Billund";
 

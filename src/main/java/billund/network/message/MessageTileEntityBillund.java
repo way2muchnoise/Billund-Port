@@ -11,16 +11,19 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 
-public class MessageTileEntityBillund implements IMessage {
+public class MessageTileEntityBillund implements IMessage
+{
 
     public Stud[] studs;
     public int x, y, z;
 
-    public MessageTileEntityBillund() {
+    public MessageTileEntityBillund()
+    {
         this.studs = new Stud[Stud.STUDS_PER_BLOCK];
     }
 
-    public MessageTileEntityBillund(int x, int y, int z, Stud[] studs) {
+    public MessageTileEntityBillund(int x, int y, int z, Stud[] studs)
+    {
         this.studs = studs;
         this.x = x;
         this.y = y;
@@ -28,14 +31,18 @@ public class MessageTileEntityBillund implements IMessage {
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(ByteBuf buf)
+    {
         this.x = buf.readInt();
         this.y = buf.readInt();
         this.z = buf.readInt();
-        if (buf.isReadable()) {
+        if (buf.isReadable())
+        {
             int j = buf.readInt();
-            for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i) {
-                if (j == i) {
+            for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i)
+            {
+                if (j == i)
+                {
                     Stud stud = new Stud();
                     stud.Colour = Colour.getValue(buf.readInt());
                     stud.XOrigin = buf.readInt();
@@ -45,10 +52,12 @@ public class MessageTileEntityBillund implements IMessage {
                     stud.BrickHeight = buf.readInt();
                     stud.BrickDepth = buf.readInt();
                     this.studs[i] = stud;
-                    if (buf.isReadable()) {
+                    if (buf.isReadable())
+                    {
                         j = buf.readInt();
                     }
-                } else {
+                } else
+                {
                     this.studs[i] = null;
                 }
             }
@@ -56,13 +65,16 @@ public class MessageTileEntityBillund implements IMessage {
     }
 
     @Override
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(ByteBuf buf)
+    {
         buf.writeInt(this.x);
         buf.writeInt(this.y);
         buf.writeInt(this.z);
-        for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i) {
+        for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i)
+        {
             Stud stud = this.studs[i];
-            if (stud != null) {
+            if (stud != null)
+            {
                 buf.writeInt(i);
                 buf.writeInt(stud.Colour.number);
                 buf.writeInt(stud.XOrigin);
@@ -75,13 +87,16 @@ public class MessageTileEntityBillund implements IMessage {
         }
     }
 
-    public static class Handler implements IMessageHandler<MessageTileEntityBillund, IMessage> {
+    public static class Handler implements IMessageHandler<MessageTileEntityBillund, IMessage>
+    {
 
         @Override
-        public IMessage onMessage(MessageTileEntityBillund message, MessageContext ctx) {
+        public IMessage onMessage(MessageTileEntityBillund message, MessageContext ctx)
+        {
             TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y, message.z);
 
-            if (tileEntity instanceof TileEntityBillund) {
+            if (tileEntity instanceof TileEntityBillund)
+            {
                 ((TileEntityBillund) tileEntity).setStuds(message.studs);
             }
             FMLClientHandler.instance().getClient().theWorld.markBlockForUpdate(message.x, message.y, message.z);

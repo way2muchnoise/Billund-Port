@@ -6,11 +6,13 @@ import billund.reference.Reference;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
-public class ModBlocks {
+public class ModBlocks
+{
 
     public static BlockBillund billund = new BlockBillund();
 
-    public static void init() {
+    public static void init()
+    {
         GameRegistry.registerBlock(billund, Names.Blocks.BILLUND);
     }
 }

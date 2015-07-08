@@ -15,7 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class GuiOrderForm extends GuiScreen {
+public class GuiOrderForm extends GuiScreen
+{
     private static final ResourceLocation background = new ResourceLocation("billund", "textures/gui/orderForm.png");
 
     private static final int xSize = 192;
@@ -27,61 +28,76 @@ public class GuiOrderForm extends GuiScreen {
     private boolean[] m_orders;
     private boolean m_ordered;
 
-    public GuiOrderForm(EntityPlayer player) {
+    public GuiOrderForm(EntityPlayer player)
+    {
         m_player = player;
         m_orders = new boolean[NUM_SETS];
-        for (int i = 0; i < NUM_SETS; ++i) {
+        for (int i = 0; i < NUM_SETS; ++i)
+        {
             m_orders[i] = false;
         }
         m_ordered = false;
     }
 
     @Override
-    public void initGui() {
+    public void initGui()
+    {
         super.initGui();
     }
 
     @Override
-    public void onGuiClosed() {
+    public void onGuiClosed()
+    {
         super.onGuiClosed();
     }
 
     @Override
-    public boolean doesGuiPauseGame() {
+    public boolean doesGuiPauseGame()
+    {
         return false;
     }
 
     @Override
-    public void updateScreen() {
+    public void updateScreen()
+    {
         // TODO: If the item got lost, close GUI
         super.updateScreen();
     }
 
     @Override
-    protected void keyTyped(char c, int k) {
+    protected void keyTyped(char c, int k)
+    {
         super.keyTyped(c, k);
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int button) {
+    protected void mouseClicked(int x, int y, int button)
+    {
         super.mouseClicked(x, y, button);
 
         int startY = (height - ySize) / 2;
         int startX = (width - xSize) / 2;
-        if (button == 0) {
+        if (button == 0)
+        {
             int localX = x - startX;
             int localY = y - startY;
 
             // Test tickboxes
-            if (localX >= 160 && localX < 177 && localY >= 33) {
+            if (localX >= 160 && localX < 177 && localY >= 33)
+            {
                 int tickBoxIndex = (localY - 33) / 23;
                 int tickBoxLocalY = (localY - 33) % 23;
-                if (tickBoxIndex >= 0 && tickBoxIndex < NUM_SETS && tickBoxLocalY < 17) {
-                    if (!m_ordered) {
-                        for (int i = 0; i < NUM_SETS; ++i) {
-                            if (i == tickBoxIndex) {
+                if (tickBoxIndex >= 0 && tickBoxIndex < NUM_SETS && tickBoxLocalY < 17)
+                {
+                    if (!m_ordered)
+                    {
+                        for (int i = 0; i < NUM_SETS; ++i)
+                        {
+                            if (i == tickBoxIndex)
+                            {
                                 m_orders[i] = !m_orders[i];
-                            } else {
+                            } else
+                            {
                                 m_orders[i] = false;
                             }
                         }
@@ -90,8 +106,10 @@ public class GuiOrderForm extends GuiScreen {
             }
 
             // Test order button
-            if (localX >= 102 && localX < 177 && localY >= 149 && localY < 170) {
-                if (canPlayerOrder()) {
+            if (localX >= 102 && localX < 177 && localY >= 149 && localY < 170)
+            {
+                if (canPlayerOrder())
+                {
                     order();
                 }
             }
@@ -99,7 +117,8 @@ public class GuiOrderForm extends GuiScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float f) {
+    public void drawScreen(int mouseX, int mouseY, float f)
+    {
         // Draw background
         drawDefaultBackground();
 
@@ -113,8 +132,10 @@ public class GuiOrderForm extends GuiScreen {
         drawTexturedModalRect(startX, startY - 5, 0, ySize, xSize, 5);
 
         // Draw the ticks
-        for (int i = 0; i < NUM_SETS; ++i) {
-            if (m_orders[i]) {
+        for (int i = 0; i < NUM_SETS; ++i)
+        {
+            if (m_orders[i])
+            {
                 drawTexturedModalRect(startX + 160, startY + 31 + i * 23, xSize, 0, 19, 19);
             }
         }
@@ -126,7 +147,8 @@ public class GuiOrderForm extends GuiScreen {
         int currencyColour = canPlayerAffordOrder() ? 0x4c5156 : 0xae1e22;
         fontRendererObj.drawString(currency, startX + xSize - 25 - fontRendererObj.getStringWidth(currency), startY + 10, currencyColour);
 
-        for (int i = 0; i < NUM_SETS; ++i) {
+        for (int i = 0; i < NUM_SETS; ++i)
+        {
             fontRendererObj.drawString(getSetName(i), startX + 16, startY + 38 + i * 23, 0x4c5156);
         }
 
@@ -139,10 +161,13 @@ public class GuiOrderForm extends GuiScreen {
 
     // Private stuff
 
-    private boolean canPlayerOrder() {
-        if (!m_ordered) {
+    private boolean canPlayerOrder()
+    {
+        if (!m_ordered)
+        {
             int order = getOrderCost();
-            if (order > 0) {
+            if (order > 0)
+            {
                 int balance = getPlayerBalance();
                 return balance >= order;
             }
@@ -150,17 +175,22 @@ public class GuiOrderForm extends GuiScreen {
         return false;
     }
 
-    private boolean canPlayerAffordOrder() {
+    private boolean canPlayerAffordOrder()
+    {
         int order = getOrderCost();
         int balance = getPlayerBalance();
         return balance >= order;
     }
 
-    private void order() {
-        if (!m_ordered) {
+    private void order()
+    {
+        if (!m_ordered)
+        {
             // Send our orders to the server
-            for (int i = 0; i < NUM_SETS; ++i) {
-                if (m_orders[i]) {
+            for (int i = 0; i < NUM_SETS; ++i)
+            {
+                if (m_orders[i])
+                {
                     MessageBillund packet = new MessageBillund();
                     packet.packetType = MessageBillund.OrderSet;
                     packet.dataInt = new int[]{i};
@@ -173,32 +203,40 @@ public class GuiOrderForm extends GuiScreen {
         }
     }
 
-    private int getPlayerBalance() {
+    private int getPlayerBalance()
+    {
         int total = 0;
-        for (int i = 0; i < m_player.inventory.getSizeInventory(); ++i) {
+        for (int i = 0; i < m_player.inventory.getSizeInventory(); ++i)
+        {
             ItemStack stack = m_player.inventory.getStackInSlot(i);
-            if (stack != null && stack.getItem() == Items.emerald) {
+            if (stack != null && stack.getItem() == Items.emerald)
+            {
                 total += stack.stackSize;
             }
         }
         return total;
     }
 
-    private int getOrderCost() {
+    private int getOrderCost()
+    {
         int total = 0;
-        for (int i = 0; i < NUM_SETS; ++i) {
-            if (m_orders[i]) {
+        for (int i = 0; i < NUM_SETS; ++i)
+        {
+            if (m_orders[i])
+            {
                 total += getSetCost(i);
             }
         }
         return total;
     }
 
-    private String getSetName(int i) {
+    private String getSetName(int i)
+    {
         return BillundSet.get(i).getDescription();
     }
 
-    private int getSetCost(int i) {
+    private int getSetCost(int i)
+    {
         return BillundSet.get(i).getCost();
     }
 }

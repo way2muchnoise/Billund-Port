@@ -19,7 +19,8 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION_FULL, guiFactory = Reference.GUI_FACTORY_CLASS)
-public class Billund {
+public class Billund
+{
     @Mod.Instance(value = Reference.MOD_ID)
     public static Billund instance;
 
@@ -27,7 +28,8 @@ public class Billund {
     public static CommonProxy proxy;
 
     @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
+    public void preInit(FMLPreInitializationEvent event)
+    {
         //Initialize config
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         FMLCommonHandler.instance().bus().register(new ConfigHandler());
@@ -42,7 +44,8 @@ public class Billund {
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
+    public void init(FMLInitializationEvent event)
+    {
         // Initialize mod tile entities
         proxy.registerTileEntities();
 

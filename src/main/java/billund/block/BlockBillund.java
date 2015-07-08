@@ -31,25 +31,30 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
-public class BlockBillund extends BlockContainer implements ITileEntityProvider {
+public class BlockBillund extends BlockContainer implements ITileEntityProvider
+{
     public int blockRenderID;
     private static IIcon s_transparentIcon;
     private static IIcon[] s_icons;
 
     private static Brick s_hoverBrick = null;
 
-    public static void setHoverBrick(Brick brick) {
+    public static void setHoverBrick(Brick brick)
+    {
         s_hoverBrick = brick;
     }
 
-    public static IIcon getIcon(int studColour) {
-        if (studColour >= 0 && studColour < Colour.count()) {
+    public static IIcon getIcon(int studColour)
+    {
+        if (studColour >= 0 && studColour < Colour.count())
+        {
             return s_icons[studColour];
         }
         return s_transparentIcon;
     }
 
-    public BlockBillund() {
+    public BlockBillund()
+    {
         super(Material.wood);
         this.setHardness(0.25f);
         this.setBlockName(Names.Blocks.BILLUND);
@@ -59,50 +64,61 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider 
 
 
     @Override
-    public int getRenderType() {
+    public int getRenderType()
+    {
         return blockRenderID;
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
+    public boolean renderAsNormalBlock()
+    {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube()
+    {
         return false;
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
+    public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z)
+    {
         return false;
     }
 
     @Override
-    public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side) {
+    public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side)
+    {
         return false;
     }
 
     @Override
-    public int quantityDropped(Random par1Random) {
+    public int quantityDropped(Random par1Random)
+    {
         return 0;
     }
 
 
     @Override
-    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-        if (!world.isRemote) {
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
+    {
+        if (!world.isRemote)
+        {
             TileEntity tileEntity = world.getTileEntity(x, y, z);
-            if (tileEntity != null && tileEntity instanceof TileEntityBillund) {
+            if (tileEntity != null && tileEntity instanceof TileEntityBillund)
+            {
                 // Find a brick to destroy
                 TileEntityBillund billund = (TileEntityBillund) tileEntity;
                 Brick brick = ItemBrick.getExistingBrick(world, player, 1.0f);
-                if (brick != null) {
+                if (brick != null)
+                {
                     // Remove the brick
                     Stud.removeBrick(world, brick);
 
                     // Spawn an item for the destroyed brick
-                    if (!player.capabilities.isCreativeMode) {
+                    if (!player.capabilities.isCreativeMode)
+                    {
                         float brickX = ((float) brick.XOrigin + (float) brick.Width * 0.5f) / (float) Stud.ROWS_PER_BLOCK;
                         float brickY = ((float) brick.YOrigin + (float) brick.Height) / (float) Stud.LAYERS_PER_BLOCK;
                         float brickZ = ((float) brick.ZOrigin + (float) brick.Depth * 0.5f) / (float) Stud.ROWS_PER_BLOCK;
@@ -116,7 +132,8 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider 
                     }
 
                     // Clear the block
-                    if (billund.isEmpty()) {
+                    if (billund.isEmpty())
+                    {
                         world.setBlockToAir(x, y, z);
                         return true;
                     }
@@ -127,20 +144,25 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider 
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
+    {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
-        if (tileEntity != null && tileEntity instanceof TileEntityBillund) {
+        if (tileEntity != null && tileEntity instanceof TileEntityBillund)
+        {
             TileEntityBillund billund = (TileEntityBillund) tileEntity;
             billund.cullOrphans();
-            if (billund.isEmpty()) {
+            if (billund.isEmpty())
+            {
                 world.setBlockToAir(x, y, z);
             }
         }
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {
-        if (s_hoverBrick != null) {
+    public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k)
+    {
+        if (s_hoverBrick != null)
+        {
             // See if the hovered brick is in the start bit
             int sx = s_hoverBrick.XOrigin;
             int sy = s_hoverBrick.YOrigin;
@@ -155,7 +177,8 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider 
 
                 if ((i == blockX || i == blockX + 1) &&
                         (j == blockY || j == blockY + 1) &&
-                        (k == blockZ || k == blockZ + 1)) {
+                        (k == blockZ || k == blockZ + 1))
+                {
                     float xScale = 1.0f / (float) Stud.ROWS_PER_BLOCK;
                     float yScale = 1.0f / (float) Stud.LAYERS_PER_BLOCK;
                     float zScale = 1.0f / (float) Stud.ROWS_PER_BLOCK;
@@ -179,19 +202,23 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider 
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
+    {
         return AxisAlignedBB.getBoundingBox((double) par2 + this.minX, (double) par3 + this.minY, (double) par4 + this.minZ, (double) par2 + this.maxX, (double) par3 + this.maxY, (double) par4 + this.maxZ);
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
+    {
         return AxisAlignedBB.getBoundingBox((double) par2 + this.minX, (double) par3 + this.minY, (double) par4 + this.minZ, (double) par2 + this.maxX, (double) par3 + this.maxY, (double) par4 + this.maxZ);
     }
 
     @Override
-    public void addCollisionBoxesToList(World world, int i, int j, int k, AxisAlignedBB bigBox, List list, Entity entity) {
+    public void addCollisionBoxesToList(World world, int i, int j, int k, AxisAlignedBB bigBox, List list, Entity entity)
+    {
         TileEntity tileEntity = world.getTileEntity(i, j, k);
-        if (tileEntity != null && tileEntity instanceof TileEntityBillund) {
+        if (tileEntity != null && tileEntity instanceof TileEntityBillund)
+        {
             double originX = (double) i;
             double originY = (double) j;
             double originZ = (double) k;
@@ -204,15 +231,20 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider 
             int minsz = k * Stud.STUDS_PER_ROW;
 
             TileEntityBillund billund = (TileEntityBillund) tileEntity;
-            for (int x = 0; x < Stud.STUDS_PER_ROW; ++x) {
-                for (int y = 0; y < Stud.STUDS_PER_COLUMN; ++y) {
-                    for (int z = 0; z < Stud.STUDS_PER_ROW; ++z) {
+            for (int x = 0; x < Stud.STUDS_PER_ROW; ++x)
+            {
+                for (int y = 0; y < Stud.STUDS_PER_COLUMN; ++y)
+                {
+                    for (int z = 0; z < Stud.STUDS_PER_ROW; ++z)
+                    {
                         Stud stud = billund.getStudLocal(x, y, z);
-                        if (stud != null) {
+                        if (stud != null)
+                        {
                             double startX = originX + (double) x * stepX;
                             double startY = originY + (double) y * stepY;
                             double startZ = originZ + (double) z * stepZ;
-                            if (stud.XOrigin < minsx || stud.YOrigin < minsy || stud.ZOrigin < minsz) {
+                            if (stud.XOrigin < minsx || stud.YOrigin < minsy || stud.ZOrigin < minsz)
+                            {
                                 // If the origin of this brick is in a different block, add our own aabbs for each stud
                                 AxisAlignedBB littleBox = AxisAlignedBB.getBoundingBox(
                                         startX, startY, startZ,
@@ -220,22 +252,26 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider 
                                         startY + stepY,
                                         startZ + stepZ
                                 );
-                                if (littleBox.intersectsWith(bigBox)) {
+                                if (littleBox.intersectsWith(bigBox))
+                                {
                                     list.add(littleBox);
                                 }
-                            } else {
+                            } else
+                            {
                                 // Else, if this stud *is* the origin, add an aabb for the whole thing
                                 int sx = x + minsx;
                                 int sy = y + minsy;
                                 int sz = z + minsz;
-                                if (sx == stud.XOrigin && sy == stud.YOrigin && sz == stud.ZOrigin) {
+                                if (sx == stud.XOrigin && sy == stud.YOrigin && sz == stud.ZOrigin)
+                                {
                                     AxisAlignedBB littleBox = AxisAlignedBB.getBoundingBox(
                                             startX, startY, startZ,
                                             startX + (double) stud.BrickWidth * stepX,
                                             startY + (double) stud.BrickHeight * stepY,
                                             startZ + (double) stud.BrickDepth * stepZ
                                     );
-                                    if (littleBox.intersectsWith(bigBox)) {
+                                    if (littleBox.intersectsWith(bigBox))
+                                    {
                                         list.add(littleBox);
                                     }
                                 }
@@ -248,39 +284,48 @@ public class BlockBillund extends BlockContainer implements ITileEntityProvider 
     }
 
     @Override
-    public void onBlockAdded(World world, int i, int j, int k) {
+    public void onBlockAdded(World world, int i, int j, int k)
+    {
         super.onBlockAdded(world, i, j, k);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack itemstack) {
+    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack itemstack)
+    {
         super.onBlockPlacedBy(world, i, j, k, entityliving, itemstack);
-        if (world.isRemote) {
+        if (world.isRemote)
+        {
             return;
         }
     }
 
     @Override
-    public IIcon getIcon(int side, int damage) {
+    public IIcon getIcon(int side, int damage)
+    {
         return s_transparentIcon;
     }
 
     @Override
-    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int l, float m, float n, float o) {
+    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int l, float m, float n, float o)
+    {
         return false;
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int id) {
+    public TileEntity createNewTileEntity(World world, int id)
+    {
         return new TileEntityBillund();
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
+    public void registerBlockIcons(IIconRegister iconRegister)
+    {
         s_icons = new IIcon[Colour.count()];
         s_transparentIcon = iconRegister.registerIcon(Textures.RESOURCE_PREFIX + Textures.COLOURS_PREFIX + "transparent");
-        for (Colour colour : Colour.values()) {
-            if (colour.number >= 0) {
+        for (Colour colour : Colour.values())
+        {
+            if (colour.number >= 0)
+            {
                 s_icons[colour.number] = iconRegister.registerIcon(Textures.RESOURCE_PREFIX + Textures.COLOURS_PREFIX + colour.name);
             }
         }

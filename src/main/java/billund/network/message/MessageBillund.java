@@ -23,7 +23,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
-public class MessageBillund implements IMessage {
+public class MessageBillund implements IMessage
+{
     // Static Packet types
     public static final byte OrderSet = 1;
 
@@ -32,91 +33,120 @@ public class MessageBillund implements IMessage {
     public String[] dataString;
     public int[] dataInt;
 
-    public MessageBillund() {
+    public MessageBillund()
+    {
         packetType = 0;
         dataString = null;
         dataInt = null;
     }
 
-    private void writeData(DataOutputStream data) throws IOException {
+    private void writeData(DataOutputStream data) throws IOException
+    {
         data.writeByte(packetType);
-        if (dataString != null) {
+        if (dataString != null)
+        {
             data.writeByte(dataString.length);
-        } else {
+        } else
+        {
             data.writeByte(0);
         }
-        if (dataInt != null) {
+        if (dataInt != null)
+        {
             data.writeByte(dataInt.length);
-        } else {
+        } else
+        {
             data.writeByte(0);
         }
-        if (dataString != null) {
-            for (String s : dataString) {
+        if (dataString != null)
+        {
+            for (String s : dataString)
+            {
                 data.writeUTF(s);
             }
         }
-        if (dataInt != null) {
-            for (int i : dataInt) {
+        if (dataInt != null)
+        {
+            for (int i : dataInt)
+            {
                 data.writeInt(i);
             }
         }
     }
 
-    private void readData(DataInputStream data) throws IOException {
+    private void readData(DataInputStream data) throws IOException
+    {
         packetType = data.readByte();
         byte nString = data.readByte();
         byte nInt = data.readByte();
-        if (nString > 128 || nInt > 128 || nString < 0 || nInt < 0) {
+        if (nString > 128 || nInt > 128 || nString < 0 || nInt < 0)
+        {
             throw new IOException("");
         }
-        if (nString == 0) {
+        if (nString == 0)
+        {
             dataString = null;
-        } else {
+        } else
+        {
             dataString = new String[nString];
-            for (int k = 0; k < nString; k++) {
+            for (int k = 0; k < nString; k++)
+            {
                 dataString[k] = data.readUTF();
             }
         }
-        if (nInt == 0) {
+        if (nInt == 0)
+        {
             dataInt = null;
-        } else {
+        } else
+        {
             dataInt = new int[nInt];
-            for (int k = 0; k < nInt; k++) {
+            for (int k = 0; k < nInt; k++)
+            {
                 dataInt[k] = data.readInt();
             }
         }
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
-        try {
+    public void fromBytes(ByteBuf buf)
+    {
+        try
+        {
             readData(new DataInputStream(new ByteBufInputStream(buf)));
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void toBytes(ByteBuf buf) {
-        try {
+    public void toBytes(ByteBuf buf)
+    {
+        try
+        {
             writeData(new DataOutputStream(new ByteBufOutputStream(buf)));
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
 
-    public static class Handler implements IMessageHandler<MessageBillund, IMessage> {
+    public static class Handler implements IMessageHandler<MessageBillund, IMessage>
+    {
 
         @Override
-        public IMessage onMessage(MessageBillund message, MessageContext ctx) {
+        public IMessage onMessage(MessageBillund message, MessageContext ctx)
+        {
             LogHelper.info(String.format("Received order for %s from %s", BillundSet.get(message.dataInt[0]).getDescription(), ctx.getServerHandler().playerEntity.getDisplayName()));
             EntityPlayer player = ctx.getServerHandler().playerEntity;
-            switch (message.packetType) {
-                case MessageBillund.OrderSet: {
+            switch (message.packetType)
+            {
+                case MessageBillund.OrderSet:
+                {
                     World world = player.worldObj;
                     int set = message.dataInt[0];
                     int cost = BillundSet.get(set).getCost();
-                    if (EmeraldHelper.removeEmeralds(player, cost)) {
+                    if (EmeraldHelper.removeEmeralds(player, cost))
+                    {
                         Random r = new Random();
                         world.spawnEntityInWorld(new TileEntityAirDrop(
                                 world,

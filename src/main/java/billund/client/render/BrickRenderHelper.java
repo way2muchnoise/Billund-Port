@@ -15,7 +15,8 @@ import org.lwjgl.opengl.GL11;
 
 public class BrickRenderHelper
 {
-    public static void renderBrick(ItemStack brick, boolean scale, boolean center) {
+    public static void renderBrick(ItemStack brick, boolean scale, boolean center)
+    {
         Tessellator tessellator = Tessellator.instance;
         int brightness = 15;
 
@@ -27,11 +28,13 @@ public class BrickRenderHelper
         // Setup
         GL11.glPushMatrix();
 
-        if (scale) {
+        if (scale)
+        {
             float scaleValue = ((float) Stud.LAYERS_PER_BLOCK) / Math.max(2.0f, (float) Math.max(width, depth) - 0.5f);
             GL11.glScalef(scaleValue, scaleValue, scaleValue);
         }
-        if (center) {
+        if (center)
+        {
             GL11.glTranslatef(
                     -0.5f * ((float) width / (float) Stud.ROWS_PER_BLOCK),
                     -0.5f * ((float) height / (float) Stud.LAYERS_PER_BLOCK),
@@ -57,7 +60,8 @@ public class BrickRenderHelper
         GL11.glPopMatrix();
     }
 
-    public static void renderBrick(IBlockAccess world, Brick brick) {
+    public static void renderBrick(IBlockAccess world, Brick brick)
+    {
         int localX = (brick.XOrigin % Stud.ROWS_PER_BLOCK + Stud.ROWS_PER_BLOCK) % Stud.ROWS_PER_BLOCK;
         int localY = (brick.YOrigin % Stud.LAYERS_PER_BLOCK + Stud.LAYERS_PER_BLOCK) % Stud.LAYERS_PER_BLOCK;
         int localZ = (brick.ZOrigin % Stud.ROWS_PER_BLOCK + Stud.ROWS_PER_BLOCK) % Stud.ROWS_PER_BLOCK;
@@ -77,10 +81,12 @@ public class BrickRenderHelper
         tessellator.draw();
     }
 
-    public static void renderBrick(IBlockAccess world, int brightness, int colour, int sx, int sy, int sz, int width, int height, int depth) {
+    public static void renderBrick(IBlockAccess world, int brightness, int colour, int sx, int sy, int sz, int width, int height, int depth)
+    {
         // Draw the brick
         IIcon icon = BlockBillund.getIcon(colour);
-        if (world != null) {
+        if (world != null)
+        {
             Tessellator tessellator = Tessellator.instance;
             tessellator.setBrightness(brightness);
         }
@@ -107,19 +113,24 @@ public class BrickRenderHelper
         int sny = sy + height;
         startY = (float) sny / yBlockSize;
         endY = startY + (0.1666f / yBlockSize);
-        for (int snx = sx; snx < sx + width; ++snx) {
+        for (int snx = sx; snx < sx + width; ++snx)
+        {
             startX = (float) snx / xBlockSize;
             endX = startX + (1.0f / xBlockSize);
-            for (int snz = sz; snz < sz + depth; ++snz) {
+            for (int snz = sz; snz < sz + depth; ++snz)
+            {
                 boolean drawStud;
-                if (world != null) {
+                if (world != null)
+                {
                     Stud above = Stud.getStud(world, snx, sny, snz);
                     drawStud = (above == null) || (above.Colour == Colour.TRANSLUCENT_WALL);
-                } else {
+                } else
+                {
                     drawStud = true;
                 }
 
-                if (drawStud) {
+                if (drawStud)
+                {
                     startZ = (float) snz / zBlockSize;
                     endZ = startZ + (1.0f / zBlockSize);
                     renderBox(
@@ -145,13 +156,15 @@ public class BrickRenderHelper
         }
     }
 
-    private static void renderBox(IIcon icon, int brightness, float startX, float startY, float startZ, float endX, float endY, float endZ, boolean bottom) {
+    private static void renderBox(IIcon icon, int brightness, float startX, float startY, float startZ, float endX, float endY, float endZ, boolean bottom)
+    {
         // X faces
         renderFaceXNeg(icon, startX, startY, startZ, endX, endY, endZ);
         renderFaceXPos(icon, startX, startY, startZ, endX, endY, endZ);
 
         // Y faces
-        if (bottom) {
+        if (bottom)
+        {
             renderFaceYNeg(icon, startX, startY, startZ, endX, endY, endZ);
         }
         renderFaceYPos(icon, startX, startY, startZ, endX, endY, endZ);
@@ -161,7 +174,8 @@ public class BrickRenderHelper
         renderFaceZPos(icon, startX, startY, startZ, endX, endY, endZ);
     }
 
-    private static void renderFaceXNeg(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ) {
+    private static void renderFaceXNeg(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ)
+    {
         Tessellator tessellator = Tessellator.instance;
         tessellator.setColorOpaque_F(0.6f, 0.6f, 0.6f);
         tessellator.addVertexWithUV(startX, endY, endZ, icon.getMinU(), icon.getMaxV());
@@ -170,7 +184,8 @@ public class BrickRenderHelper
         tessellator.addVertexWithUV(startX, startY, endZ, icon.getMaxU(), icon.getMaxV());
     }
 
-    private static void renderFaceXPos(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ) {
+    private static void renderFaceXPos(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ)
+    {
         Tessellator tessellator = Tessellator.instance;
         tessellator.setColorOpaque_F(0.6f, 0.6f, 0.6f);
         tessellator.addVertexWithUV(endX, startY, endZ, icon.getMaxU(), icon.getMaxV());
@@ -179,7 +194,8 @@ public class BrickRenderHelper
         tessellator.addVertexWithUV(endX, endY, endZ, icon.getMinU(), icon.getMaxV());
     }
 
-    private static void renderFaceYNeg(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ) {
+    private static void renderFaceYNeg(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ)
+    {
         Tessellator tessellator = Tessellator.instance;
         tessellator.setColorOpaque_F(0.5f, 0.5f, 0.5f);
         tessellator.addVertexWithUV(startX, startY, endZ, icon.getMinU(), icon.getMaxV());
@@ -188,7 +204,8 @@ public class BrickRenderHelper
         tessellator.addVertexWithUV(endX, startY, endZ, icon.getMaxU(), icon.getMaxV());
     }
 
-    private static void renderFaceYPos(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ) {
+    private static void renderFaceYPos(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ)
+    {
         Tessellator tessellator = Tessellator.instance;
         tessellator.setColorOpaque_F(1.0f, 1.0f, 1.0f);
         tessellator.addVertexWithUV(endX, endY, endZ, icon.getMaxU(), icon.getMaxV());
@@ -197,7 +214,8 @@ public class BrickRenderHelper
         tessellator.addVertexWithUV(startX, endY, endZ, icon.getMinU(), icon.getMaxV());
     }
 
-    private static void renderFaceZNeg(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ) {
+    private static void renderFaceZNeg(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ)
+    {
         Tessellator tessellator = Tessellator.instance;
         tessellator.setColorOpaque_F(0.8f, 0.8f, 0.8f);
         tessellator.addVertexWithUV(startX, endY, startZ, icon.getMaxU(), icon.getMaxV());
@@ -206,7 +224,8 @@ public class BrickRenderHelper
         tessellator.addVertexWithUV(startX, startY, startZ, icon.getMinU(), icon.getMaxV());
     }
 
-    private static void renderFaceZPos(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ) {
+    private static void renderFaceZPos(IIcon icon, float startX, float startY, float startZ, float endX, float endY, float endZ)
+    {
         Tessellator tessellator = Tessellator.instance;
         tessellator.setColorOpaque_F(0.8f, 0.8f, 0.8f);
         tessellator.addVertexWithUV(startX, startY, endZ, icon.getMinU(), icon.getMaxV());

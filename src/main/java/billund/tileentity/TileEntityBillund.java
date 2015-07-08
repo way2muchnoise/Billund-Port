@@ -13,79 +13,99 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityBillund extends TileEntity {
+public class TileEntityBillund extends TileEntity
+{
     private Stud[] m_studs;
 
-    public void setStuds(Stud[] studs) {
+    public void setStuds(Stud[] studs)
+    {
         this.m_studs = studs;
     }
 
-    public TileEntityBillund() {
+    public TileEntityBillund()
+    {
         super();
         m_studs = new Stud[Stud.STUDS_PER_BLOCK];
     }
 
-    public Stud getStudLocal(int x, int y, int z) {
+    public Stud getStudLocal(int x, int y, int z)
+    {
         if (x >= 0 && x < Stud.STUDS_PER_ROW &&
                 y >= 0 && y < Stud.STUDS_PER_COLUMN &&
-                z >= 0 && z < Stud.STUDS_PER_ROW) {
+                z >= 0 && z < Stud.STUDS_PER_ROW)
+        {
             return m_studs[x + (z * Stud.STUDS_PER_ROW) + (y * Stud.STUDS_PER_LAYER)];
         }
         return null;
     }
 
-    public void setStudLocal(int x, int y, int z, Stud stud) {
+    public void setStudLocal(int x, int y, int z, Stud stud)
+    {
         if (x >= 0 && x < Stud.STUDS_PER_ROW &&
                 y >= 0 && y < Stud.STUDS_PER_COLUMN &&
-                z >= 0 && z < Stud.STUDS_PER_ROW) {
+                z >= 0 && z < Stud.STUDS_PER_ROW)
+        {
             m_studs[x + (z * Stud.STUDS_PER_ROW) + (y * Stud.STUDS_PER_LAYER)] = stud;
         }
     }
 
-    public boolean isEmpty() {
-        for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i) {
-            if (m_studs[i] != null) {
+    public boolean isEmpty()
+    {
+        for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i)
+        {
+            if (m_studs[i] != null)
+            {
                 return false;
             }
         }
         return true;
     }
 
-    public void cullOrphans() {
+    public void cullOrphans()
+    {
         boolean changed = false;
-        for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i) {
+        for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i)
+        {
             Stud stud = m_studs[i];
-            if (stud != null) {
+            if (stud != null)
+            {
                 Stud origin = Stud.getStud(worldObj, stud.XOrigin, stud.YOrigin, stud.ZOrigin);
-                if (origin == null) {
+                if (origin == null)
+                {
                     m_studs[i] = null;
                     changed = true;
                 }
             }
         }
-        if (changed) {
+        if (changed)
+        {
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
     }
 
     @Override
-    public void updateEntity() {
+    public void updateEntity()
+    {
         super.updateEntity();
     }
 
     @Override
-    public Packet getDescriptionPacket() {
+    public Packet getDescriptionPacket()
+    {
         writeToNBT(new NBTTagCompound());
         return MessageHandler.INSTANCE.getPacketFrom(new MessageTileEntityBillund(this.xCoord, this.yCoord, this.zCoord, this.m_studs));
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
+    public void writeToNBT(NBTTagCompound nbttagcompound)
+    {
         super.writeToNBT(nbttagcompound);
 
-        for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i) {
+        for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i)
+        {
             Stud stud = m_studs[i];
-            if (stud != null) {
+            if (stud != null)
+            {
                 NBTTagCompound studTag = new NBTTagCompound();
                 studTag.setInteger("c", stud.Colour.number);
                 studTag.setInteger("x", stud.XOrigin);
@@ -100,12 +120,15 @@ public class TileEntityBillund extends TileEntity {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound) {
+    public void readFromNBT(NBTTagCompound nbttagcompound)
+    {
         super.readFromNBT(nbttagcompound);
 
-        for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i) {
+        for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i)
+        {
             String key = "s" + i;
-            if (nbttagcompound.hasKey(key)) {
+            if (nbttagcompound.hasKey(key))
+            {
                 Stud stud = new Stud();
                 NBTTagCompound studTag = nbttagcompound.getCompoundTag(key);
                 stud.Colour = Colour.getValue(studTag.getInteger("c"));
@@ -116,7 +139,8 @@ public class TileEntityBillund extends TileEntity {
                 stud.BrickHeight = studTag.getInteger("h");
                 stud.BrickDepth = studTag.getInteger("d");
                 m_studs[i] = stud;
-            } else {
+            } else
+            {
                 m_studs[i] = null;
             }
         }

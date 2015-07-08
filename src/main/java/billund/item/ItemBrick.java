@@ -23,22 +23,27 @@ import java.util.List;
 
 import static net.minecraft.util.Vec3.createVectorHelper;
 
-public class ItemBrick extends ItemBillund {
-    public ItemBrick() {
+public class ItemBrick extends ItemBillund
+{
+    public ItemBrick()
+    {
         super();
         this.setMaxStackSize(64);
         this.setHasSubtypes(true);
         this.setUnlocalizedName(Names.Items.BRICK);
     }
 
-    public static ItemStack create(Colour colour, int width, int depth, int quantity) {
+    public static ItemStack create(Colour colour, int width, int depth, int quantity)
+    {
         int damage = ((width - 1) & 0x1) + (((depth - 1) & 0x7) << 1) + ((colour.number & 0xf) << 4);
         return new ItemStack(ModItems.brick, quantity, damage);
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs tabs, List list) {
-        for (Colour colour : Colour.values()) {
+    public void getSubItems(Item item, CreativeTabs tabs, List list)
+    {
+        for (Colour colour : Colour.values())
+        {
             list.add(create(colour, 1, 1, 1));
             list.add(create(colour, 1, 2, 1));
             list.add(create(colour, 1, 3, 1));
@@ -51,7 +56,8 @@ public class ItemBrick extends ItemBillund {
         }
     }
 
-    public static Stud.StudRaycastResult raycastFromPlayer(World world, EntityPlayer player, float f) {
+    public static Stud.StudRaycastResult raycastFromPlayer(World world, EntityPlayer player, float f)
+    {
         // Calculate the raycast origin and direction
         double yOffset2 = (!world.isRemote && player.isSneaking()) ? -0.08 : 0.0; // TODO: Improve
         float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * f;
@@ -69,7 +75,8 @@ public class ItemBrick extends ItemBillund {
         float f8 = f3 * f5;
 
         float distance = 5.0f;
-        if (player instanceof EntityPlayerMP) {
+        if (player instanceof EntityPlayerMP)
+        {
             distance = (float) ((EntityPlayerMP) player).theItemInWorldManager.getBlockReachDistance();
         }
         Vec3 direction = createVectorHelper((double) f7, (double) f6, (double) f8);
@@ -78,15 +85,18 @@ public class ItemBrick extends ItemBillund {
         return Stud.raycastStuds(world, position, direction, distance);
     }
 
-    public static Brick getPotentialBrick(ItemStack stack, World world, EntityPlayer player, float f) {
+    public static Brick getPotentialBrick(ItemStack stack, World world, EntityPlayer player, float f)
+    {
         // Do the raycast
         Stud.StudRaycastResult result = raycastFromPlayer(world, player, f);
-        if (result != null) {
+        if (result != null)
+        {
             // Calculate where to place the brick
             int width = getWidth(stack);
             int depth = getDepth(stack);
             int height = 1;
-            if (player.isSneaking()) {
+            if (player.isSneaking())
+            {
                 int temp = depth;
                 depth = width;
                 width = temp;
@@ -95,7 +105,8 @@ public class ItemBrick extends ItemBillund {
             int placeX = result.hitX;
             int placeY = result.hitY;
             int placeZ = result.hitZ;
-            switch (result.hitSide) {
+            switch (result.hitSide)
+            {
                 case 0:
                     placeY -= height;
                     break;
@@ -118,13 +129,17 @@ public class ItemBrick extends ItemBillund {
 
             // Try a few positions nearby
             Brick brick = new Brick(getColour(stack), placeX, placeY, placeZ, width, height, depth);
-            for (int x = 0; x < width; ++x) {
-                for (int z = 0; z < depth; ++z) {
-                    for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x)
+            {
+                for (int z = 0; z < depth; ++z)
+                {
+                    for (int y = 0; y < height; ++y)
+                    {
                         brick.XOrigin = placeX - x;
                         brick.YOrigin = placeY - y;
                         brick.ZOrigin = placeZ - z;
-                        if (Stud.canAddBrick(world, brick)) {
+                        if (Stud.canAddBrick(world, brick))
+                        {
                             return brick;
                         }
                     }
@@ -134,12 +149,15 @@ public class ItemBrick extends ItemBillund {
         return null;
     }
 
-    public static Brick getExistingBrick(World world, EntityPlayer player, float f) {
+    public static Brick getExistingBrick(World world, EntityPlayer player, float f)
+    {
         // Do the raycast
         Stud.StudRaycastResult result = raycastFromPlayer(world, player, f);
-        if (result != null) {
+        if (result != null)
+        {
             Stud stud = Stud.getStud(world, result.hitX, result.hitY, result.hitZ);
-            if (stud != null && stud.Colour != Colour.WALL) {
+            if (stud != null && stud.Colour != Colour.WALL)
+            {
                 return new Brick(stud.Colour, stud.XOrigin, stud.YOrigin, stud.ZOrigin, stud.BrickWidth, stud.BrickHeight, stud.BrickDepth);
             }
         }
@@ -147,7 +165,8 @@ public class ItemBrick extends ItemBillund {
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    {
 //    	Brick brick = getPotentialBrick( stack, world, player, 1.0f );
 //    	if( brick != null )
 //		{
@@ -157,7 +176,8 @@ public class ItemBrick extends ItemBillund {
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    {
 //    	Brick brick = getPotentialBrick( stack, world, player, 1.0f );
 //    	if( brick != null )
 //		{
@@ -167,14 +187,18 @@ public class ItemBrick extends ItemBillund {
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    {
         Brick brick = getPotentialBrick(stack, world, player, 1.0f);
-        if (brick != null) {
-            if (!world.isRemote) {
+        if (brick != null)
+        {
+            if (!world.isRemote)
+            {
                 // Place the brick
                 Stud.addBrick(world, brick);
 
-                if (!player.capabilities.isCreativeMode) {
+                if (!player.capabilities.isCreativeMode)
+                {
                     // Decrement stackSize
                     stack.stackSize--;
                 }
@@ -183,21 +207,25 @@ public class ItemBrick extends ItemBillund {
         return stack;
     }
 
-    public static int getWidth(ItemStack stack) {
+    public static int getWidth(ItemStack stack)
+    {
         int damage = stack.getItemDamage();
         return (damage & 0x1) + 1;
     }
 
-    public static int getHeight(ItemStack stack) {
+    public static int getHeight(ItemStack stack)
+    {
         return 1;
     }
 
-    public static int getDepth(ItemStack stack) {
+    public static int getDepth(ItemStack stack)
+    {
         int damage = stack.getItemDamage();
         return ((damage >> 1) & 0x7) + 1;
     }
 
-    public static Colour getColour(ItemStack stack) {
+    public static Colour getColour(ItemStack stack)
+    {
         int damage = stack.getItemDamage();
         return Colour.values()[((damage >> 4) & 0xf)];
     }
