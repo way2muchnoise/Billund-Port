@@ -6,7 +6,7 @@
 package billund.client.gui;
 
 import billund.network.MessageHandler;
-import billund.network.message.MessageBillund;
+import billund.network.message.MessageBillundOrder;
 import billund.reference.Resources;
 import billund.util.BillundSet;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,6 +14,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class GuiOrderForm extends GuiScreen
 {
@@ -31,22 +34,8 @@ public class GuiOrderForm extends GuiScreen
         m_player = player;
         m_orders = new boolean[NUM_SETS];
         for (int i = 0; i < NUM_SETS; ++i)
-        {
             m_orders[i] = false;
-        }
         m_ordered = false;
-    }
-
-    @Override
-    public void initGui()
-    {
-        super.initGui();
-    }
-
-    @Override
-    public void onGuiClosed()
-    {
-        super.onGuiClosed();
     }
 
     @Override
@@ -60,12 +49,6 @@ public class GuiOrderForm extends GuiScreen
     {
         // TODO: If the item got lost, close GUI
         super.updateScreen();
-    }
-
-    @Override
-    protected void keyTyped(char c, int k)
-    {
-        super.keyTyped(c, k);
     }
 
     @Override
@@ -88,7 +71,8 @@ public class GuiOrderForm extends GuiScreen
                 if (tickBoxIndex >= 0 && tickBoxIndex < NUM_SETS && tickBoxLocalY < 17)
                     if (!m_ordered)
                         for (int i = 0; i < NUM_SETS; ++i)
-                            m_orders[i] = i == tickBoxIndex && !m_orders[i];
+                            if (i == tickBoxIndex)
+                                m_orders[i] = !m_orders[i];
             }
 
             // Test order button
@@ -161,17 +145,19 @@ public class GuiOrderForm extends GuiScreen
     {
         if (!m_ordered)
         {
+            List<Integer> ordersList = new LinkedList<Integer>();
             // Send our orders to the server
             for (int i = 0; i < NUM_SETS; ++i)
-            {
                 if (m_orders[i])
-                {
-                    MessageBillund packet = new MessageBillund();
-                    packet.packetType = MessageBillund.OrderSet;
-                    packet.dataInt = new int[]{i};
-                    MessageHandler.INSTANCE.sendToServer(packet);
-                }
-            }
+                    ordersList.add(i);
+
+            int[] orders = new int[ordersList.size()];
+            int i = 0;
+            for (Integer order : ordersList)
+                orders[i++] = order;
+
+            MessageBillundOrder packet = new MessageBillundOrder(orders);
+            MessageHandler.INSTANCE.sendToServer(packet);
 
             // Ensure we don't order again
             m_ordered = true;

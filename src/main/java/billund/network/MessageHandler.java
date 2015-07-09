@@ -5,7 +5,7 @@
 
 package billund.network;
 
-import billund.network.message.MessageBillund;
+import billund.network.message.MessageBillundOrder;
 import billund.network.message.MessageTileEntityBillund;
 import billund.reference.Reference;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -21,7 +21,7 @@ public class MessageHandler implements IMessageHandler
 
     public static void init()
     {
-        INSTANCE.registerMessage(MessageBillund.Handler.class, MessageBillund.class, 0, Side.SERVER);
+        INSTANCE.registerMessage(MessageBillundOrder.Handler.class, MessageBillundOrder.class, 0, Side.SERVER);
         INSTANCE.registerMessage(MessageTileEntityBillund.Handler.class, MessageTileEntityBillund.class, 1, Side.CLIENT);
     }
 
