@@ -1,7 +1,7 @@
 package billund.recipe;
 
 import billund.handler.ConfigHandler;
-import billund.init.ModItems;
+import billund.registry.ItemRegistry;
 import billund.item.ItemBrick;
 import billund.reference.Colour;
 import billund.util.OreDictionaryHelper;
@@ -24,7 +24,7 @@ public class RecipeBrick implements IRecipe
             ItemStack stack = inv.getStackInSlot(i);
             if (stack != null)
             {
-                if (stack.getItem() == ModItems.brick)
+                if (stack.getItem() == ItemRegistry.brick)
                     bricks++;
                 else if (OreDictionaryHelper.compareOre(stack, "dye"))
                     dye++;
@@ -46,7 +46,7 @@ public class RecipeBrick implements IRecipe
             ItemStack stack = inv.getStackInSlot(i);
             if (stack != null)
             {
-                if (stack.getItem() == ModItems.brick)
+                if (stack.getItem() == ItemRegistry.brick)
                     brick = stack.copy();
                 else if (OreDictionaryHelper.compareOre(stack, "dye"))
                     component = stack.copy();
@@ -75,6 +75,6 @@ public class RecipeBrick implements IRecipe
     @Override
     public ItemStack getRecipeOutput()
     {
-        return new ItemStack(ModItems.brick);
+        return new ItemStack(ItemRegistry.brick);
     }
 }

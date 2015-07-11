@@ -1,7 +1,7 @@
 package billund.client.render;
 
 import billund.block.BlockBillund;
-import billund.init.ModBlocks;
+import billund.registry.BlockRegistry;
 import billund.item.ItemBrick;
 import billund.reference.Colour;
 import billund.util.Brick;
@@ -70,7 +70,7 @@ public class BrickRenderHelper
         int blockZ = (brick.zOrigin - localZ) / Stud.ROWS_PER_BLOCK;
 
         Tessellator tessellator = Tessellator.instance;
-        int brightness = ModBlocks.billund.getMixedBrightnessForBlock(world, blockX, blockY, blockZ);
+        int brightness = BlockRegistry.billund.getMixedBrightnessForBlock(world, blockX, blockY, blockZ);
 
         Minecraft mc = Minecraft.getMinecraft();
         mc.getTextureManager().bindTexture(mc.getTextureManager().getResourceLocation(0)); // bind the terrain texture

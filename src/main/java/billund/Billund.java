@@ -6,9 +6,9 @@
 package billund;
 
 import billund.handler.ConfigHandler;
-import billund.init.ModBlocks;
-import billund.init.ModItems;
-import billund.init.Recipes;
+import billund.registry.BlockRegistry;
+import billund.registry.ItemRegistry;
+import billund.registry.RecipeRegistry;
 import billund.proxy.CommonProxy;
 import billund.reference.MetaData;
 import billund.reference.Reference;
@@ -43,10 +43,10 @@ public class Billund
         metadata = MetaData.init(metadata);
 
         // Initialize mod items
-        ModItems.init();
+        ItemRegistry.init();
 
         // Initialize mod blocks
-        ModBlocks.init();
+        BlockRegistry.init();
 
         LogHelper.info("preInit Complete!");
     }
@@ -67,7 +67,7 @@ public class Billund
         proxy.registerHandlers();
 
         // Register Recipes
-        Recipes.init();
+        RecipeRegistry.init();
 
         LogHelper.info("init Complete!");
     }

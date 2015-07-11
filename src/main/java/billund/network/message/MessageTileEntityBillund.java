@@ -11,7 +11,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 
-public class MessageTileEntityBillund implements IMessage
+public class MessageTileEntityBillund implements IMessage, IMessageHandler<MessageTileEntityBillund, IMessage>
 {
 
     public Stud[] studs;
@@ -87,21 +87,17 @@ public class MessageTileEntityBillund implements IMessage
         }
     }
 
-    public static class Handler implements IMessageHandler<MessageTileEntityBillund, IMessage>
+    @Override
+    public IMessage onMessage(MessageTileEntityBillund message, MessageContext ctx)
     {
+        TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y, message.z);
 
-        @Override
-        public IMessage onMessage(MessageTileEntityBillund message, MessageContext ctx)
+        if (tileEntity instanceof TileEntityBillund)
         {
-            TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y, message.z);
-
-            if (tileEntity instanceof TileEntityBillund)
-            {
-                ((TileEntityBillund) tileEntity).setStuds(message.studs);
-            }
+            ((TileEntityBillund) tileEntity).setStuds(message.studs);
             FMLClientHandler.instance().getClient().theWorld.markBlockForUpdate(message.x, message.y, message.z);
             LogHelper.debug(String.format("Brick at x:%s y:%s z:%s", message.x, message.y, message.z));
-            return null;
         }
+        return null;
     }
 }

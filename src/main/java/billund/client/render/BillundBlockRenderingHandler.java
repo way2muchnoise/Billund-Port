@@ -1,6 +1,6 @@
 package billund.client.render;
 
-import billund.init.ModBlocks;
+import billund.registry.BlockRegistry;
 import billund.tileentity.TileEntityBillund;
 import billund.util.Stud;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -21,7 +21,7 @@ public class BillundBlockRenderingHandler implements ISimpleBlockRenderingHandle
     @Override
     public int getRenderId()
     {
-        return ModBlocks.billund.blockRenderID;
+        return BlockRegistry.billund.blockRenderID;
     }
 
     @Override

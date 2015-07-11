@@ -6,7 +6,7 @@
 package billund.proxy;
 
 import billund.Billund;
-import billund.init.ModItems;
+import billund.registry.ItemRegistry;
 import billund.network.MessageHandler;
 import billund.tileentity.TileEntityAirDrop;
 import billund.tileentity.TileEntityBillund;
@@ -74,7 +74,7 @@ public class CommonProxy
             {
                 EntityLivingBase living = (EntityLivingBase) event.entity;
                 if ((living.isChild() && r.nextInt(20) == 0) || (!living.isChild() && r.nextInt(100) == 0))
-                    event.entity.entityDropItem(new ItemStack(ModItems.orderForm, 1), 0.0f);
+                    event.entity.entityDropItem(new ItemStack(ItemRegistry.orderForm, 1), 0.0f);
             }
         }
     }

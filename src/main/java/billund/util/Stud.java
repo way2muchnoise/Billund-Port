@@ -5,7 +5,7 @@
 
 package billund.util;
 
-import billund.init.ModBlocks;
+import billund.registry.BlockRegistry;
 import billund.reference.Colour;
 import billund.tileentity.TileEntityBillund;
 import net.minecraft.block.Block;
@@ -65,7 +65,7 @@ public class Stud
         if (blockY >= 0)
         {
             Block block = world.getBlock(blockX, blockY, blockZ);
-            if (block == ModBlocks.billund)
+            if (block == BlockRegistry.billund)
             {
                 TileEntity entity = world.getTileEntity(blockX, blockY, blockZ);
                 if (entity != null && entity instanceof TileEntityBillund)
@@ -94,7 +94,7 @@ public class Stud
         if (blockY >= 0)
         {
             Block block = world.getBlock(blockX, blockY, blockZ);
-            if (block == ModBlocks.billund)
+            if (block == BlockRegistry.billund)
             {
                 TileEntity entity = world.getTileEntity(blockX, blockY, blockZ);
                 if (entity != null && entity instanceof TileEntityBillund)
@@ -120,7 +120,7 @@ public class Stud
         if (blockY >= 0)
         {
             Block block = world.getBlock(blockX, blockY, blockZ);
-            if (block == ModBlocks.billund)
+            if (block == BlockRegistry.billund)
             {
                 // Add to existing billund block
                 TileEntity entity = world.getTileEntity(blockX, blockY, blockZ);
@@ -133,7 +133,7 @@ public class Stud
             } else if (block == Blocks.air)
             {
                 // Add a new billund block
-                if (world.setBlock(blockX, blockY, blockZ, ModBlocks.billund, 0, 3))
+                if (world.setBlock(blockX, blockY, blockZ, BlockRegistry.billund, 0, 3))
                 {
                     TileEntity entity = world.getTileEntity(blockX, blockY, blockZ);
                     if (entity != null && entity instanceof TileEntityBillund)
@@ -180,7 +180,7 @@ public class Stud
                     setStud(world, x, y, z, null);
     }
 
-    public static class StudRaycastResult
+    public static class RaycastResult
     {
         public int hitX;
         public int hitY;
@@ -188,7 +188,7 @@ public class Stud
         public int hitSide;
     }
 
-    public static StudRaycastResult raycastStuds(World world, Vec3 origin, Vec3 direction, float distance)
+    public static RaycastResult raycastStuds(World world, Vec3 origin, Vec3 direction, float distance)
     {
         float xScale = (float) ROWS_PER_BLOCK;
         float yScale = (float) LAYERS_PER_BLOCK;
@@ -325,7 +325,7 @@ public class Stud
 
         if (hitStud != null)
         {
-            StudRaycastResult result = new StudRaycastResult();
+            RaycastResult result = new RaycastResult();
             result.hitX = sx;
             result.hitY = sy;
             result.hitZ = sz;

@@ -5,9 +5,11 @@
 
 package billund.item;
 
-import billund.init.ModItems;
+import billund.proxy.ClientProxy;
+import billund.registry.ItemRegistry;
 import billund.reference.Colour;
 import billund.reference.Names;
+import billund.registry.RotationRegistry;
 import billund.util.Brick;
 import billund.util.Stud;
 import net.minecraft.creativetab.CreativeTabs;
@@ -36,7 +38,7 @@ public class ItemBrick extends ItemBillund
     public static ItemStack create(Colour colour, int width, int depth, int quantity)
     {
         int damage = ((width - 1) & 0x1) + (((depth - 1) & 0x7) << 1) + ((colour.number & 0xf) << 4);
-        return new ItemStack(ModItems.brick, quantity, damage);
+        return new ItemStack(ItemRegistry.brick, quantity, damage);
     }
 
     @Override
@@ -56,7 +58,7 @@ public class ItemBrick extends ItemBillund
         }
     }
 
-    public static Stud.StudRaycastResult raycastFromPlayer(World world, EntityPlayer player, float f)
+    public static Stud.RaycastResult raycastFromPlayer(World world, EntityPlayer player, float f)
     {
         // Calculate the raycast origin and direction
         double yOffset2 = (!world.isRemote && player.isSneaking()) ? -0.08 : 0.0; // TODO: Improve
@@ -88,23 +90,24 @@ public class ItemBrick extends ItemBillund
     public static Brick getPotentialBrick(ItemStack stack, World world, EntityPlayer player, float f)
     {
         // Do the raycast
-        Stud.StudRaycastResult result = raycastFromPlayer(world, player, f);
+        Stud.RaycastResult result = raycastFromPlayer(world, player, f);
+        byte rotation = world.isRemote ? ClientProxy.rotation : RotationRegistry.instance().getRotation(player);
         if (result != null)
         {
             // Calculate where to place the brick
             int width = getWidth(stack);
             int depth = getDepth(stack);
             int height = 1;
-            if (player.isSneaking())
+            if (rotation % 2 != 0)
             {
                 int temp = depth;
                 depth = width;
                 width = temp;
             }
 
-            int placeX = result.hitX;
+            int placeX = result.hitX - (rotation == 3 ? width-1 : 0);
             int placeY = result.hitY;
-            int placeZ = result.hitZ;
+            int placeZ = result.hitZ - (rotation == 2 ? depth-1 : 0);
             switch (result.hitSide)
             {
                 case 0:
@@ -139,9 +142,7 @@ public class ItemBrick extends ItemBillund
                         brick.yOrigin = placeY - y;
                         brick.zOrigin = placeZ - z;
                         if (Stud.canAddBrick(world, brick))
-                        {
                             return brick;
-                        }
                     }
                 }
             }
@@ -152,7 +153,7 @@ public class ItemBrick extends ItemBillund
     public static Brick getExistingBrick(World world, EntityPlayer player, float f)
     {
         // Do the raycast
-        Stud.StudRaycastResult result = raycastFromPlayer(world, player, f);
+        Stud.RaycastResult result = raycastFromPlayer(world, player, f);
         if (result != null)
         {
             Stud stud = Stud.getStud(world, result.hitX, result.hitY, result.hitZ);
@@ -162,28 +163,6 @@ public class ItemBrick extends ItemBillund
             }
         }
         return null;
-    }
-
-    @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
-    {
-//    	Brick brick = getPotentialBrick( stack, world, player, 1.0f );
-//    	if( brick != null )
-//		{
-//			return true;
-//		}
-        return false;
-    }
-
-    @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
-    {
-//    	Brick brick = getPotentialBrick( stack, world, player, 1.0f );
-//    	if( brick != null )
-//		{
-//			return true;
-//		}
-        return false;
     }
 
     @Override

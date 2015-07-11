@@ -1,9 +1,9 @@
-package billund.init;
+package billund.registry;
 
 import billund.recipe.RecipeBrick;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class Recipes
+public class RecipeRegistry
 {
     public static void init()
     {

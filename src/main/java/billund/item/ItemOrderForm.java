@@ -6,7 +6,7 @@
 package billund.item;
 
 import billund.Billund;
-import billund.init.ModItems;
+import billund.registry.ItemRegistry;
 import billund.reference.Names;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,22 +31,20 @@ public class ItemOrderForm extends ItemBillund
     public static ItemStack create(int colour, int width, int depth, int quantity)
     {
         int damage = ((width - 1) & 0x1) + (((depth - 1) & 0x7) << 1) + ((colour & 0xf) << 4);
-        return new ItemStack(ModItems.brick, quantity, damage);
+        return new ItemStack(ItemRegistry.brick, quantity, damage);
     }
 
     @Override
     public void getSubItems(Item item, CreativeTabs tabs, List list)
     {
-        list.add(new ItemStack(ModItems.orderForm, 1, 0));
+        list.add(new ItemStack(ItemRegistry.orderForm, 1, 0));
     }
 
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
     {
         if (Billund.proxy.isClient() && world.isRemote)
-        {
             Billund.proxy.openOrderFormGUI(player);
-        }
         return stack;
     }
 

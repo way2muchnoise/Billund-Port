@@ -9,11 +9,13 @@ import billund.client.gui.GuiOrderForm;
 import billund.client.render.BillundBlockRenderingHandler;
 import billund.client.render.BrickRenderer;
 import billund.client.render.tileentity.TileEntityRendererAirDrop;
+import billund.handler.ClientEventHandler;
 import billund.handler.ForgeEventHandler;
-import billund.init.ModBlocks;
-import billund.init.ModItems;
+import billund.registry.BlockRegistry;
+import billund.registry.ItemRegistry;
 import billund.tileentity.TileEntityAirDrop;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.client.gui.GuiScreen;
@@ -23,6 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class ClientProxy extends CommonProxy
 {
+    public static byte rotation = 0;
 
     @Override
     public boolean isClient()
@@ -32,9 +35,9 @@ public class ClientProxy extends CommonProxy
 
     public void initRenderingAndTextures()
     {
-        ModBlocks.billund.blockRenderID = RenderingRegistry.getNextAvailableRenderId();
+        BlockRegistry.billund.blockRenderID = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new BillundBlockRenderingHandler());
-        MinecraftForgeClient.registerItemRenderer(ModItems.brick, new BrickRenderer());
+        MinecraftForgeClient.registerItemRenderer(ItemRegistry.brick, new BrickRenderer());
         RenderingRegistry.registerEntityRenderingHandler(TileEntityAirDrop.class, new TileEntityRendererAirDrop());
     }
 
@@ -44,6 +47,8 @@ public class ClientProxy extends CommonProxy
         super.registerHandlers();
         MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
         FMLCommonHandler.instance().bus().register(new ForgeEventHandler());
+        ClientRegistry.registerKeyBinding(ClientEventHandler.KEY_ROTATE);
+        FMLCommonHandler.instance().bus().register(new ClientEventHandler());
     }
 
     @Override

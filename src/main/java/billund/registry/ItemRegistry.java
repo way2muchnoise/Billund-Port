@@ -1,13 +1,12 @@
-package billund.init;
+package billund.registry;
 
 import billund.item.ItemBrick;
 import billund.item.ItemOrderForm;
 import billund.reference.Names;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class ModItems
+public class ItemRegistry
 {
-
     public static ItemBrick brick;
     public static ItemOrderForm orderForm;
 
