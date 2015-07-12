@@ -8,11 +8,14 @@ package billund.client.gui;
 import billund.network.MessageHandler;
 import billund.network.message.MessageBillundOrder;
 import billund.reference.Resources;
-import billund.util.BillundSet;
+import billund.registry.BillundSetRegistry;
+import billund.set.BillundSet;
+import billund.set.BillundSetData;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import java.util.LinkedList;
@@ -23,19 +26,17 @@ public class GuiOrderForm extends GuiScreen
     private static final int xSize = 192;
     private static final int ySize = 185;
 
-    private static final int NUM_SETS = 5;
-
-    private EntityPlayer m_player;
-    private boolean[] m_orders;
-    private boolean m_ordered;
+    private EntityPlayer player;
+    private List<BillundSet> sets;
+    private List<BillundSet> orders;
+    private boolean ordered;
 
     public GuiOrderForm(EntityPlayer player)
     {
-        m_player = player;
-        m_orders = new boolean[NUM_SETS];
-        for (int i = 0; i < NUM_SETS; ++i)
-            m_orders[i] = false;
-        m_ordered = false;
+        this.player = player;
+        this.orders = new LinkedList<BillundSet>();
+        this.sets = BillundSetRegistry.instance().getAll();
+        this.ordered = false;
     }
 
     @Override
@@ -68,11 +69,21 @@ public class GuiOrderForm extends GuiScreen
             {
                 int tickBoxIndex = (localY - 33) / 23;
                 int tickBoxLocalY = (localY - 33) % 23;
-                if (tickBoxIndex >= 0 && tickBoxIndex < NUM_SETS && tickBoxLocalY < 17)
-                    if (!m_ordered)
-                        for (int i = 0; i < NUM_SETS; ++i)
+                if (tickBoxIndex >= 0 && tickBoxIndex < sets.size() && tickBoxLocalY < 17)
+                {
+                    if (!ordered)
+                    {
+                        for (int i = 0; i < sets.size(); ++i)
+                        {
                             if (i == tickBoxIndex)
-                                m_orders[i] = !m_orders[i];
+                            {
+                                BillundSet set = sets.get(i);
+                                if (orders.contains(set)) orders.remove(set);
+                                else orders.add(set);
+                            }
+                        }
+                    }
+                }
             }
 
             // Test order button
@@ -97,21 +108,21 @@ public class GuiOrderForm extends GuiScreen
         drawTexturedModalRect(startX, startY - 5, 0, ySize, xSize, 5);
 
         // Draw the ticks
-        for (int i = 0; i < NUM_SETS; ++i)
-            if (m_orders[i])
+        for (int i = 0; i < sets.size(); ++i)
+            if (orders.contains(sets.get(i)))
                 drawTexturedModalRect(startX + 160, startY + 31 + i * 23, xSize, 0, 19, 19);
 
         // Draw the text
-        fontRendererObj.drawString("Billund Order Form", startX + 8, startY + 10, 0x4c5156);
+        fontRendererObj.drawString(StatCollector.translateToLocal("billund.gui.orderForm.title"), startX + 8, startY + 10, 0x4c5156);
 
         String currency = getPlayerBalance() + " / " + getOrderCost();
         int currencyColour = canPlayerAffordOrder() ? 0x4c5156 : 0xae1e22;
         fontRendererObj.drawString(currency, startX + xSize - 25 - fontRendererObj.getStringWidth(currency), startY + 10, currencyColour);
 
-        for (int i = 0; i < NUM_SETS; ++i)
-            fontRendererObj.drawString(getSetName(i), startX + 16, startY + 38 + i * 23, 0x4c5156);
+        for (int i = 0; i < sets.size(); ++i)
+            fontRendererObj.drawString(sets.get(i).getLocalizedName(), startX + 16, startY + 38 + i * 23, 0x4c5156);
 
-        String order = m_ordered ? "Placed" : "Place Order";
+        String order = StatCollector.translateToLocal("billund.gui.orderForm." + (ordered ? "placed" : "place"));
         int colour = canPlayerOrder() ? 0x4c5156 : 0xb3a8a7;
         fontRendererObj.drawString(order, startX + 102 + (75 - fontRendererObj.getStringWidth(order)) / 2, startY + 156, colour);
 
@@ -122,7 +133,7 @@ public class GuiOrderForm extends GuiScreen
 
     private boolean canPlayerOrder()
     {
-        if (!m_ordered)
+        if (!ordered)
         {
             int order = getOrderCost();
             if (order > 0)
@@ -143,33 +154,28 @@ public class GuiOrderForm extends GuiScreen
 
     private void order()
     {
-        if (!m_ordered)
+        if (!ordered)
         {
-            List<Integer> ordersList = new LinkedList<Integer>();
+            List<String> ordersList = new LinkedList<String>();
             // Send our orders to the server
-            for (int i = 0; i < NUM_SETS; ++i)
-                if (m_orders[i])
-                    ordersList.add(i);
+            for (BillundSet order : orders)
+                if (order != null)
+                    ordersList.add(order.getName());
 
-            int[] orders = new int[ordersList.size()];
-            int i = 0;
-            for (Integer order : ordersList)
-                orders[i++] = order;
-
-            MessageBillundOrder packet = new MessageBillundOrder(orders);
+            MessageBillundOrder packet = new MessageBillundOrder(ordersList.toArray(new String[ordersList.size()]));
             MessageHandler.INSTANCE.sendToServer(packet);
 
             // Ensure we don't order again
-            m_ordered = true;
+            ordered = true;
         }
     }
 
     private int getPlayerBalance()
     {
         int total = 0;
-        for (int i = 0; i < m_player.inventory.getSizeInventory(); ++i)
+        for (int i = 0; i < player.inventory.getSizeInventory(); ++i)
         {
-            ItemStack stack = m_player.inventory.getStackInSlot(i);
+            ItemStack stack = player.inventory.getStackInSlot(i);
             if (stack != null && stack.getItem() == Items.emerald)
                 total += stack.stackSize;
         }
@@ -179,19 +185,8 @@ public class GuiOrderForm extends GuiScreen
     private int getOrderCost()
     {
         int total = 0;
-        for (int i = 0; i < NUM_SETS; ++i)
-            if (m_orders[i])
-                total += getSetCost(i);
+        for (BillundSet set : orders)
+                total += set.getCost();
         return total;
-    }
-
-    private String getSetName(int i)
-    {
-        return BillundSet.get(i).getDescription();
-    }
-
-    private int getSetCost(int i)
-    {
-        return BillundSet.get(i).getCost();
     }
 }

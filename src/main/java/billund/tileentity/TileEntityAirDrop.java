@@ -6,7 +6,9 @@
 package billund.tileentity;
 
 import billund.handler.ConfigHandler;
-import billund.util.BillundSet;
+import billund.registry.BillundSetRegistry;
+import billund.set.BillundSet;
+import billund.set.BillundSetData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -22,7 +24,7 @@ public class TileEntityAirDrop extends Entity
 {
     public Block block;
     public int metadata;
-    public int setType;
+    public BillundSet set;
     public boolean deployed;
 
     public TileEntityAirDrop(World world)
@@ -32,7 +34,7 @@ public class TileEntityAirDrop extends Entity
         this.metadata = 0;
     }
 
-    public TileEntityAirDrop(World world, double x, double y, double z, int set)
+    public TileEntityAirDrop(World world, double x, double y, double z, BillundSet set)
     {
         this(world);
         this.preventEntitySpawning = true;
@@ -45,7 +47,7 @@ public class TileEntityAirDrop extends Entity
         this.prevPosX = x;
         this.prevPosY = y;
         this.prevPosZ = z;
-        this.setType = set;
+        this.set = set;
     }
 
     @Override
@@ -120,8 +122,8 @@ public class TileEntityAirDrop extends Entity
                     {
                         TileEntityChest inv = (TileEntityChest) entity;
                         //rename the chest to corresponding set
-                        inv.func_145976_a(BillundSet.get(this.setType).getDescription());
-                        BillundSet.get(this.setType).populateChest(inv);
+                        inv.func_145976_a(this.set.getLocalizedName());
+                        this.set.populateChest(inv);
                         inv.markDirty();
                     }
                 }
@@ -139,7 +141,7 @@ public class TileEntityAirDrop extends Entity
     protected void writeEntityToNBT(NBTTagCompound nbtTagCompound)
     {
         nbtTagCompound.setByte("Data", (byte) this.metadata);
-        nbtTagCompound.setInteger("Set", this.setType);
+        nbtTagCompound.setString("Set", this.set.getName());
         nbtTagCompound.setBoolean("Deployed", this.deployed);
     }
 
@@ -147,7 +149,7 @@ public class TileEntityAirDrop extends Entity
     protected void readEntityFromNBT(NBTTagCompound nbtTagCompound)
     {
         this.metadata = nbtTagCompound.getByte("Data") & 255;
-        this.setType = nbtTagCompound.getInteger("Set");
+        this.set = BillundSetRegistry.instance().getBillundSet(nbtTagCompound.getString("Set"));
         this.deployed = nbtTagCompound.getBoolean("Deployed");
     }
 

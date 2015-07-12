@@ -23,7 +23,7 @@ public class MessageHandler implements IMessageHandler
 
     public static void init()
     {
-        INSTANCE.registerMessage(MessageBillundOrder.Handler.class, MessageBillundOrder.class, ID++, Side.SERVER);
+        INSTANCE.registerMessage(MessageBillundOrder.class, MessageBillundOrder.class, ID++, Side.SERVER);
         INSTANCE.registerMessage(MessageRotation.class, MessageRotation.class, ID++, Side.SERVER);
         INSTANCE.registerMessage(MessageTileEntityBillund.class, MessageTileEntityBillund.class, ID++, Side.CLIENT);
     }

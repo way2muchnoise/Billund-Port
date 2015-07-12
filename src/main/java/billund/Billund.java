@@ -12,12 +12,14 @@ import billund.registry.RecipeRegistry;
 import billund.proxy.CommonProxy;
 import billund.reference.MetaData;
 import billund.reference.Reference;
+import billund.set.BillundSetData;
 import billund.util.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Reference.ID, name = Reference.NAME, version = Reference.VERSION_FULL, guiFactory = Reference.GUI_FACTORY_CLASS)
@@ -70,5 +72,14 @@ public class Billund
         RecipeRegistry.init();
 
         LogHelper.info("init Complete!");
+    }
+
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event)
+    {
+        // Add default Billund sets
+        BillundSetData.init();
+
+        LogHelper.info("postInit Complete!");
     }
 }

@@ -11,6 +11,7 @@ import billund.reference.Colour;
 import billund.reference.Names;
 import billund.registry.RotationRegistry;
 import billund.util.Brick;
+import billund.set.Bricks;
 import billund.util.Stud;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,6 +40,11 @@ public class ItemBrick extends ItemBillund
     {
         int damage = ((width - 1) & 0x1) + (((depth - 1) & 0x7) << 1) + ((colour.number & 0xf) << 4);
         return new ItemStack(ItemRegistry.brick, quantity, damage);
+    }
+
+    public static ItemStack create(Bricks brick)
+    {
+        return create(brick.colour, brick.width, brick.depth, brick.quantity);
     }
 
     @Override
