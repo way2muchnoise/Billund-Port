@@ -16,4 +16,18 @@ public class Bricks
         this.depth = depth;
         this.quantity = quantity;
     }
+
+    public Bricks(Bricks brick)
+    {
+        this.colour = brick.colour;
+        this.width = brick.width;
+        this.depth = brick.depth;
+        this.quantity = brick.quantity;
+    }
+
+    public Bricks setColour(Colour colour)
+    {
+        this.colour = colour;
+        return this;
+    }
 }

@@ -1,0 +1,127 @@
+{
+  "subsets": {
+    "basic": [
+      [1, 2, 24],
+      [1, 4, 24],
+      [2, 2, 24],
+      [2, 4, 24]
+    ],
+    "all": [
+      [1, 1, 24],
+      [1, 2, 24],
+      [1, 3, 24],
+      [1, 4, 24],
+      [1, 6, 24],
+      [2, 1, 24],
+      [2, 2, 24],
+      [2, 3, 24],
+      [2, 4, 24],
+      [2, 6, 24]
+    ]
+  },
+  "sets": {
+    "starter": {
+      "cost": 7,
+      "bricks": [
+        {
+          "colour": "red",
+          "subset": "basic"
+        },
+        {
+          "colour": "green",
+          "subset": "basic"
+        },
+        {
+          "empty" : 1
+        },
+        {
+          "colour": "blue",
+          "subset": "basic"
+        },
+        {
+          "colour": "yellow",
+          "subset": "basic"
+        },
+        {
+          "empty" : 1
+        },
+        {
+          "colour": "white",
+          "subset": "basic"
+        },
+        {
+          "colour": "black",
+          "subset": "basic"
+        }
+      ]
+    },
+    "packA": {
+      "cost": 10,
+      "bricks": [
+        {
+          "colour": "red",
+          "subset": "all"
+        },
+        {
+          "colour": "green",
+          "subset": "all"
+        },
+        {
+          "colour": "blue",
+          "subset": "all"
+        }
+      ]
+    },
+    "packB": {
+      "cost": 10,
+      "bricks": [
+        {
+          "colour": "orange",
+          "subset": "all"
+        },
+        {
+          "colour": "yellow",
+          "subset": "all"
+        },
+        {
+          "colour": "lime",
+          "subset": "all"
+        }
+      ]
+    },
+    "packC": {
+      "cost": 10,
+      "bricks": [
+        {
+          "colour": "pink",
+          "subset": "all"
+        },
+        {
+          "colour": "purple",
+          "subset": "all"
+        },
+        {
+          "colour": "white",
+          "subset": "all"
+        }
+      ]
+    },
+    "packD": {
+      "cost": 10,
+      "bricks": [
+        {
+          "colour": "lightGrey",
+          "subset": "all"
+        },
+        {
+          "colour": "grey",
+          "subset": "all"
+        },
+        {
+          "colour": "black",
+          "subset": "all"
+        }
+      ]
+    }
+  }
+}

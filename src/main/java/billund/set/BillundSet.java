@@ -2,6 +2,7 @@ package billund.set;
 
 import billund.item.ItemBrick;
 import billund.reference.Colour;
+import billund.registry.BillundSubSetRegistry;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.StatCollector;
 
@@ -57,29 +58,15 @@ public class BillundSet
         this.bricksList.add(bricks);
     }
 
-    public void addBricksCollection(Collection<Bricks> bricks)
+    public void addBricks(Collection<Bricks> bricks)
     {
         this.bricksList.addAll(bricks);
     }
 
-    public void addBasicBricks(Colour colour)
+    public void addBricks(String subset, Colour colour)
     {
-        this.bricksList.add(new Bricks(colour, 1, 2, 24));
-        this.bricksList.add(new Bricks(colour, 1, 4, 24));
-        this.bricksList.add(new Bricks(colour, 2, 2, 24));
-        this.bricksList.add(new Bricks(colour, 2, 4, 24));
-    }
-
-    public void addAllBricks(Colour colour)
-    {
-        this.bricksList.add(new Bricks(colour, 1, 1, 24));
-        this.bricksList.add(new Bricks(colour, 1, 2, 24));
-        this.bricksList.add(new Bricks(colour, 1, 3, 24));
-        this.bricksList.add(new Bricks(colour, 1, 4, 24));
-        this.bricksList.add(new Bricks(colour, 1, 6, 24));
-        this.bricksList.add(new Bricks(colour, 2, 2, 24));
-        this.bricksList.add(new Bricks(colour, 2, 3, 24));
-        this.bricksList.add(new Bricks(colour, 2, 4, 24));
-        this.bricksList.add(new Bricks(colour, 2, 6, 24));
+        BillundSubSet subSet = BillundSubSetRegistry.instance().getBillundSubSet(subset);
+        if (subSet != null)
+            this.bricksList.addAll(subSet.getBricks(colour));
     }
 }

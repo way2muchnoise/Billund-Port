@@ -13,6 +13,7 @@ import billund.proxy.CommonProxy;
 import billund.reference.MetaData;
 import billund.reference.Reference;
 import billund.set.BillundSetData;
+import billund.set.BillundSubSetData;
 import billund.util.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -78,6 +79,7 @@ public class Billund
     public void postInit(FMLPostInitializationEvent event)
     {
         // Add default Billund sets
+        BillundSubSetData.init();
         BillundSetData.init();
 
         LogHelper.info("postInit Complete!");
