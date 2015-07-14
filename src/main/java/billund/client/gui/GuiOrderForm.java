@@ -10,7 +10,6 @@ import billund.network.message.MessageBillundOrder;
 import billund.reference.Resources;
 import billund.registry.BillundSetRegistry;
 import billund.set.BillundSet;
-import billund.set.BillundSetData;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;

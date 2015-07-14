@@ -8,7 +8,6 @@ package billund.network.message;
 import billund.registry.BillundSetRegistry;
 import billund.set.BillundSet;
 import billund.tileentity.TileEntityAirDrop;
-import billund.set.BillundSetData;
 import billund.util.EmeraldHelper;
 import billund.util.LogHelper;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;

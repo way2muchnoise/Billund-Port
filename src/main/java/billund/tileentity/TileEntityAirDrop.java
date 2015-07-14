@@ -8,7 +8,6 @@ package billund.tileentity;
 import billund.handler.ConfigHandler;
 import billund.registry.BillundSetRegistry;
 import billund.set.BillundSet;
-import billund.set.BillundSetData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
