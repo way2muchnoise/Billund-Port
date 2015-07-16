@@ -62,4 +62,10 @@ public enum Colour
         //should never happen
         return null;
     }
+
+    @Override
+    public String toString()
+    {
+        return this.name;
+    }
 }

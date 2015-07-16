@@ -33,4 +33,10 @@ public class BillundSubSet
             coloured.add(new Bricks(brick).setColour(colour));
         return coloured;
     }
+
+    @Override
+    public String toString()
+    {
+        return this.name;
+    }
 }

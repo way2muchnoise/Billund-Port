@@ -69,4 +69,10 @@ public class BillundSet
         if (subSet != null)
             this.bricksList.addAll(subSet.getBricks(colour));
     }
+
+    @Override
+    public String toString()
+    {
+        return this.name;
+    }
 }

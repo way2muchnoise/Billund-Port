@@ -30,4 +30,10 @@ public class Bricks
         this.colour = colour;
         return this;
     }
+
+    @Override
+    public String toString()
+    {
+        return (this.colour != null ? this.colour.name : "null") + ": " + this.width + "x" + this.depth + " " + this.quantity;
+    }
 }
