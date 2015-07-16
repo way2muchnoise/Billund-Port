@@ -1,5 +1,6 @@
 package billund.set;
 
+import billund.handler.ConfigHandler;
 import billund.reference.Colour;
 import billund.registry.BillundSetRegistry;
 import billund.registry.BillundSubSetRegistry;
@@ -17,7 +18,7 @@ public class BillundSetLoader
 {
     public static void loadSets()
     {
-        JsonReader reader = new JsonReader(new InputStreamReader(FileHelpler.getJsonFile(BillundSetLoader.class, "default.json", "billundSets\\default.json", false)));
+        JsonReader reader = new JsonReader(new InputStreamReader(FileHelpler.getJsonFile(BillundSetLoader.class, "default.json", "billundSets\\default.json", ConfigHandler.reloadDefaultPacks)));
         JsonParser parser = new JsonParser();
         JsonObject base = parser.parse(reader).getAsJsonObject();
 
@@ -43,8 +44,16 @@ public class BillundSetLoader
                 JsonObject object = element.getAsJsonObject();
                 if (object.has("empty"))
                     for (int i = object.get("empty").getAsInt(); i > 0; i--)
-                        set.addBricks((Bricks)null);
-                else
+                        set.addBricks((Bricks) null);
+                if (object.has("bricks"))
+                {
+                    for (JsonElement brick : object.getAsJsonArray("bricks"))
+                    {
+                        JsonArray array = brick.getAsJsonArray();
+                        set.addBricks(new Bricks(Colour.getNamed(object.get("colour").getAsString()), array.get(0).getAsInt(), array.get(1).getAsInt(), array.get(2).getAsInt()));
+                    }
+                }
+                if (object.has("subset"))
                     set.addBricks(object.get("subset").getAsString(), Colour.getNamed(object.get("colour").getAsString()));
             }
             BillundSetRegistry.instance().addBillundSet(set);

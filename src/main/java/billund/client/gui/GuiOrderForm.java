@@ -24,17 +24,35 @@ public class GuiOrderForm extends GuiScreen
 {
     private static final int xSize = 192;
     private static final int ySize = 185;
+    private static final int itemsPerPage = 5;
 
     private EntityPlayer player;
-    private List<BillundSet> sets;
+    private List<List<BillundSet>> sets;
     private List<BillundSet> orders;
     private boolean ordered;
+    private int page;
 
     public GuiOrderForm(EntityPlayer player)
     {
         this.player = player;
         this.orders = new LinkedList<BillundSet>();
-        this.sets = BillundSetRegistry.instance().getAll();
+        this.sets = new LinkedList<List<BillundSet>>();
+        this.page = 0;
+        int count = 0;
+        List<BillundSet> temp = new LinkedList<BillundSet>();
+        for (BillundSet set : BillundSetRegistry.instance().getAll())
+        {
+            count++;
+            temp.add(set);
+            if (count >= itemsPerPage)
+            {
+                count = 0;
+                this.sets.add(temp);
+                temp = new LinkedList<BillundSet>();
+            }
+        }
+        if (!temp.isEmpty())
+            this.sets.add(temp);
         this.ordered = false;
     }
 
@@ -68,15 +86,15 @@ public class GuiOrderForm extends GuiScreen
             {
                 int tickBoxIndex = (localY - 33) / 23;
                 int tickBoxLocalY = (localY - 33) % 23;
-                if (tickBoxIndex >= 0 && tickBoxIndex < sets.size() && tickBoxLocalY < 17)
+                if (tickBoxIndex >= 0 && tickBoxIndex < sets.get(page).size() && tickBoxLocalY < 17)
                 {
                     if (!ordered)
                     {
-                        for (int i = 0; i < sets.size(); ++i)
+                        for (int i = 0; i < sets.get(page).size(); ++i)
                         {
                             if (i == tickBoxIndex)
                             {
-                                BillundSet set = sets.get(i);
+                                BillundSet set = sets.get(page).get(i);
                                 if (orders.contains(set)) orders.remove(set);
                                 else orders.add(set);
                             }
@@ -88,6 +106,10 @@ public class GuiOrderForm extends GuiScreen
             // Test order button
             if (localX >= 102 && localX < 177 && localY >= 149 && localY < 170)
                 if (canPlayerOrder()) order();
+
+            // page cycle TODO: make pretty
+            if (localX >= 0 && localX < 55 && localY >= 149 && localY < 170)
+                this.page = this.page+2 > this.sets.size() ? 0 : this.page+1;
         }
     }
 
@@ -107,8 +129,8 @@ public class GuiOrderForm extends GuiScreen
         drawTexturedModalRect(startX, startY - 5, 0, ySize, xSize, 5);
 
         // Draw the ticks
-        for (int i = 0; i < sets.size(); ++i)
-            if (orders.contains(sets.get(i)))
+        for (int i = 0; i < sets.get(page).size(); ++i)
+            if (orders.contains(sets.get(page).get(i)))
                 drawTexturedModalRect(startX + 160, startY + 31 + i * 23, xSize, 0, 19, 19);
 
         // Draw the text
@@ -118,12 +140,17 @@ public class GuiOrderForm extends GuiScreen
         int currencyColour = canPlayerAffordOrder() ? 0x4c5156 : 0xae1e22;
         fontRendererObj.drawString(currency, startX + xSize - 25 - fontRendererObj.getStringWidth(currency), startY + 10, currencyColour);
 
-        for (int i = 0; i < sets.size(); ++i)
-            fontRendererObj.drawString(sets.get(i).getLocalizedName(), startX + 16, startY + 38 + i * 23, 0x4c5156);
+        for (int i = 0; i < sets.get(page).size(); ++i)
+            fontRendererObj.drawString(sets.get(page).get(i).getLocalizedName(), startX + 16, startY + 38 + i * 23, 0x4c5156);
 
         String order = StatCollector.translateToLocal("billund.gui.orderForm." + (ordered ? "placed" : "place"));
         int colour = canPlayerOrder() ? 0x4c5156 : 0xb3a8a7;
         fontRendererObj.drawString(order, startX + 102 + (75 - fontRendererObj.getStringWidth(order)) / 2, startY + 156, colour);
+
+        // TODO: Make pretty
+        String page = "Turn Page";
+        colour = this.sets.size() > 1 ? 0x4c5156 : 0xb3a8a7;
+        fontRendererObj.drawString(page, startX + (75 - fontRendererObj.getStringWidth(page)) / 2, startY + 156, colour);
 
         super.drawScreen(mouseX, mouseY, f);
     }
