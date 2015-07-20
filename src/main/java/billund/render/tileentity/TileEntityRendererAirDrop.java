@@ -3,9 +3,9 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package billund.client.render.tileentity;
+package billund.render.tileentity;
 
-import billund.client.render.models.ModelParachute;
+import billund.render.models.ModelParachute;
 import billund.reference.Resources;
 import billund.tileentity.TileEntityAirDrop;
 import cpw.mods.fml.relauncher.Side;

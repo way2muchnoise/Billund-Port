@@ -6,10 +6,10 @@ itemGroup.billund=Billund
 billund.gui.orderForm.title=Billund Order Form
 billund.gui.orderForm.place=Place
 billund.gui.orderForm.placed=Placed
+billund.gui.orderForm.pages=Page %s of %s
 
 billund.set.starter=Starter Pack
 billund.set.packA=Colour Pack A
 billund.set.packB=Colour Pack B
 billund.set.packC=Colour Pack C
 billund.set.packD=Colour Pack D
-billund.set.packTest=Testing Pack

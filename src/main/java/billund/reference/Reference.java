@@ -19,5 +19,5 @@ public class Reference
     public static final String CLIENT_PROXY_CLASS = "billund.proxy.ClientProxy";
     public static final String SEVER_PROXY_CLASS = "billund.proxy.ServerProxy";
 
-    public static final String GUI_FACTORY_CLASS = "billund.client.gui.GuiFactory";
+    public static final String GUI_FACTORY_CLASS = "billund.gui.GuiFactory";
 }

@@ -1,4 +1,4 @@
-package billund.client.gui;
+package billund.gui;
 
 import billund.handler.ConfigHandler;
 import billund.reference.Reference;

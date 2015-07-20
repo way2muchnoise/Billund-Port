@@ -1,4 +1,4 @@
-package billund.client.gui;
+package billund.gui;
 
 import cpw.mods.fml.client.IModGuiFactory;
 import net.minecraft.client.Minecraft;

@@ -122,33 +122,6 @@
           "subset": "all"
         }
       ]
-    },
-    "packTest": {
-      "cost": 10,
-      "bricks": [
-        {
-          "colour": "blue",
-          "subset": "basic"
-        },
-        {
-          "empty": 3
-        },
-        {
-          "colour": "red",
-          "bricks": [
-						[2, 2, 10],
-		  			[2, 4, 10]
-		  		]
-        },
-				{
-					"colour": "yellow",
-					"subset": "basic",
-					"bricks": [
-						[2, 2, 10],
-						[2, 4, 10]
-					]
-				}
-      ]
     }
   }
 }

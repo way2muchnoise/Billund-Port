@@ -3,7 +3,7 @@
  * Copyright Daniel Ratcliffe, 2013-2014. See LICENSE for license details.
  */
 
-package billund.client.gui;
+package billund.gui;
 
 import billund.network.MessageHandler;
 import billund.network.message.MessageBillundOrder;
@@ -107,9 +107,14 @@ public class GuiOrderForm extends GuiScreen
             if (localX >= 102 && localX < 177 && localY >= 149 && localY < 170)
                 if (canPlayerOrder()) order();
 
-            // page cycle TODO: make pretty
-            if (localX >= 0 && localX < 55 && localY >= 149 && localY < 170)
-                this.page = this.page+2 > this.sets.size() ? 0 : this.page+1;
+            // page cycle
+            if (this.sets.size() > 1)
+            {
+                if (localX >= 12 && localX < 26 && localY >= 149 && localY < 170)
+                    this.page = this.page-1 < 0 ? this.sets.size()-1 : this.page-1;
+                if (localX >= 90 && localX < 104 && localY >= 149 && localY < 170)
+                    this.page = this.page+2 > this.sets.size() ? 0 : this.page+1;
+            }
         }
     }
 
@@ -133,6 +138,13 @@ public class GuiOrderForm extends GuiScreen
             if (orders.contains(sets.get(page).get(i)))
                 drawTexturedModalRect(startX + 160, startY + 31 + i * 23, xSize, 0, 19, 19);
 
+        // Draw page turners
+        if (this.sets.size() > 1)
+        {
+            drawTexturedModalRect(startX + 10, startY + 153, xSize, 23, 14, 14);
+            drawTexturedModalRect(startX + 88, startY + 153, xSize, 37, 14, 14);
+        }
+
         // Draw the text
         fontRendererObj.drawString(StatCollector.translateToLocal("billund.gui.orderForm.title"), startX + 8, startY + 10, 0x4c5156);
 
@@ -147,10 +159,11 @@ public class GuiOrderForm extends GuiScreen
         int colour = canPlayerOrder() ? 0x4c5156 : 0xb3a8a7;
         fontRendererObj.drawString(order, startX + 102 + (75 - fontRendererObj.getStringWidth(order)) / 2, startY + 156, colour);
 
-        // TODO: Make pretty
-        String page = "Turn Page";
-        colour = this.sets.size() > 1 ? 0x4c5156 : 0xb3a8a7;
-        fontRendererObj.drawString(page, startX + (75 - fontRendererObj.getStringWidth(page)) / 2, startY + 156, colour);
+        if (this.sets.size() > 1)
+        {
+            String page = StatCollector.translateToLocalFormatted("billund.gui.orderForm.pages", this.page + 1, this.sets.size());
+            fontRendererObj.drawString(page, startX + 22 + (68 - fontRendererObj.getStringWidth(page)) / 2, startY + 156, 0x4c5156);
+        }
 
         super.drawScreen(mouseX, mouseY, f);
     }

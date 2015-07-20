@@ -1,4 +1,4 @@
-package billund.client.render;
+package billund.render;
 
 import billund.block.BlockBillund;
 import billund.registry.BlockRegistry;

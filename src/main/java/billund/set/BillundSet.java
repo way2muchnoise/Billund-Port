@@ -12,13 +12,14 @@ import java.util.List;
 
 public class BillundSet
 {
-    private String name;
+    private String name, localName;
     private int cost;
     private List<Bricks> bricksList;
 
     public BillundSet(String name, int cost)
     {
         this.name = name;
+        this.localName = null;
         this.cost = cost;
         this.bricksList = new LinkedList<Bricks>();
     }
@@ -33,9 +34,15 @@ public class BillundSet
         return this.name;
     }
 
+    public BillundSet setLocalizedName(String name)
+    {
+        this.localName = name;
+        return this;
+    }
+
     public String getLocalizedName()
     {
-        return StatCollector.translateToLocal("billund.set." + this.name);
+        return this.localName == null ? StatCollector.translateToLocal("billund.set." + this.name) : this.localName;
     }
 
     public void populateChest(IInventory inv)

@@ -1,7 +1,7 @@
 package billund.handler;
 
 import billund.block.BlockBillund;
-import billund.client.render.BrickRenderHelper;
+import billund.render.BrickRenderHelper;
 import billund.item.ItemBrick;
 import billund.util.Brick;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

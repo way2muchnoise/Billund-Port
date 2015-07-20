@@ -11,7 +11,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class BillundSetLoader
@@ -20,43 +23,71 @@ public class BillundSetLoader
     {
         JsonReader reader = new JsonReader(new InputStreamReader(FileHelpler.getJsonFile(BillundSetLoader.class, "default.json", "billundSets\\default.json", ConfigHandler.reloadDefaultPacks)));
         JsonParser parser = new JsonParser();
-        JsonObject base = parser.parse(reader).getAsJsonObject();
 
-        JsonObject subsets = base.getAsJsonObject("subsets");
-        for (Map.Entry<String, JsonElement> entry : subsets.entrySet())
+        List<JsonObject> subSetsList = new LinkedList<JsonObject>();
+        List<JsonObject> setsList = new LinkedList<JsonObject>();
+
+        JsonObject base = parser.parse(reader).getAsJsonObject();
+        if (base.has("subsets"))
+            subSetsList.add(base.getAsJsonObject("subsets"));
+        if (base.has("sets"))
+            setsList.add(base.getAsJsonObject("sets"));
+
+        InputStream[] streams =  FileHelpler.getJsonFiles("billundSets", "default.json");
+        if (streams != null)
         {
-            BillundSubSet subset = new BillundSubSet(entry.getKey());
-            for (JsonElement element : entry.getValue().getAsJsonArray())
+            for (InputStream stream : streams)
             {
-                JsonArray array = element.getAsJsonArray();
-                subset.addBricks(array.get(0).getAsInt(), array.get(1).getAsInt(), array.get(2).getAsInt());
+                reader = new JsonReader(new InputStreamReader(stream));
+                base = parser.parse(reader).getAsJsonObject();
+                if (base.has("subsets"))
+                    subSetsList.add(base.getAsJsonObject("subsets"));
+                if (base.has("sets"))
+                    setsList.add(base.getAsJsonObject("sets"));
             }
-            BillundSubSetRegistry.instance().addBillundSubSet(subset);
         }
 
-        JsonObject sets = base.getAsJsonObject("sets");
-        for(Map.Entry<String, JsonElement> entry : sets.entrySet())
+        for (JsonObject subsets : subSetsList)
         {
-            JsonObject jsonSet = entry.getValue().getAsJsonObject();
-            BillundSet set = new BillundSet(entry.getKey(), jsonSet.get("cost").getAsInt());
-            for (JsonElement element : jsonSet.get("bricks").getAsJsonArray())
+            for (Map.Entry<String, JsonElement> entry : subsets.entrySet())
             {
-                JsonObject object = element.getAsJsonObject();
-                if (object.has("empty"))
-                    for (int i = object.get("empty").getAsInt(); i > 0; i--)
-                        set.addBricks((Bricks) null);
-                if (object.has("bricks"))
+                BillundSubSet subset = new BillundSubSet(entry.getKey());
+                for (JsonElement element : entry.getValue().getAsJsonArray())
                 {
-                    for (JsonElement brick : object.getAsJsonArray("bricks"))
-                    {
-                        JsonArray array = brick.getAsJsonArray();
-                        set.addBricks(new Bricks(Colour.getNamed(object.get("colour").getAsString()), array.get(0).getAsInt(), array.get(1).getAsInt(), array.get(2).getAsInt()));
-                    }
+                    JsonArray array = element.getAsJsonArray();
+                    subset.addBricks(array.get(0).getAsInt(), array.get(1).getAsInt(), array.get(2).getAsInt());
                 }
-                if (object.has("subset"))
-                    set.addBricks(object.get("subset").getAsString(), Colour.getNamed(object.get("colour").getAsString()));
+                BillundSubSetRegistry.instance().addBillundSubSet(subset);
             }
-            BillundSetRegistry.instance().addBillundSet(set);
+        }
+
+        for (JsonObject sets : setsList)
+        {
+            for (Map.Entry<String, JsonElement> entry : sets.entrySet())
+            {
+                JsonObject jsonSet = entry.getValue().getAsJsonObject();
+                BillundSet set = new BillundSet(entry.getKey(), jsonSet.get("cost").getAsInt());
+                if (jsonSet.has("name"))
+                    set.setLocalizedName(jsonSet.get("name").getAsString());
+                for (JsonElement element : jsonSet.get("bricks").getAsJsonArray())
+                {
+                    JsonObject object = element.getAsJsonObject();
+                    if (object.has("empty"))
+                        for (int i = object.get("empty").getAsInt(); i > 0; i--)
+                            set.addBricks((Bricks) null);
+                    if (object.has("bricks"))
+                    {
+                        for (JsonElement brick : object.getAsJsonArray("bricks"))
+                        {
+                            JsonArray array = brick.getAsJsonArray();
+                            set.addBricks(new Bricks(Colour.getNamed(object.get("colour").getAsString()), array.get(0).getAsInt(), array.get(1).getAsInt(), array.get(2).getAsInt()));
+                        }
+                    }
+                    if (object.has("subset"))
+                        set.addBricks(object.get("subset").getAsString(), Colour.getNamed(object.get("colour").getAsString()));
+                }
+                BillundSetRegistry.instance().addBillundSet(set);
+            }
         }
     }
 }

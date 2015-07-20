@@ -5,10 +5,10 @@
 
 package billund.proxy;
 
-import billund.client.gui.GuiOrderForm;
-import billund.client.render.BillundBlockRenderingHandler;
-import billund.client.render.BrickRenderer;
-import billund.client.render.tileentity.TileEntityRendererAirDrop;
+import billund.gui.GuiOrderForm;
+import billund.render.BillundBlockRenderingHandler;
+import billund.render.BrickRenderer;
+import billund.render.tileentity.TileEntityRendererAirDrop;
 import billund.handler.ClientEventHandler;
 import billund.handler.ForgeEventHandler;
 import billund.registry.BlockRegistry;

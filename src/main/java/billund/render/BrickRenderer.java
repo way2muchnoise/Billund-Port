@@ -1,4 +1,4 @@
-package billund.client.render;
+package billund.render;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;

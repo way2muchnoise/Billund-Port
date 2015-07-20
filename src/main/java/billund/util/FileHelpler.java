@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.net.URL;
+import java.util.Arrays;
 
 public class FileHelpler
 {
@@ -51,5 +52,40 @@ public class FileHelpler
             return stream;
         }
         throw new RuntimeException(); // this should never be reached
+    }
+
+    /**
+     * Get all json files in a folder
+     * @param folderSource the folder
+     * @return null if not a folder, an array of all streams if folder
+     */
+    public static InputStream[] getJsonFiles(String folderSource, final String... excludedFiles)
+    {
+        File folder = new File(folderSource);
+        if (!folder.isDirectory()) return null;
+
+        File[] dataFiles = folder.listFiles(new FilenameFilter()
+        {
+            @Override
+            public boolean accept(File dir, String name)
+            {
+                return name.endsWith(".json") && !Arrays.asList(excludedFiles).contains(name);
+            }
+        });
+
+        InputStream[] streams = new InputStream[dataFiles.length];
+        for (int i = 0; i < dataFiles.length; i++)
+        {
+            try
+            {
+                InputStream stream = new FileInputStream(dataFiles[i]);
+                streams[i] = stream;
+            } catch (FileNotFoundException e)
+            {
+                LogHelper.warn("Could not read file " + dataFiles[i].getName());
+            }
+        }
+
+        return streams;
     }
 }
