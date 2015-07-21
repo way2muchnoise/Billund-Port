@@ -10,15 +10,16 @@ import java.io.File;
 public class ConfigHandler
 {
     public static Configuration config;
+    public static final String configDir = "config/billund/";
     public static boolean redye = true;
     public static boolean reloadDefaultPacks = false;
     public static int speedMultiplier = 1;
 
-    public static void init(File configFile)
+    public static void init()
     {
         if (config == null)
         {
-            config = new Configuration(configFile);
+            config = new Configuration(new File(configDir + "billund.cfg"));
             loadConfig();
         }
     }

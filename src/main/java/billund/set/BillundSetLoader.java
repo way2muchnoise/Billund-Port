@@ -21,7 +21,7 @@ public class BillundSetLoader
 {
     public static void loadSets()
     {
-        JsonReader reader = new JsonReader(new InputStreamReader(FileHelpler.getJsonFile(BillundSetLoader.class, "default.json", "billundSets\\default.json", ConfigHandler.reloadDefaultPacks)));
+        JsonReader reader = new JsonReader(new InputStreamReader(FileHelpler.getJsonFile(BillundSetLoader.class, "default.json", ConfigHandler.configDir + "sets/default.json", ConfigHandler.reloadDefaultPacks)));
         JsonParser parser = new JsonParser();
 
         List<JsonObject> subSetsList = new LinkedList<JsonObject>();
@@ -33,7 +33,7 @@ public class BillundSetLoader
         if (base.has("sets"))
             setsList.add(base.getAsJsonObject("sets"));
 
-        InputStream[] streams =  FileHelpler.getJsonFiles("billundSets", "default.json");
+        InputStream[] streams =  FileHelpler.getJsonFiles(ConfigHandler.configDir + "sets", "default.json");
         if (streams != null)
         {
             for (InputStream stream : streams)

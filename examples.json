@@ -1,4 +1,4 @@
-// To be added in a folder called billundSets in the minecraft folder (not in the config)
+// To be added in a folder called billundSets in the billund config folder under sets
 // The folder will be created upon first run with the mod
 {
   // Define subsets with a unique name of billunds
@@ -12,7 +12,7 @@
       [1, 4, 24],
       [2, 2, 24],
       [2, 4, 24]
-    ],
+    ]
   },
   // Define sets with a unique name 
   "sets": {
@@ -20,28 +20,29 @@
       "name": "Testing Pack", // the displayname of the set
       "cost": 10, // emerald cost
       "bricks": [ // array of objects to define the content
-      {
-        "colour": "blue", // colour of the bricks
-        "subset": "basic" // the subset of bricks to add in given colour
-      },
-      {
-        "empty": 3 // adds empty slots to the chest
-      },
-      {
-        "colour": "red",
-        "bricks": [ // add bricks that are not in a subset
-          [2, 2, 10],
-          [2, 4, 10]
-        ]
-      },
-      {
-       "colour": "yellow", // using subset and not subet set code in one object
-       "subset": "basic",
-       "bricks": [
-         [2, 2, 10],
-         [2, 4, 10]
-        ]
-      }
-    ]
+        {
+          "colour": "blue", // colour of the bricks
+          "subset": "basic" // the subset of bricks to add in given colour
+        },
+        {
+          "empty": 3 // adds empty slots to the chest
+        },
+        {
+          "colour": "red",
+          "bricks": [ // add bricks that are not in a subset
+            [2, 2, 10],
+            [2, 4, 10]
+          ]
+        },
+        {
+         "colour": "yellow", // using subset and not subet set code in one object
+         "subset": "basic",
+         "bricks": [
+           [2, 2, 10],
+           [2, 4, 10]
+          ]
+        }
+      ]
+    }
   }
 }

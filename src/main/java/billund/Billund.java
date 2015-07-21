@@ -38,7 +38,7 @@ public class Billund
     public void preInit(FMLPreInitializationEvent event)
     {
         // Initialize config
-        ConfigHandler.init(event.getSuggestedConfigurationFile());
+        ConfigHandler.init();
         FMLCommonHandler.instance().bus().register(new ConfigHandler());
 
         // Init MetaData
