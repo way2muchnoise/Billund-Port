@@ -7,6 +7,7 @@ package billund.network;
 
 import billund.network.message.MessageBillundOrder;
 import billund.network.message.MessageRotation;
+import billund.network.message.MessageServerSync;
 import billund.network.message.MessageTileEntityBillund;
 import billund.reference.Reference;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -26,6 +27,7 @@ public class MessageHandler implements IMessageHandler
         INSTANCE.registerMessage(MessageBillundOrder.class, MessageBillundOrder.class, ID++, Side.SERVER);
         INSTANCE.registerMessage(MessageRotation.class, MessageRotation.class, ID++, Side.SERVER);
         INSTANCE.registerMessage(MessageTileEntityBillund.class, MessageTileEntityBillund.class, ID++, Side.CLIENT);
+        INSTANCE.registerMessage(MessageServerSync.class, MessageServerSync.class, ID++, Side.CLIENT);
     }
 
     @Override

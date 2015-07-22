@@ -6,26 +6,17 @@
 package billund.proxy;
 
 import billund.Billund;
-import billund.registry.ItemRegistry;
+import billund.handler.ForgeServerEventHandler;
 import billund.network.MessageHandler;
 import billund.tileentity.TileEntityAirDrop;
 import billund.tileentity.TileEntityBillund;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-
-import java.util.Random;
 
 public class CommonProxy
 {
-    // IProxy implementation
-
     public void openOrderFormGUI(EntityPlayer player)
     {
         // NOOP
@@ -55,27 +46,7 @@ public class CommonProxy
 
     public void registerHandlers()
     {
-        MinecraftForge.EVENT_BUS.register(new ForgeHandlers());
+        MinecraftForge.EVENT_BUS.register(new ForgeServerEventHandler());
         MessageHandler.init();
-    }
-
-    public class ForgeHandlers
-    {
-        private Random r = new Random();
-
-        // Forge event responses
-
-        @SubscribeEvent
-        public void onEntityLivingDeath(LivingDeathEvent event)
-        {
-            if (event.entity.worldObj.isRemote) return;
-
-            if (event.entity instanceof EntityZombie)
-            {
-                EntityLivingBase living = (EntityLivingBase) event.entity;
-                if ((living.isChild() && r.nextInt(20) == 0) || (!living.isChild() && r.nextInt(100) == 0))
-                    event.entity.entityDropItem(new ItemStack(ItemRegistry.orderForm, 1), 0.0f);
-            }
-        }
     }
 }

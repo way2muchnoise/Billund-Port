@@ -52,6 +52,7 @@ public enum Colour
 
     public static Colour getNamed(String name)
     {
+        if (name.equals("null")) return null;
         for (Colour p : values())
         {
             if (p.name.toLowerCase().equals(name.toLowerCase()))

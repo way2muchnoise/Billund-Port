@@ -9,8 +9,7 @@ import billund.gui.GuiOrderForm;
 import billund.render.BillundBlockRenderingHandler;
 import billund.render.BrickRenderer;
 import billund.render.tileentity.TileEntityRendererAirDrop;
-import billund.handler.ClientEventHandler;
-import billund.handler.ForgeEventHandler;
+import billund.handler.ForgeClientEventHandler;
 import billund.registry.BlockRegistry;
 import billund.registry.ItemRegistry;
 import billund.tileentity.TileEntityAirDrop;
@@ -45,10 +44,9 @@ public class ClientProxy extends CommonProxy
     public void registerHandlers()
     {
         super.registerHandlers();
-        MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
-        FMLCommonHandler.instance().bus().register(new ForgeEventHandler());
-        ClientRegistry.registerKeyBinding(ClientEventHandler.KEY_ROTATE);
-        FMLCommonHandler.instance().bus().register(new ClientEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ForgeClientEventHandler());
+        FMLCommonHandler.instance().bus().register(new ForgeClientEventHandler());
+        ClientRegistry.registerKeyBinding(ForgeClientEventHandler.KEY_ROTATE);
     }
 
     @Override

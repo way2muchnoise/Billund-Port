@@ -1,6 +1,7 @@
 package billund.registry;
 
 import billund.set.BillundSet;
+import billund.set.BillundSetLoader;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -37,5 +38,27 @@ public class BillundSetRegistry
     public List<BillundSet> getAll()
     {
         return new LinkedList<BillundSet>(this.billundSets.values());
+    }
+
+    public String asString()
+    {
+        StringBuilder builder = new StringBuilder();
+        for (BillundSet set : this.billundSets.values())
+            builder.append(set.asString()).append("\n");
+        return builder.toString();
+    }
+
+    public void serverSync(String string)
+    {
+        String[] splitted = string.split("\n");
+        this.billundSets.clear();
+        for (String set : splitted)
+            addBillundSet(BillundSet.fromString(set));
+    }
+
+    public void reload()
+    {
+        this.billundSets.clear();
+        BillundSetLoader.loadSets();
     }
 }

@@ -5,6 +5,7 @@
 
 package billund;
 
+import billund.command.ReloadCommand;
 import billund.handler.ConfigHandler;
 import billund.registry.BlockRegistry;
 import billund.registry.ItemRegistry;
@@ -18,9 +19,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.*;
 
 @Mod(modid = Reference.ID, name = Reference.NAME, version = Reference.VERSION_FULL, guiFactory = Reference.GUI_FACTORY_CLASS)
 public class Billund
@@ -77,9 +76,23 @@ public class Billund
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
+        LogHelper.info("postInit Complete!");
+    }
+
+    @Mod.EventHandler
+    public void onServerStarting(FMLServerStartingEvent event)
+    {
+        event.registerServerCommand(new ReloadCommand());
+
+        LogHelper.info("serverStarting Complete!");
+    }
+
+    @Mod.EventHandler
+    public void onServerStarted(FMLServerStartedEvent event)
+    {
         // Load Billund Sets
         BillundSetLoader.loadSets();
 
-        LogHelper.info("postInit Complete!");
+        LogHelper.info("serverStarted Complete!");
     }
 }

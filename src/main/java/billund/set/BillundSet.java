@@ -77,6 +77,28 @@ public class BillundSet
             this.bricksList.addAll(subSet.getBricks(colour));
     }
 
+    public static BillundSet fromString(String string)
+    {
+        String[] splitted = string.split(";",4);
+        BillundSet set = new BillundSet(splitted[0], Integer.parseInt(splitted[1]));
+        set.setLocalizedName(splitted[2].equals("null") ? null : splitted[2]);
+        String[] allBricks = splitted[3].split(";");
+        for (String bricks : allBricks)
+            set.addBricks(bricks.equals("null") ? null : Bricks.fromString(bricks));
+        return set;
+    }
+
+    public String asString()
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.append(this.name).append(";");
+        builder.append(this.cost).append(";");
+        builder.append(this.localName).append(";");
+        for (Bricks bricks : this.bricksList)
+            builder.append(bricks == null ? "null" : bricks.asString()).append(";");
+        return builder.toString();
+    }
+
     @Override
     public String toString()
     {

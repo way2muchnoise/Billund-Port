@@ -2,6 +2,7 @@ item.billund:orderForm.name=Billund orderform
 item.billund:brick.name=Billund brick
 tile.billund.name=Billund tile
 itemGroup.billund=Billund
+billund.command.reloaded=Reloaded Billund Sets
 
 billund.gui.orderForm.title=Billund Order Form
 billund.gui.orderForm.place=Place
