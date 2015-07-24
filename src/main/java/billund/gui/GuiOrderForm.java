@@ -111,9 +111,9 @@ public class GuiOrderForm extends GuiScreen
             if (this.sets.size() > 1)
             {
                 if (localX >= 12 && localX < 26 && localY >= 149 && localY < 170)
-                    this.page = this.page-1 < 0 ? this.sets.size()-1 : this.page-1;
+                    this.page = this.page - 1 < 0 ? this.sets.size() - 1 : this.page - 1;
                 if (localX >= 90 && localX < 104 && localY >= 149 && localY < 170)
-                    this.page = this.page+2 > this.sets.size() ? 0 : this.page+1;
+                    this.page = this.page + 2 > this.sets.size() ? 0 : this.page + 1;
             }
         }
     }
@@ -225,7 +225,7 @@ public class GuiOrderForm extends GuiScreen
     {
         int total = 0;
         for (BillundSet set : orders)
-                total += set.getCost();
+            total += set.getCost();
         return total;
     }
 }

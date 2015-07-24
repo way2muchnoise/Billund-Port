@@ -2,7 +2,6 @@ package billund.registry;
 
 import billund.block.BlockBillund;
 import billund.reference.Names;
-import billund.reference.Reference;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BlockRegistry

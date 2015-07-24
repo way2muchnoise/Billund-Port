@@ -6,12 +6,12 @@
 package billund.proxy;
 
 import billund.gui.GuiOrderForm;
-import billund.render.BillundBlockRenderingHandler;
-import billund.render.BrickRenderer;
-import billund.render.tileentity.TileEntityRendererAirDrop;
 import billund.handler.ForgeClientEventHandler;
 import billund.registry.BlockRegistry;
 import billund.registry.ItemRegistry;
+import billund.render.BillundBlockRenderingHandler;
+import billund.render.BrickRenderer;
+import billund.render.tileentity.TileEntityRendererAirDrop;
 import billund.tileentity.TileEntityAirDrop;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;

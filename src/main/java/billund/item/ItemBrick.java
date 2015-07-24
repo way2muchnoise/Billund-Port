@@ -6,12 +6,12 @@
 package billund.item;
 
 import billund.proxy.ClientProxy;
-import billund.registry.ItemRegistry;
 import billund.reference.Colour;
 import billund.reference.Names;
+import billund.registry.ItemRegistry;
 import billund.registry.RotationRegistry;
-import billund.util.Brick;
 import billund.set.Bricks;
+import billund.util.Brick;
 import billund.util.Stud;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -111,9 +111,9 @@ public class ItemBrick extends ItemBillund
                 width = temp;
             }
 
-            int placeX = result.hitX - (rotation == 3 ? width-1 : 0);
+            int placeX = result.hitX - (rotation == 3 ? width - 1 : 0);
             int placeY = result.hitY;
-            int placeZ = result.hitZ - (rotation == 2 ? depth-1 : 0);
+            int placeZ = result.hitZ - (rotation == 2 ? depth - 1 : 0);
             switch (result.hitSide)
             {
                 case 0:

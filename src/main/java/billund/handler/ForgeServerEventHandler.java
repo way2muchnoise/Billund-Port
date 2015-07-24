@@ -20,7 +20,7 @@ public class ForgeServerEventHandler
     public void onEntityJoinWorld(EntityJoinWorldEvent event)
     {
         if (event.entity instanceof EntityPlayerMP)
-            MessageHandler.INSTANCE.sendTo(new MessageServerSync(), (EntityPlayerMP)event.entity);
+            MessageHandler.INSTANCE.sendTo(new MessageServerSync(), (EntityPlayerMP) event.entity);
     }
 
     private Random r = new Random();

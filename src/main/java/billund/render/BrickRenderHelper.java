@@ -1,9 +1,9 @@
 package billund.render;
 
 import billund.block.BlockBillund;
-import billund.registry.BlockRegistry;
 import billund.item.ItemBrick;
 import billund.reference.Colour;
+import billund.registry.BlockRegistry;
 import billund.util.Brick;
 import billund.util.Stud;
 import net.minecraft.client.Minecraft;

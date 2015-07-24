@@ -34,9 +34,9 @@ public class Bricks
     public static Bricks fromString(String string)
     {
         String[] splitted = string.split(",");
-        int[] ints = new int[splitted.length-1];
+        int[] ints = new int[splitted.length - 1];
         for (int i = 1; i < splitted.length; i++)
-            ints[i-1] = Integer.parseInt(splitted[i]);
+            ints[i - 1] = Integer.parseInt(splitted[i]);
         return new Bricks(Colour.getNamed(splitted[0]), ints[0], ints[1], ints[2]);
     }
 

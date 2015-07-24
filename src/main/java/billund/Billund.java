@@ -7,12 +7,12 @@ package billund;
 
 import billund.command.ReloadCommand;
 import billund.handler.ConfigHandler;
-import billund.registry.BlockRegistry;
-import billund.registry.ItemRegistry;
-import billund.registry.RecipeRegistry;
 import billund.proxy.CommonProxy;
 import billund.reference.MetaData;
 import billund.reference.Reference;
+import billund.registry.BlockRegistry;
+import billund.registry.ItemRegistry;
+import billund.registry.RecipeRegistry;
 import billund.set.BillundSetLoader;
 import billund.util.LogHelper;
 import cpw.mods.fml.common.FMLCommonHandler;

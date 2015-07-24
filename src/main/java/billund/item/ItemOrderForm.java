@@ -6,8 +6,8 @@
 package billund.item;
 
 import billund.Billund;
-import billund.registry.ItemRegistry;
 import billund.reference.Names;
+import billund.registry.ItemRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

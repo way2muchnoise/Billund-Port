@@ -5,8 +5,8 @@
 
 package billund.util;
 
-import billund.registry.BlockRegistry;
 import billund.reference.Colour;
+import billund.registry.BlockRegistry;
 import billund.tileentity.TileEntityBillund;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;

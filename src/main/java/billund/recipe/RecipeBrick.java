@@ -1,9 +1,9 @@
 package billund.recipe;
 
 import billund.handler.ConfigHandler;
-import billund.registry.ItemRegistry;
 import billund.item.ItemBrick;
 import billund.reference.Colour;
+import billund.registry.ItemRegistry;
 import billund.util.OreDictionaryHelper;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -50,7 +50,7 @@ public class RecipeBrick implements IRecipe
                     brick = stack.copy();
                 else if (OreDictionaryHelper.compareOre(stack, "dye"))
                     component = stack.copy();
-                    dye = true;
+                dye = true;
             }
         }
         if (dye)

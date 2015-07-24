@@ -66,7 +66,7 @@ public class MessageBillundOrder implements IMessage, IMessageHandler<MessageBil
         String sets = "";
         for (String set : message.sets)
             sets += set + ", ";
-        LogHelper.info(String.format("Received order for %s from %s", sets.substring(0, sets.length()-2), ctx.getServerHandler().playerEntity.getDisplayName()));
+        LogHelper.info(String.format("Received order for %s from %s", sets.substring(0, sets.length() - 2), ctx.getServerHandler().playerEntity.getDisplayName()));
         EntityPlayer player = ctx.getServerHandler().playerEntity;
         World world = player.worldObj;
         Random r = new Random();

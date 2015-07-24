@@ -56,7 +56,9 @@ public class FileHelpler
 
     /**
      * Get all json files in a folder
+     *
      * @param folderSource the folder
+     *
      * @return null if not a folder, an array of all streams if folder
      */
     public static InputStream[] getJsonFiles(String folderSource, final String... excludedFiles)

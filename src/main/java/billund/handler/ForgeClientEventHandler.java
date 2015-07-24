@@ -1,11 +1,11 @@
 package billund.handler;
 
 import billund.block.BlockBillund;
+import billund.item.ItemBrick;
 import billund.network.MessageHandler;
 import billund.network.message.MessageRotation;
 import billund.proxy.ClientProxy;
 import billund.render.BrickRenderHelper;
-import billund.item.ItemBrick;
 import billund.util.Brick;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -79,7 +79,6 @@ public class ForgeClientEventHandler
     }
 
     // Tick handler
-
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event)
     {

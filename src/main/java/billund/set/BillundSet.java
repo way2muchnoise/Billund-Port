@@ -79,7 +79,7 @@ public class BillundSet
 
     public static BillundSet fromString(String string)
     {
-        String[] splitted = string.split(";",4);
+        String[] splitted = string.split(";", 4);
         BillundSet set = new BillundSet(splitted[0], Integer.parseInt(splitted[1]));
         set.setLocalizedName(splitted[2].equals("null") ? null : splitted[2]);
         String[] allBricks = splitted[3].split(";");

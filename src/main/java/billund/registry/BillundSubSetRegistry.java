@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class BillundSubSetRegistry
 {
-    private Map<String, BillundSubSet>  subSetMap;
+    private Map<String, BillundSubSet> subSetMap;
     private static BillundSubSetRegistry instance;
 
     public static BillundSubSetRegistry instance()
