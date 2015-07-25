@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL11;
 // Forge Client event responses
 public class ForgeClientEventHandler
 {
-    public static KeyBinding KEY_ROTATE = new KeyBinding("billund.rotate", Keyboard.KEY_R, "keys.general");
+    public static KeyBinding KEY_ROTATE = new KeyBinding("billund.key.rotate", Keyboard.KEY_R, "keys.billund");
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event)

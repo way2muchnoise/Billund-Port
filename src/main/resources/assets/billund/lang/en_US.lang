@@ -3,6 +3,8 @@ item.billund:brick.name=Billund brick
 tile.billund.name=Billund tile
 itemGroup.billund=Billund
 billund.command.reloaded=Reloaded Billund Sets
+billund.key.rotate=Rotate Brick
+keys.billund=Billund
 
 billund.gui.orderForm.title=Billund Order Form
 billund.gui.orderForm.place=Place

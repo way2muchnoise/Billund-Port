@@ -17,7 +17,7 @@ public class Reference
     public static final String VERSION_FULL = V_MAJOR + "." + V_MINOR + "." + V_REVIS;
 
     public static final String CLIENT_PROXY_CLASS = "billund.proxy.ClientProxy";
-    public static final String SEVER_PROXY_CLASS = "billund.proxy.ServerProxy";
+    public static final String SEVER_PROXY_CLASS = "billund.proxy.CommonProxy";
 
     public static final String GUI_FACTORY_CLASS = "billund.gui.GuiFactory";
 }
