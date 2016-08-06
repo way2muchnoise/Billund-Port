@@ -20,7 +20,7 @@ public class RotationRegistry
 
     private RotationRegistry()
     {
-        this.rotationMap = new HashMap<UUID, Byte>();
+        this.rotationMap = new HashMap<>();
     }
 
     public void setRotation(EntityPlayer player, byte rotation)

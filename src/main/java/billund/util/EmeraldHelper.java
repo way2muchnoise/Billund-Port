@@ -14,7 +14,7 @@ public class EmeraldHelper
         for (int i = 0; i < player.inventory.getSizeInventory(); ++i)
         {
             ItemStack stack = player.inventory.getStackInSlot(i);
-            if (stack != null && stack.getItem() == Items.emerald)
+            if (stack != null && stack.getItem() == Items.EMERALD)
             {
                 emeralds += stack.stackSize;
                 if (emeralds >= cost)
@@ -29,7 +29,7 @@ public class EmeraldHelper
             for (int i = 0; i < player.inventory.getSizeInventory(); ++i)
             {
                 ItemStack stack = player.inventory.getStackInSlot(i);
-                if (stack != null && stack.getItem() == Items.emerald)
+                if (stack != null && stack.getItem() == Items.EMERALD)
                 {
                     if (stack.stackSize <= emeralds)
                     {

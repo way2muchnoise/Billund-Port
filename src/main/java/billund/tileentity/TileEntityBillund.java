@@ -5,13 +5,11 @@
 
 package billund.tileentity;
 
-import billund.network.MessageHandler;
-import billund.network.message.MessageTileEntityBillund;
 import billund.reference.Colour;
 import billund.util.Stud;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class TileEntityBillund extends TileEntity
 {
@@ -66,26 +64,27 @@ public class TileEntityBillund extends TileEntity
             }
         }
         if (changed)
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockRangeForRenderUpdate(pos, BlockPos.ORIGIN);
     }
 
-    @Override
-    public void updateEntity()
-    {
-        super.updateEntity();
-    }
 
-    @Override
+    /*@Override
     public Packet getDescriptionPacket()
     {
         writeToNBT(new NBTTagCompound());
-        return MessageHandler.INSTANCE.getPacketFrom(new MessageTileEntityBillund(this.xCoord, this.yCoord, this.zCoord, this.m_studs));
+        return MessageHandler.INSTANCE.getPacketFrom(new MessageTileEntityBillund(this.getPos(), this.m_studs));
+    }*/
+
+    @Override
+    public NBTTagCompound getUpdateTag()
+    {
+        return writeToNBT(new NBTTagCompound());
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound)
+    public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeToNBT(nbttagcompound);
+        nbttagcompound = super.writeToNBT(nbttagcompound);
 
         for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i)
         {
@@ -103,6 +102,8 @@ public class TileEntityBillund extends TileEntity
                 nbttagcompound.setTag("s" + i, studTag);
             }
         }
+
+        return nbttagcompound;
     }
 
     @Override

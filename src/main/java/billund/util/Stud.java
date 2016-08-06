@@ -11,7 +11,8 @@ import billund.tileentity.TileEntityBillund;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -61,21 +62,22 @@ public class Stud
         int blockX = (x - localX) / ROWS_PER_BLOCK;
         int blockY = (y - localY) / LAYERS_PER_BLOCK;
         int blockZ = (z - localZ) / ROWS_PER_BLOCK;
+        BlockPos blockPos = new BlockPos(blockX, blockY, blockZ);
 
         if (blockY >= 0)
         {
-            Block block = world.getBlock(blockX, blockY, blockZ);
+            Block block = world.getBlockState(blockPos).getBlock();
             if (block == BlockRegistry.billund)
             {
-                TileEntity entity = world.getTileEntity(blockX, blockY, blockZ);
+                TileEntity entity = world.getTileEntity(blockPos);
                 if (entity != null && entity instanceof TileEntityBillund)
                 {
                     TileEntityBillund billund = (TileEntityBillund) entity;
                     return billund.getStudLocal(localX, localY, localZ);
                 }
-            } else if (block != Blocks.air)
+            } else if (block != Blocks.AIR)
             {
-                Colour colour = block.isOpaqueCube() ? billund.reference.Colour.TRANSLUCENT_WALL : billund.reference.Colour.WALL;
+                Colour colour = block.isVisuallyOpaque() ? billund.reference.Colour.TRANSLUCENT_WALL : billund.reference.Colour.WALL;
                 return new Stud(colour, x, y, z, 1, 1, 1);
             }
         }
@@ -90,19 +92,20 @@ public class Stud
         int blockX = (x - localX) / ROWS_PER_BLOCK;
         int blockY = (y - localY) / LAYERS_PER_BLOCK;
         int blockZ = (z - localZ) / ROWS_PER_BLOCK;
+        BlockPos blockPos = new BlockPos(blockX, blockY, blockZ);
 
         if (blockY >= 0)
         {
-            Block block = world.getBlock(blockX, blockY, blockZ);
+            Block block = world.getBlockState(blockPos).getBlock();
             if (block == BlockRegistry.billund)
             {
-                TileEntity entity = world.getTileEntity(blockX, blockY, blockZ);
+                TileEntity entity = world.getTileEntity(blockPos);
                 if (entity != null && entity instanceof TileEntityBillund)
                 {
                     TileEntityBillund billund = (TileEntityBillund) entity;
                     return (billund.getStudLocal(localX, localY, localZ) == null);
                 }
-            } else if (block == Blocks.air)
+            } else if (block == Blocks.AIR)
                 return true;
         }
         return false;
@@ -116,32 +119,33 @@ public class Stud
         int blockX = (x - localX) / ROWS_PER_BLOCK;
         int blockY = (y - localY) / LAYERS_PER_BLOCK;
         int blockZ = (z - localZ) / ROWS_PER_BLOCK;
+        BlockPos blockPos = new BlockPos(blockX, blockY, blockZ);
 
         if (blockY >= 0)
         {
-            Block block = world.getBlock(blockX, blockY, blockZ);
+            Block block = world.getBlockState(blockPos).getBlock();
             if (block == BlockRegistry.billund)
             {
                 // Add to existing billund block
-                TileEntity entity = world.getTileEntity(blockX, blockY, blockZ);
+                TileEntity entity = world.getTileEntity(blockPos);
                 if (entity != null && entity instanceof TileEntityBillund)
                 {
                     TileEntityBillund billund = (TileEntityBillund) entity;
                     billund.setStudLocal(localX, localY, localZ, stud);
                 }
-                world.markBlockForUpdate(blockX, blockY, blockZ);
-            } else if (block == Blocks.air)
+                world.markBlockRangeForRenderUpdate(blockPos, BlockPos.ORIGIN);
+            } else if (block == Blocks.AIR)
             {
                 // Add a new billund block
-                if (world.setBlock(blockX, blockY, blockZ, BlockRegistry.billund, 0, 3))
+                if (world.setBlockState(blockPos, BlockRegistry.billund.getDefaultState()))
                 {
-                    TileEntity entity = world.getTileEntity(blockX, blockY, blockZ);
+                    TileEntity entity = world.getTileEntity(blockPos);
                     if (entity != null && entity instanceof TileEntityBillund)
                     {
                         TileEntityBillund billund = (TileEntityBillund) entity;
                         billund.setStudLocal(localX, localY, localZ, stud);
                     }
-                    world.markBlockForUpdate(blockX, blockY, blockZ);
+                    world.markBlockRangeForRenderUpdate(blockPos, BlockPos.ORIGIN);
                 }
             }
         }
@@ -188,7 +192,7 @@ public class Stud
         public int hitSide;
     }
 
-    public static RaycastResult raycastStuds(World world, Vec3 origin, Vec3 direction, float distance)
+    public static RaycastResult raycastStuds(World world, Vec3d origin, Vec3d direction, float distance)
     {
         float xScale = (float) ROWS_PER_BLOCK;
         float yScale = (float) LAYERS_PER_BLOCK;

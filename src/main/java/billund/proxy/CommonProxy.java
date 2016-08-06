@@ -10,8 +10,8 @@ import billund.handler.ForgeServerEventHandler;
 import billund.network.MessageHandler;
 import billund.tileentity.TileEntityAirDrop;
 import billund.tileentity.TileEntityBillund;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 

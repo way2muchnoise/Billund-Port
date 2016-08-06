@@ -4,7 +4,7 @@ import billund.item.ItemBrick;
 import billund.reference.Colour;
 import billund.registry.BillundSubSetRegistry;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -42,7 +42,7 @@ public class BillundSet
 
     public String getLocalizedName()
     {
-        return this.localName == null ? StatCollector.translateToLocal("billund.set." + this.name) : this.localName;
+        return this.localName == null ? I18n.translateToLocal("billund.set." + this.name) : this.localName;
     }
 
     public void populateChest(IInventory inv)

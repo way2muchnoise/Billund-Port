@@ -4,10 +4,11 @@ import billund.reference.Colour;
 import billund.tileentity.TileEntityBillund;
 import billund.util.LogHelper;
 import billund.util.Stud;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 
@@ -15,27 +16,23 @@ public class MessageTileEntityBillund implements IMessage, IMessageHandler<Messa
 {
 
     public Stud[] studs;
-    public int x, y, z;
+    public BlockPos pos;
 
     public MessageTileEntityBillund()
     {
         this.studs = new Stud[Stud.STUDS_PER_BLOCK];
     }
 
-    public MessageTileEntityBillund(int x, int y, int z, Stud[] studs)
+    public MessageTileEntityBillund(BlockPos pos, Stud[] studs)
     {
         this.studs = studs;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.pos = pos;
     }
 
     @Override
     public void fromBytes(ByteBuf buf)
     {
-        this.x = buf.readInt();
-        this.y = buf.readInt();
-        this.z = buf.readInt();
+        this.pos = BlockPos.fromLong(buf.readLong());
         if (buf.isReadable())
         {
             int j = buf.readInt();
@@ -67,9 +64,7 @@ public class MessageTileEntityBillund implements IMessage, IMessageHandler<Messa
     @Override
     public void toBytes(ByteBuf buf)
     {
-        buf.writeInt(this.x);
-        buf.writeInt(this.y);
-        buf.writeInt(this.z);
+        buf.writeLong(pos.toLong());
         for (int i = 0; i < Stud.STUDS_PER_BLOCK; ++i)
         {
             Stud stud = this.studs[i];
@@ -90,13 +85,13 @@ public class MessageTileEntityBillund implements IMessage, IMessageHandler<Messa
     @Override
     public IMessage onMessage(MessageTileEntityBillund message, MessageContext ctx)
     {
-        TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y, message.z);
+        TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.pos);
 
         if (tileEntity instanceof TileEntityBillund)
         {
             ((TileEntityBillund) tileEntity).setStuds(message.studs);
-            FMLClientHandler.instance().getClient().theWorld.markBlockForUpdate(message.x, message.y, message.z);
-            LogHelper.debug(String.format("Brick at x:%s y:%s z:%s", message.x, message.y, message.z));
+            FMLClientHandler.instance().getClient().theWorld.markBlockRangeForRenderUpdate(message.pos, BlockPos.ORIGIN);
+            LogHelper.debug(String.format("Brick at x:%s y:%s z:%s", message.pos.getX(), message.pos.getY(), message.pos.getZ()));
         }
         return null;
     }

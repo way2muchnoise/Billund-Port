@@ -5,10 +5,9 @@ import billund.item.ItemBrick;
 import billund.network.MessageHandler;
 import billund.network.message.MessageRotation;
 import billund.proxy.ClientProxy;
-import billund.render.BrickRenderHelper;
 import billund.util.Brick;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
@@ -41,7 +40,7 @@ public class ForgeClientEventHandler
     public void onRenderWorldLast(RenderWorldLastEvent event)
     {
         // Draw the preview brick
-        float f = event.partialTicks;
+        float f = event.getPartialTicks();
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         World world = Minecraft.getMinecraft().theWorld;
         if (player != null && world != null)
@@ -58,8 +57,8 @@ public class ForgeClientEventHandler
                     GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
                     GL11.glDisable(GL11.GL_LIGHTING);
 
-                    translateToWorldCoords(Minecraft.getMinecraft().renderViewEntity, f);
-                    BrickRenderHelper.renderBrick(world, brick);
+                    translateToWorldCoords(Minecraft.getMinecraft().getRenderViewEntity(), f);
+                    // BrickRenderHelper.renderBrick(world, brick); TODO: render preview
 
                     // Teardown
                     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

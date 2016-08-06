@@ -18,13 +18,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-import static net.minecraft.util.Vec3.createVectorHelper;
 
 public class ItemBrick extends ItemBillund
 {
@@ -71,9 +73,9 @@ public class ItemBrick extends ItemBillund
         float pitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * f;
         float yaw = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * f;
         double x = player.prevPosX + (player.posX - player.prevPosX) * (double) f;
-        double y = player.prevPosY + (player.posY - player.prevPosY) * (double) f + 1.62 - player.yOffset + yOffset2; // TODO: Improve
+        double y = player.prevPosY + (player.posY - player.prevPosY) * (double) f + 1.62 - player.getYOffset() + yOffset2; // TODO: Improve
         double z = player.prevPosZ + (player.posZ - player.prevPosZ) * (double) f;
-        Vec3 position = createVectorHelper(x, y, z);
+        Vec3d position = new Vec3d(x, y, z);
 
         float f3 = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
         float f4 = MathHelper.sin(-yaw * 0.017453292F - (float) Math.PI);
@@ -85,9 +87,9 @@ public class ItemBrick extends ItemBillund
         float distance = 5.0f;
         if (player instanceof EntityPlayerMP)
         {
-            distance = (float) ((EntityPlayerMP) player).theItemInWorldManager.getBlockReachDistance();
+            distance = (float) ((EntityPlayerMP) player).interactionManager.getBlockReachDistance();
         }
-        Vec3 direction = createVectorHelper((double) f7, (double) f6, (double) f8);
+        Vec3d direction = new Vec3d( f7, f6, f8);
 
         // Do the raycast
         return Stud.raycastStuds(world, position, direction, distance);
@@ -172,7 +174,7 @@ public class ItemBrick extends ItemBillund
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
     {
         Brick brick = getPotentialBrick(stack, world, player, 1.0f);
         if (brick != null)
@@ -186,10 +188,11 @@ public class ItemBrick extends ItemBillund
                 {
                     // Decrement stackSize
                     stack.stackSize--;
+                    return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
                 }
             }
         }
-        return stack;
+        return ActionResult.newResult(EnumActionResult.PASS, stack);
     }
 
     public static int getWidth(ItemStack stack)

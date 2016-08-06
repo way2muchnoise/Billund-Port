@@ -8,15 +8,16 @@ package billund.tileentity;
 import billund.handler.ConfigHandler;
 import billund.registry.BillundSetRegistry;
 import billund.set.BillundSet;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class TileEntityAirDrop extends Entity
@@ -25,11 +26,12 @@ public class TileEntityAirDrop extends Entity
     public int metadata;
     public BillundSet set;
     public boolean deployed;
+    private float yOffset;
 
     public TileEntityAirDrop(World world)
     {
         super(world);
-        this.block = Blocks.chest;
+        this.block = Blocks.CHEST;
         this.metadata = 0;
     }
 
@@ -47,6 +49,12 @@ public class TileEntityAirDrop extends Entity
         this.prevPosY = y;
         this.prevPosZ = z;
         this.set = set;
+    }
+
+    @Override
+    public double getYOffset()
+    {
+        return yOffset;
     }
 
     @Override
@@ -76,9 +84,8 @@ public class TileEntityAirDrop extends Entity
         if (!this.deployed)
         {
             float deployHeight = (float) (this.worldObj.getTopSolidOrLiquidBlock(
-                    MathHelper.floor_double(this.posX),
-                    MathHelper.floor_double(this.posZ)
-            )) + 11.0f;
+                    new BlockPos(MathHelper.floor_double(this.posX), 0, MathHelper.floor_double(this.posZ))
+            )).getY() + 11.0f;
             if (this.posY <= deployHeight)
                 this.deployed = true;
         }
@@ -98,6 +105,7 @@ public class TileEntityAirDrop extends Entity
             int blockX = MathHelper.floor_double(this.posX);
             int blockY = MathHelper.floor_double(this.posY);
             int blockZ = MathHelper.floor_double(this.posZ);
+            BlockPos blockPos = new BlockPos(blockX, blockY, blockZ);
 
             if (this.onGround)
             {
@@ -105,23 +113,24 @@ public class TileEntityAirDrop extends Entity
                 this.motionZ *= 0.7;
                 this.motionY *= -0.5;
 
-                if (this.worldObj.getBlock(blockX, blockY, blockZ) != Blocks.piston_extension)
+                if (this.worldObj.getBlockState(blockPos).getBlock() != Blocks.PISTON_EXTENSION)
                 {
                     this.setDead();
 
                     // Set the block
-                    this.worldObj.setBlock(blockX, blockY, blockZ, this.block, this.metadata, 3);
+                    //this.worldObj.setBlockState(blockPos, this.block, this.metadata, 3);
+                    this.worldObj.setBlockState(blockPos, this.block.getStateFromMeta(this.metadata));
 
                     //particles
-                    this.worldObj.playAuxSFX(2006, blockX, blockY - 1, blockZ, 10);
+                    this.worldObj.playEvent(2006, new BlockPos(blockX, blockY - 1, blockZ), 10);
 
                     // Populate the block
-                    TileEntity entity = this.worldObj.getTileEntity(blockX, blockY, blockZ);
+                    TileEntity entity = this.worldObj.getTileEntity(blockPos);
                     if (entity != null && entity instanceof TileEntityChest)
                     {
                         TileEntityChest inv = (TileEntityChest) entity;
                         //rename the chest to corresponding set
-                        inv.func_145976_a(this.set.getLocalizedName());
+                        inv.setCustomName(this.set.getLocalizedName());
                         this.set.populateChest(inv);
                         inv.markDirty();
                     }
@@ -132,8 +141,9 @@ public class TileEntityAirDrop extends Entity
     }
 
     @Override
-    protected void fall(float par1)
+    public void fall(float distance, float damageMultiplier)
     {
+        super.fall(distance, damageMultiplier);
     }
 
     @Override

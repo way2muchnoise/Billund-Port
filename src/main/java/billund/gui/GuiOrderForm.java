@@ -14,9 +14,10 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,11 +36,11 @@ public class GuiOrderForm extends GuiScreen
     public GuiOrderForm(EntityPlayer player)
     {
         this.player = player;
-        this.orders = new LinkedList<BillundSet>();
-        this.sets = new LinkedList<List<BillundSet>>();
+        this.orders = new LinkedList<>();
+        this.sets = new LinkedList<>();
         this.page = 0;
         int count = 0;
-        List<BillundSet> temp = new LinkedList<BillundSet>();
+        List<BillundSet> temp = new LinkedList<>();
         for (BillundSet set : BillundSetRegistry.instance().getAll())
         {
             count++;
@@ -48,7 +49,7 @@ public class GuiOrderForm extends GuiScreen
             {
                 count = 0;
                 this.sets.add(temp);
-                temp = new LinkedList<BillundSet>();
+                temp = new LinkedList<>();
             }
         }
         if (!temp.isEmpty())
@@ -70,7 +71,7 @@ public class GuiOrderForm extends GuiScreen
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int button)
+    protected void mouseClicked(int x, int y, int button) throws IOException
     {
         super.mouseClicked(x, y, button);
 
@@ -146,7 +147,7 @@ public class GuiOrderForm extends GuiScreen
         }
 
         // Draw the text
-        fontRendererObj.drawString(StatCollector.translateToLocal("billund.gui.orderForm.title"), startX + 8, startY + 10, 0x4c5156);
+        fontRendererObj.drawString(I18n.translateToLocal("billund.gui.orderForm.title"), startX + 8, startY + 10, 0x4c5156);
 
         String currency = getPlayerBalance() + " / " + getOrderCost();
         int currencyColour = canPlayerAffordOrder() ? 0x4c5156 : 0xae1e22;
@@ -155,13 +156,13 @@ public class GuiOrderForm extends GuiScreen
         for (int i = 0; i < sets.get(page).size(); ++i)
             fontRendererObj.drawString(sets.get(page).get(i).getLocalizedName(), startX + 16, startY + 38 + i * 23, 0x4c5156);
 
-        String order = StatCollector.translateToLocal("billund.gui.orderForm." + (ordered ? "placed" : "place"));
+        String order = I18n.translateToLocal("billund.gui.orderForm." + (ordered ? "placed" : "place"));
         int colour = canPlayerOrder() ? 0x4c5156 : 0xb3a8a7;
         fontRendererObj.drawString(order, startX + 102 + (75 - fontRendererObj.getStringWidth(order)) / 2, startY + 156, colour);
 
         if (this.sets.size() > 1)
         {
-            String page = StatCollector.translateToLocalFormatted("billund.gui.orderForm.pages", this.page + 1, this.sets.size());
+            String page = I18n.translateToLocalFormatted("billund.gui.orderForm.pages", this.page + 1, this.sets.size());
             fontRendererObj.drawString(page, startX + 22 + (68 - fontRendererObj.getStringWidth(page)) / 2, startY + 156, 0x4c5156);
         }
 
@@ -215,7 +216,7 @@ public class GuiOrderForm extends GuiScreen
         for (int i = 0; i < player.inventory.getSizeInventory(); ++i)
         {
             ItemStack stack = player.inventory.getStackInSlot(i);
-            if (stack != null && stack.getItem() == Items.emerald)
+            if (stack != null && stack.getItem() == Items.EMERALD)
                 total += stack.stackSize;
         }
         return total;

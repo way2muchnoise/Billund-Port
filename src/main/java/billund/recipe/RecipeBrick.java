@@ -77,4 +77,10 @@ public class RecipeBrick implements IRecipe
     {
         return new ItemStack(ItemRegistry.brick);
     }
+
+    @Override
+    public ItemStack[] getRemainingItems(InventoryCrafting inv)
+    {
+        return new ItemStack[0];
+    }
 }

@@ -6,9 +6,12 @@ import billund.registry.BillundSetRegistry;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.StatCollector;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +30,7 @@ public class ReloadCommand extends CommandBase
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args)
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
     {
         if (args.length != 1)
             throw new CommandException("/billund reload");
@@ -37,12 +40,12 @@ public class ReloadCommand extends CommandBase
             BillundSetRegistry.instance().reload();
             if (!sender.getEntityWorld().isRemote)
                 MessageHandler.INSTANCE.sendToAll(new MessageServerSync());
-            sender.addChatMessage(new ChatComponentText("\u00A7a" + StatCollector.translateToLocal("billund.command.reloaded")));
+            sender.addChatMessage(new TextComponentString("\u00A7a" + I18n.translateToLocal("billund.command.reloaded")));
         }
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args)
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos)
     {
         List<String> list = new LinkedList<String>();
         if (args.length > 1) return list;

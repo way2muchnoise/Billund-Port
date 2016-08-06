@@ -12,7 +12,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -41,16 +43,10 @@ public class ItemOrderForm extends ItemBillund
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
     {
         if (Billund.proxy.isClient() && world.isRemote)
             Billund.proxy.openOrderFormGUI(player);
-        return stack;
-    }
-
-    @Override
-    public IIcon getIconFromDamage(int damage)
-    {
-        return itemIcon;
+        return ActionResult.newResult(EnumActionResult.PASS, stack);
     }
 }
